@@ -46,18 +46,18 @@ help:
 # ------------------------------------------------------------------------------
 
 requirements/py3.txt:
-	touch requirements/py3.txt
+	@touch requirements/py3.txt
 
 virtualenvs/py3:
-	virtualenv virtualenvs/py3 --python=python3
-	touch virtualenvs/py3/bin/activate
-	sleep 1s
-	touch virtualenvs/py3
+	@virtualenv virtualenvs/py3 --python=python3
+	@touch virtualenvs/py3/bin/activate
+	@sleep 1s
+	@touch virtualenvs/py3
 
 virtualenvs/py3/bin/activate: virtualenvs/py3 requirements/py3.txt
-	. virtualenvs/py3/bin/activate && pip install -r requirements/py3.txt; deactivate
-	touch virtualenvs/py3/bin/activate
+	@. virtualenvs/py3/bin/activate && pip install -r requirements/py3.txt; deactivate
+	@touch virtualenvs/py3/bin/activate
 
 ## Make virtual environments meet requirements
 virtualenvs: virtualenvs/py3/bin/activate
-	touch virtualenvs
+	@touch virtualenvs
