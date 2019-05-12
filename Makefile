@@ -61,3 +61,13 @@ virtualenvs/py3/bin/activate: virtualenvs/py3 requirements/py3.txt
 ## Make virtual environments meet requirements
 virtualenvs: virtualenvs/py3/bin/activate
 	@touch virtualenvs
+
+# Libraries
+# ------------------------------------------------------------------------------
+
+# lib/jumanpp-1.02:
+# 	@curl -o lib/jumanpp-1.02.tar.xz 'http://lotus.kuee.kyoto-u.ac.jp/nl-resource/jumanpp/jumanpp-1.02.tar.xz'
+# 	@cd lib && tar -xJf jumanpp-1.02.tar.xz && rm jumanpp-1.02.tar.xz
+# 	@cd lib/jumanpp-1.02 && ./configure && make && sudo make install
+
+lib: # lib/jumanpp-1.02
