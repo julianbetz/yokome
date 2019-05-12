@@ -1,3 +1,13 @@
 * Personalized Reading Support
 
 A web-based personalized reading support system for learners of Japanese.
+
+** Requirements
+
+- Operating System: Linux (tested under Ubuntu 18.04)
+- virtualenv
+- [[http://lotus.kuee.kyoto-u.ac.jp/nl-resource/jumanpp/jumanpp-1.02.tar.xz][JUMAN++ morphological analyzer ver. 1.02]], accessible from the command line
+  via:
+  #+BEGIN_SRC sh
+    jumanpp
+  #+END_SRC
