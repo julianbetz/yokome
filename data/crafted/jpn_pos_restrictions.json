@@ -1,0 +1,185 @@
+{
+    "expression": {"parents": [], "label": null},
+
+    "whitespace": {"parents": ["expression"], "label": "segment"},
+    "symbol": {"parents": ["expression"], "label": "segment"},
+    "word": {"parents": ["expression"], "label": "segment"},
+    "multiword": {"parents": ["expression"], "label": "segment"},
+
+    "punctuation": {"parents": ["symbol"], "label": "class"},
+    "period": {"parents": ["punctuation"], "label": "class"},
+    "comma": {"parents": ["punctuation"], "label": "class"},
+    "opening bracket": {"parents": ["punctuation"], "label": "class"},
+    "closing bracket": {"parents": ["punctuation"], "label": "class"},
+
+    "adverb": {"parents": ["word", "multiword"], "label": "class"},
+    "quotable": {"parents": ["adverb"], "label": "quotation"},
+
+    "noun": {"parents": ["word", "multiword"], "label": "class"},
+    "common noun": {"parents": ["noun"], "label": "class"},
+    "adverbial noun": {"parents": ["noun", "adverb"], "label": "class"},
+    "temporal noun": {"parents": ["noun", "adverb"], "label": "class"},
+    "dependent noun": {"parents": ["noun", "dependent"], "label": "class"},
+    "proper noun": {"parents": ["noun"], "label": "class"},
+    "organization name": {"parents": ["proper noun"], "label": "class"},
+    "place name": {"parents": ["proper noun"], "label": "class"},
+    "person name": {"parents": ["proper noun"], "label": "class"},
+    "other name": {"parents": ["proper noun"], "label": "class"},
+
+    "adjective": {"parents": ["word", "multiword"], "label": "class"},
+    "i-adjective": {"parents": ["adjective"], "label": "class"},
+    "na-adjective": {"parents": ["adjective"], "label": "class"},
+    "nari-adjective": {"parents": ["adjective"], "label": "class"},
+    "no-adjective": {"parents": ["adjective"], "label": "class"},
+    "ku-adjective": {"parents": ["adjective"], "label": "class"},
+    "shiku-adjective": {"parents": ["adjective"], "label": "class"},
+    "taru-adjective": {"parents": ["adjective"], "label": "class"},
+    "kari-adjective": {"parents": ["adjective"], "label": "class"},
+    "pre-noun adjectival": {"parents": ["adjective"], "label": "class"},
+    "yoi/ii class": {"parents": ["i-adjective"], "label": "variation"},
+    "a/u/o row": {"parents": ["i-adjective"], "label": "ending"},
+    "i row": {"parents": ["i-adjective"], "label": "ending"},
+    "regular": {
+        "parents": [
+            "quintigrade",
+            "monograde",
+            "bigrade",
+            "quadrigrade",
+            "i-adjective",
+            "na-adjective"
+        ],
+        "label": "inflection"
+    },
+    "ookii special class": {"parents": ["i-adjective"], "label": "inflection"},
+    "onaji special class": {"parents": ["na-adjective"], "label": "inflection"},
+
+    "verb": {"parents": ["word", "multiword"], "label": "class"},
+    "monograde": {"parents": ["verb"], "label": "class"},
+    "bigrade": {"parents": ["verb"], "label": "class"},
+    "quadrigrade": {"parents": ["verb"], "label": "class"},
+    "quintigrade": {"parents": ["verb"], "label": "class"},
+    "k-irregular": {"parents": ["verb"], "label": "class"},
+    "s-irregular": {"parents": ["verb"], "label": "class"},
+    "n-irregular": {"parents": ["verb"], "label": "class"},
+    "r-irregular": {"parents": ["verb"], "label": "class"},
+    "masu": {"parents": ["verb"], "label": "class"},
+    "irregular": {"parents": ["verb"], "label": "class"},
+    "upper class": {"parents": ["bigrade", "monograde"], "label": "class"},
+    "lower class": {"parents": ["bigrade", "monograde"], "label": "class"},
+    "a column": {"parents": ["quintigrade", "bigrade"], "label": "ending"},
+    "ka column": {
+        "parents": ["quintigrade", "quadrigrade", "bigrade"],
+        "label": "ending"
+    },
+    "ga column": {
+        "parents": ["quintigrade", "bigrade", "quadrigrade"],
+        "label": "ending"
+    },
+    "sa column": {
+        "parents": ["quintigrade", "quadrigrade", "bigrade"],
+        "label": "ending"
+    },
+    "za column": {"parents": ["bigrade"], "label": "ending"},
+    "ta column": {
+        "parents": ["quintigrade", "bigrade", "quadrigrade"],
+        "label": "ending"
+    },
+    "da column": {"parents": ["bigrade"], "label": "ending"},
+    "na column": {
+        "parents": ["quintigrade", "bigrade", "quadrigrade"],
+        "label": "ending"
+    },
+    "ha column": {"parents": ["quadrigrade", "bigrade"], "label": "ending"},
+    "ba column": {
+        "parents": ["quintigrade", "bigrade", "quadrigrade"],
+        "label": "ending"
+    },
+    "ma column": {
+        "parents": ["quintigrade", "bigrade", "quadrigrade"],
+        "label": "ending"
+    },
+    "ya column": {"parents": ["bigrade"], "label": "ending"},
+    "ra column": {
+        "parents": ["quintigrade", "quadrigrade", "bigrade", "monograde"],
+        "label": "ending"
+    },
+    "wa column": {"parents": ["bigrade"], "label": "ending"},
+    "-aru special class": {"parents": ["quintigrade"], "label": "inflection"},
+    "-'u special class": {"parents": ["quintigrade"], "label": "inflection"},
+    "iku/yuku special class": {
+        "parents": ["quintigrade"],
+        "label": "inflection"
+    },
+    "uru special class": {"parents": ["quintigrade"], "label": "inflection"},
+    "-ru irregular": {"parents": ["quintigrade"], "label": "inflection"},
+    "kureru special class": {"parents": ["monograde"], "label": "inflection"},
+    "-zuru ending": {"parents": ["monograde"], "label": "inflection"},
+    "suru class": {"parents": ["s-irregular"], "label": "inflection"},
+    "su class": {"parents": ["s-irregular"], "label": "inflection"},
+    "suru ending": {"parents": ["suru class"], "label": "inclusion"},
+    "-suru ending": {"parents": ["suru class"], "label": "inclusion"},
+
+    "copula": {"parents": ["word", "multiword"], "label": "class"},
+
+    "particle": {"parents": ["word", "multiword"], "label": "class"},
+    "case particle": {"parents": ["particle"], "label": "class"},
+    "adverbial particle": {"parents": ["particle"], "label": "class"},
+    "sentence-ending particle": {"parents": ["particle"], "label": "class"},
+
+    "dependent": {
+        "parents": ["word", "multiword"],
+        "label": "class"
+    },
+    "non-inflectional": {"parents": ["dependent"], "label": "class"},
+    "nu": {"parents": ["dependent"], "label": "class"},
+    "darou": {"parents": ["dependent"], "label": "class"},
+    "souda": {"parents": ["dependent"], "label": "class"},
+    "beshi/gotoshi": {"parents": ["dependent"], "label": "class"},
+
+    "conjunction": {"parents": ["word", "multiword"], "label": "conjunction"},
+
+    "interjection": {"parents": ["word", "multiword"], "label": "interjection"},
+
+    "numeral": {"parents": ["word", "multiword"], "label": "numeral"},
+
+    "prefix": {"parents": ["word", "multiword"], "label": "affix"},
+    "suffix": {"parents": ["word", "multiword"], "label": "affix"},
+    "attached to noun": {"parents": ["suffix", "prefix"], "label": "attachment"},
+    "attached to verb": {"parents": ["prefix"], "label": "attachment"},
+    "attached to i-adjective": {
+        "parents": ["prefix"],
+        "label": "attachment"
+    },
+    "attached to na-adjective": {
+        "parents": ["prefix"],
+        "label": "attachment"
+    },
+    "attached to predicate": {
+        "parents": ["suffix"],
+        "label": "attachment"
+    },
+    "counter": {"parents": ["suffix"], "label": "attachment"},
+
+    "auxiliary": {"parents": ["word", "multiword"], "label": "auxiliary"},
+
+    "demonstrative": {
+        "parents": ["word", "multiword"],
+        "label": "demonstrative"
+    },
+
+    "prenominal": {
+        "parents": ["noun", "verb"],
+        "label": "prenominal"
+    },
+
+    "pronoun": {"parents": ["word", "multiword"], "label": "pronoun"},
+
+    "suru verb": {"parents": ["word", "multiword"], "label": "suru"},
+
+    "transitive": {"parents": ["verb", "suru verb"], "label": "transitivity"},
+    "intransitive": {"parents": ["verb", "suru verb"], "label": "transitivity"},
+
+    "syllabary": {"parents": ["expression"], "label": "writing system"},
+    "alphabet": {"parents": ["expression"], "label": "writing system"},
+    "katakana": {"parents": ["syllabary"], "label": "writing system"}
+}
