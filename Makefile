@@ -71,3 +71,53 @@ virtualenvs: virtualenvs/py3/bin/activate
 # 	@cd lib/jumanpp-1.02 && ./configure && make && sudo make install
 
 lib: # lib/jumanpp-1.02
+
+# Data
+# ------------------------------------------------------------------------------
+
+# XXX This may download a different revision every time.  Make sure that the
+# data is still accessible in the same way / that the base layout of the data
+# did not change.
+data/raw/JMdict.xml:
+	@while true; do \
+	    echo "JMdict (http://www.edrdg.org/jmdict/j_jmdict.html) is an electronic Japanese\ndictionary that is required to provide English descriptions of Japanese words. It\nis published under the Creative Commons Attribution-ShareAlike Licence (V3.0)."; \
+	    read -p "Do you wish to download it? [Y/n] " yn; \
+	    case $$yn in \
+	        ''|[Yy]|[Yy][Ee][Ss] ) break;; \
+	        [Nn]|[Nn][Oo] ) exit 1;; \
+	        * ) echo "Please answer yes or no.";; \
+	    esac; \
+	done
+	@curl -o data/raw/JMdict.xml.gz 'http://ftp.monash.edu/pub/nihongo/JMdict_e.gz'
+	@gunzip data/raw/JMdict.xml.gz
+
+# TODO Point to license
+data/raw/jeita_aozora:
+	@while true; do \
+	    echo "The JEITA Public Morphologically Tagged Corpus for Aozora Bunko is required to\nprovide English descriptions of Japanese words as well as Japanese example\nsentences."; \
+	    read -p "Do you wish to download it? [Y/n] " yn; \
+	    case $$yn in \
+	        ''|[Yy]|[Yy][Ee][Ss] ) break;; \
+	        [Nn]|[Nn][Oo] ) exit 1;; \
+	        * ) echo "Please answer yes or no.";; \
+	    esac; \
+	done
+	@curl -o data/raw/jeita_aozora.tar.bz2 'http://masatohagiwara.net/files/jeita_aozora.tar.bz2'
+	@cd data/raw && tar -xjf jeita_aozora.tar.bz2 && rm jeita_aozora.tar.bz2
+
+# TODO Point to license
+data/raw/jeita_genpaku:
+	@while true; do \
+	    echo "The JEITA Public Morphologically Tagged Corpus for Project Sugita Genpaku is\nrequired to provide English descriptions of Japanese words as well as Japanese\nexample sentences."; \
+	    read -p "Do you wish to download it? [Y/n] " yn; \
+	    case $$yn in \
+	        ''|[Yy]|[Yy][Ee][Ss] ) break;; \
+	        [Nn]|[Nn][Oo] ) exit 1;; \
+	        * ) echo "Please answer yes or no.";; \
+	    esac; \
+	done
+	@curl -o data/raw/jeita_genpaku.tar.bz2 'http://masatohagiwara.net/files/jeita_genpaku.tar.bz2'
+	@cd data/raw && tar -xjf jeita_genpaku.tar.bz2 && rm jeita_genpaku.tar.bz2
+
+## Download all raw data
+data: data/raw/JMdict.xml data/raw/jeita_aozora data/raw/jeita_genpaku
