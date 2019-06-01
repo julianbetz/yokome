@@ -65,12 +65,18 @@ virtualenvs: virtualenvs/py3/bin/activate
 # Libraries
 # ------------------------------------------------------------------------------
 
+# Require 6.5.4 to be able to use it together with current Wikipedia dumps
+lib/elasticsearch:
+	@curl -L -o lib/elasticsearch-6.5.4.tar.gz 'https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.5.4.tar.gz'
+	@cd lib && tar -xzf elasticsearch-6.5.4.tar.gz && rm elasticsearch-6.5.4.tar.gz
+	@mv lib/elasticsearch-6.5.4 lib/elasticsearch
+
 # lib/jumanpp-1.02:
 # 	@curl -o lib/jumanpp-1.02.tar.xz 'http://lotus.kuee.kyoto-u.ac.jp/nl-resource/jumanpp/jumanpp-1.02.tar.xz'
 # 	@cd lib && tar -xJf jumanpp-1.02.tar.xz && rm jumanpp-1.02.tar.xz
 # 	@cd lib/jumanpp-1.02 && ./configure && make && sudo make install
 
-lib: # lib/jumanpp-1.02
+lib: lib/elasticsearch # lib/jumanpp-1.02
 
 # Data
 # ------------------------------------------------------------------------------
