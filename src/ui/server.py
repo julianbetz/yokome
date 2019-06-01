@@ -16,6 +16,8 @@
 
 
 import sys
+import os
+import logging
 import traceback
 import click
 import re
@@ -23,7 +25,14 @@ from subprocess import Popen, PIPE
 from urllib.parse import unquote_plus
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
+import sqlite3 as sql
 
+if __name__ == '__main__':
+    sys.path.append(os.path.abspath(os.path.dirname(os.path.abspath(__file__))
+                                    + '/../..'))
+    from src.data.jpn import hiragana_to_katakana
+else:
+    from ..data.jpn import hiragana_to_katakana
 
 # Server settings
 
@@ -58,6 +67,15 @@ KANA_RANGES = ((0x3041, 0x3096),        # Hiragana
 The ranges contain pronouncable characters only and are expressed as pairs of
 start (including) and end (including) characters.
 """
+
+DATABASE_FILE = os.path.abspath(os.path.expanduser(
+    os.path.dirname(os.path.abspath(__file__)) + '/../../data/processed/JMdict.db'))
+JUMAN_TRANSLATOR_FILE = os.path.abspath(
+    os.path.dirname(os.path.abspath(__file__))
+    + '/../../data/interim/juman_pos_translator.json')
+with open(JUMAN_TRANSLATOR_FILE, 'r') as f:
+    JUMAN_TRANSLATOR = json.load(f)
+
 
 
 # HTTP protocol-based errors
@@ -94,33 +112,83 @@ def detect_language(text):
     # Standard value
     return None
 
+def longest_common_prefix_len(a, b):
+    for i, (x, y) in enumerate(zip(a, b)):
+        if x != y:
+            return i
+    return i + 1
+
 def to_dict(token):
     """Turn an array of JUMAN++-style token annotations into a dictionary."""
     assert ((token[0] == ' ') == ('代表表記: / ' in token[11])
             and (token[0] == ' ') == (token[11] == '代表表記: / ')
             and '  ' not in token[11])
-    # TODO Remove "だ" suffix from na-adj., "v" from lexeme form of nominalized
-    # verbs and turn phonetic representation into katakana for better
-    # interoperability with JMdict
-    return {'word_graphic': token[0],
-            'word_phonetic': token[1],
-            'lemma': token[2],
-            'pos1': token[3],
-            'pos2': None if token[5] == '*' else token[5],
-            'class': None if token[7] == '*' else token[7],
-            'flexion': None if token[9] == '*' else token[9],
-            # TODO Handle non-explicit lexemes
-            # XXX Use a regex that captures a note directly, without relying on
-            #     the assertion above
-            # XXX Analyze the notes' substructure
-            'lexeme': (None if '代表表記:' not in token[11]
-                       else token[11][5:] if token[0] == ' '
-                       else re.search('代表表記:([^ ]*)', token[11]).group(1)),
-            'notes': ([] if token[11] == ''
-                      else [token[11]] if token[0] == ' '
-                      # XXX Not covered by the assertions: Space could occur
-                      #     within one note
-                      else token[11].split(' '))}
+    surface_graphic = token[0]
+    surface_phonetic = token[1]
+    uninflected_graphic = token[2]
+    # Heuristic: Assume that morphological changes are only applied to the ends
+    # of words
+    lcp = longest_common_prefix_len(surface_graphic, uninflected_graphic)
+    lcs = len(surface_graphic) - lcp
+    uninflected_phonetic = (surface_phonetic[:len(surface_phonetic) - lcs]
+                            + uninflected_graphic[lcp:])
+    pos_broad = token[3]
+    pos_fine = token[5]                 # May contain '*' (i.e. null) value
+    inflection_type = token[7]          # May contain '*' (i.e. null) value
+    try:
+        pos = JUMAN_TRANSLATOR[pos_broad][pos_fine][inflection_type]
+    except KeyError:
+        pos = []
+        # TODO Use logger instead
+        print('\033[33mWARN\033[0m POS tags %r %r %r not found'
+              % (pos_broad, pos_fine, inflection_type))
+    if '代表表記:' not in token[11]:
+        # For unknown lemmas use the uninflected representations (may fail to
+        # map different graphical variants to the same lexeme)
+        lemma = {'graphic': uninflected_graphic,
+                 'phonetic': uninflected_phonetic}
+    elif token[0] == ' ':
+        lemma = {'graphic': ' ', 'phonetic': ' '}
+    else:
+        lemma = re.search('代表表記:([^ ]*)', token[11]).group(1).split('/')
+        # '/' is not subject to morphological changes, so there is always an odd
+        # number of slashes in the above matched string
+        lemma = {'graphic': '/'.join(lemma[:len(lemma) // 2]),
+                 'phonetic': '/'.join(lemma[len(lemma) // 2:])}
+    # Remove copula part of na-adjectives and no-adjectives
+    # TODO Monitor whether this may lead to unexpected results
+    if inflection_type in {'ナ形容詞', 'ナ形容詞特殊', 'ナノ形容詞'}: # TODO Check whether this exactly conforms to the inflections used by JUMAN++
+        if uninflected_graphic[-1] == 'だ':
+            uninflected_graphic = uninflected_graphic[:-1]
+            uninflected_phonetic = uninflected_phonetic[:-1]
+        if lemma['graphic'][-1] == 'だ':
+            lemma['graphic'] = lemma['graphic'][:-1]
+            lemma['phonetic'] = lemma['phonetic'][:-1]
+        # XXX Create new tokens for copula
+    # TODO Remove "v" from lemma form of nominalized verbs and turn phonetic
+    # representation into katakana for better interoperability with JMdict
+    return {
+        # Inflected form as it was found in the text, along with its reading
+        'surface_form': {'graphic': surface_graphic,
+                         'phonetic': surface_phonetic},
+        # Uninflected form for both graphic representation and reading, may
+        # be different from the lemma for different graphic variants of the
+        # same lexeme
+        'base_form': {'graphic': uninflected_graphic,
+                      'phonetic': uninflected_phonetic},
+        # Canonical form for both graphic reprepresentation and reading,
+        # intended to be unique for all variants of a lexeme
+        'lemma': lemma,
+        'pos': pos,
+        'inflection': [] if token[9] == '*' else [token[9]],
+        # XXX Use a regex that captures a note directly, without relying on
+        #     the assertion above
+        # XXX Analyze the notes' substructure
+        'notes': ([] if token[11] == ''
+                  else [token[11]] if token[0] == ' '
+                  # XXX Not covered by the assertions: Space could occur
+                  #     within one note
+                  else token[11].split(' '))}
 
 def match_reading(splits):
     """Match graphic and phonetic word representations and lemma.

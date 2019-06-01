@@ -257,13 +257,13 @@
     function resetTabsAfterTimeout(n) {
         if (global.Date.now() >= currentTimeoutStart + TIMEOUT) {
             // console.log(n);
-            if ('lexemes' in n) {
-                resetTabs(n.lexemes);
+            if ('lemmas' in n) {
+                resetTabs(n.lemmas);
             }
         }
     }
 
-    function showLexemes(event) {
+    function showLemmas(event) {
         var nodes, node, i, rectangle,
             cursor = getCursorPosition(event);
         // Only search for the word hovered over if the cursor left the old one
@@ -306,17 +306,17 @@
             node.parentNode.insertBefore(replacement, node);
             for (i = 0; i < max_i; i++) {
                 // Insert token
-                replacement = global.document.createTextNode(response.tokens[i][0].word_graphic);
+                replacement = global.document.createTextNode(response.tokens[i][0].surface_form.graphic);
                 node.parentNode.insertBefore(replacement, node);
                 // XXX Do not store information directly in node
-                if (!('lexemes' in replacement)) {
-                    replacement.lexemes = [];
+                if (!('lemmas' in replacement)) {
+                    replacement.lemmas = [];
                     max_j = response.tokens[i].length;
                     for (j = 0; j < max_j; j++) {
-                        l = response.tokens[i][j].lexeme;
-                        // TODO Also add information on non-lexeme results
+                        l = response.tokens[i][j].lemma;
+                        // TODO Also add information on non-lemma results
                         if (l !== null) {
-                            replacement.lexemes.push(l);
+                            replacement.lemmas.push(l.graphic + '【' + l.phonetic + '】');
                         }
                     }
                 }
@@ -326,7 +326,7 @@
             node.parentNode.insertBefore(replacement, node);
             // Remove original text
             // node.parentNode.style.border = '1px dotted red';
-            node.parentNode.onmousemove = showLexemes;
+            node.parentNode.onmousemove = showLemmas;
             node.parentNode.onmouseleave = resetTimeoutStart;
             node.parentNode.removeChild(node);
         }
