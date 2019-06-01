@@ -1,0 +1,61 @@
+{
+    "settings": {
+        "number_of_shards": 1,
+        "number_of_replicas": 1,
+        "analysis": {
+            "filter": {
+                "eng_stop": {
+                    "type": "stop",
+                    "stopwords": "_english_"
+                },
+                "eng_stemmer": {
+                    "type": "stemmer",
+                    "language": "english"
+                },
+                "eng_possessive_stemmer": {
+                    "type": "stemmer",
+                    "language": "possessive_english"
+                }
+            },
+            "analyzer": {
+                "eng_analyzer": {
+                    "tokenizer": "standard",
+                    "filter": [
+                        "eng_possessive_stemmer",
+                        "lowercase",
+                        "eng_stemmer"
+                    ]
+                },
+                "eng_stop_analyzer": {
+                    "tokenizer": "standard",
+                    "filter": [
+                        "eng_possessive_stemmer",
+                        "lowercase",
+                        "eng_stop",
+                        "eng_stemmer"
+                    ]
+                }
+            }
+        }
+    },
+    "mappings": {
+        "_doc": {
+            "dynamic": "strict",
+            "properties": {
+                "lemmas": {
+                    "properties": {
+                        "graphic": {"type": "keyword"},
+                        "phonetic": {"type": "keyword"}
+                    }
+                },
+                "pos": {"type": "keyword"},
+                "glosses": {
+                    "type": "text",
+                    "analyzer": "eng_analyzer",
+                    "search_analyzer": "eng_stop_analyzer",
+                    "search_quote_analyzer": "eng_analyzer"
+                }
+            }
+        }
+    }
+}
