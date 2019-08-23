@@ -1,10 +1,16 @@
-* Personalized Reading Support
+* Yokome
 
-A web-based personalized reading support system for learners of Japanese.
+A web-based personalized reading support system.
+
+Yokome is currently restricted to Japanese, but was designed with
+multilinguality in mind.
 
 ** Requirements
 
-- Operating System: Linux (tested under Ubuntu 18.04)
+- Operating System:
+  - Linux (tested under Ubuntu 18.04)
+  - Windows might work, albeit only Windows 6.0 (Vista) and above
+- Python 3.6 or later
 - virtualenv
 - [[http://lotus.kuee.kyoto-u.ac.jp/nl-resource/jumanpp/jumanpp-1.02.tar.xz][JUMAN++ morphological analyzer ver. 1.02]], accessible from the command line
   via:

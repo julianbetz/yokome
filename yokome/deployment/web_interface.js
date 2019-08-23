@@ -55,9 +55,12 @@
         node,
         i,
         HIGHEST_Z_INDEX,
-        currentRectangle,
+        currentRectangles,
         TIMEOUT = 500,                  // (ms)
-        currentTimeoutStart;
+        currentTimeoutStart,
+        tokenizerTimeoutStart,
+        POS_SEPARATOR = '; ',
+        GLOSS_SEPARATOR = ' ▪ ';
 
     function getCursorPosition(event) {
         return [event.clientX, event.clientY];
@@ -133,68 +136,122 @@
         while (i--) {
             sibling = tabSet.childNodes[i];
             // sibling.style.boxShadow = 'rgba(0,0,0,0.75) 0px 3px 10px -10px';
-            sibling.style.opacity = 0.7;
+            // sibling.style.opacity = 0.7;
+            sibling.style.border = '1px solid white';
         }
         i = tabPanels.childNodes.length;
         while (i--) {
             tabPanels.childNodes[i].style.display = 'none';
         }
         // node.style.boxShadow = 'rgba(0,0,0,0.75) 0px 6px 10px -10px';
-        node.style.opacity = 1.0;
+        // node.style.opacity = 1.0;
+        node.style.border = '1px solid black';
         tabPanels.childNodes[getIndex(node)].style.display = 'block';
     }        
     
     function activateTab(event) {
-        activateTabOf(event.target);
+        var node = event.target;
+        while (node.onclick !== activateTab) {
+            node = node.parentElement;
+        }
+        activateTabOf(node);
     }
 
-    function resetTabs(tabTexts) {
+    function resetTabs(node, lexemes, head, tail) {
+        var i, j, k, l, progressBar, score, intensity, // entries,
+            subnode, subsubnode, subsubsubnode, ruby, reading, max_score;
+        node.wilps_lexemes = lexemes;
+        lexemes = lexemes.lexemes;
+        console.log(lexemes);
         // TODO Rather use dojox.gfx.Surface to clear all objects
-        var progressBar, score, intensity;
         while (tabSet.hasChildNodes()) {
             tabSet.removeChild(tabSet.lastChild);
         }
         while (tabPanels.hasChildNodes()) {
             tabPanels.removeChild(tabPanels.lastChild);
         }
-        for (i = 0; i < tabTexts.length; i++) {
+        // entries = [[['noun; no-adj.', 'check ▪ plaid ▪ checkered', '', 0.8]], [['noun; suru verb', 'checking ▪ monitoring ▪ looking over', '荷物はチェックされました。', 0.6], ['noun', 'check (banking) ▪ cheque ▪ bill', '旅行する時はいつも現金ではなくチェックにしています。', 0.4]], [['noun', 'check (chess)', '', 0.2]]];
+        for (i = 0; i < lexemes.length; i++) {
             // Create tab button
             node = global.document.createElement('div');
-            node.appendChild(global.document.createTextNode(tabTexts[i]));
+            subnode = global.document.createElement('span');
+            ruby = global.document.createElement('ruby');
+            ruby.appendChild(global.document.createTextNode(lexemes[i].headwords[0][0] === null ? lexemes[i].headwords[0][1] : lexemes[i].headwords[0][0]));
+            reading = global.document.createElement('rt');
+            reading.appendChild(global.document.createTextNode(lexemes[i].headwords[0][1]));
+            ruby.appendChild(reading);
+            subnode.appendChild(ruby);
+            node.appendChild(subnode);
             node.style.flex = '1 1 auto';
             node.style.minWidth = '15%';
             node.style.margin = '1px';
             node.style.border = '1px solid transparent';
             node.style.borderRadius = '2px';
             node.style.padding = '4px';
-            score = (tabTexts.length - i) / tabTexts.length;
+            node.style.display = 'flex';
+            node.style.alignItems = 'flex-end';
+            score = lexemes[i].score / lexemes[0].score; // (lexemes.length - i) / lexemes.length;
             intensity = score < 0.5 ? (score + 0.5) : (score - 0.5);
-            node.style.color = 'hsl(43, ' + Math.round(100 * intensity) + '%, ' + Math.round(100 * (0.12 + 0.57 * intensity)) + '%)';
-            node.style.backgroundColor = 'hsl(43, ' + Math.round(100 * score) + '%, ' + Math.round(100 * (0.12 + 0.38 * score)) + '%)';
+            // node.style.color = 'hsl(43, ' + Math.round(100 * intensity) + '%, ' + Math.round(100 * (0.12 + 0.57 * intensity)) + '%)';
+            // node.style.backgroundColor = 'hsl(43, ' + Math.round(100 * score) + '%, ' + Math.round(100 * (0.12 + 0.38 * score)) + '%)';
+            node.style.color = COLORS[0];
+            node.style.backgroundColor = 'hsl(43, 100%, ' + Math.round(100 * (0.95 - 0.45 * score)) + '%)';
             node.onclick = activateTab;
             tabSet.appendChild(node);
             // Create tab panel
+            max_score = 0;
+            for (j = 0; j < lexemes[i].roles.length; j++) {
+                for (k = 0; k < lexemes[i].roles[j].connotations.length; k++) {
+                    if (max_score < lexemes[i].roles[j].connotations[k].score) {
+                        max_score = lexemes[i].roles[j].connotations[k].score;
+                    }
+                }
+            }
             node = global.document.createElement('div');
-            // node.appendChild(global.document.createTextNode(tabTexts[i]));
-            // node.appendChild(global.document.createElement('br'));
-            node.appendChild(global.document.createTextNode('Frequency:'));
-            progressBar = global.document.createElement('progress');
-            progressBar.setAttribute('value', tabTexts.length - i);
-            progressBar.setAttribute('max', tabTexts.length + 1);
-            node.appendChild(progressBar);
-            node.appendChild(global.document.createElement('br'));
-            node.appendChild(global.document.createTextNode('<POS>'));
-            node.appendChild(global.document.createElement('br'));
-            node.appendChild(global.document.createTextNode('<Japanese glosses>'));
-            node.appendChild(global.document.createElement('br'));
-            node.appendChild(global.document.createTextNode('<English glosses>'));
-            node.appendChild(global.document.createElement('br'));
-            node.appendChild(global.document.createTextNode('<Example sentences>'));
+            for (j = 0; j < lexemes[i].roles.length; j++) {
+                subnode = global.document.createElement('div');
+                // progressBar = global.document.createElement('progress');
+                // progressBar.setAttribute('value', lexemes.length - i);
+                // progressBar.setAttribute('max', lexemes.length + 1);
+                // progressBar.style.height = '2px';
+                // subnode.appendChild(progressBar);
+
+                subsubnode = global.document.createElement('div');
+                for (k = 0; k < lexemes[i].roles[j].poss.length; k++) {
+                    subsubnode.appendChild(global.document.createTextNode(lexemes[i].roles[j].poss[k] + (k < lexemes[i].roles[j].poss.length - 1 ? POS_SEPARATOR : '')));
+                }
+                subsubnode.style.width = '100%';
+                subnode.appendChild(subsubnode);
+
+                for (k = 0; k < lexemes[i].roles[j].connotations.length; k++) {
+                    subsubnode = global.document.createElement('div');
+                    subsubnode.appendChild(global.document.createTextNode('[' + lexemes[i].roles[j].connotations[k].sense_id.toString() + '] '));
+                    for (l = 0; l < lexemes[i].roles[j].connotations[k].glosses.length; l++) {
+                        if (lexemes[i].roles[j].connotations[k].glosses[l][0] !== null) {
+                            subsubsubnode = global.document.createElement('i');
+                            subsubsubnode.appendChild(global.document.createTextNode(lexemes[i].roles[j].connotations[k].glosses[l][0]));
+                            subsubnode.appendChild(subsubsubnode);
+                        }
+                        subsubnode.appendChild(global.document.createTextNode(lexemes[i].roles[j].connotations[k].glosses[l][1] + (l < lexemes[i].roles[j].connotations[k].glosses.length - 1 ? GLOSS_SEPARATOR : '')));
+                    }
+                    subsubnode.style.width = '100%';
+                    score = lexemes[i].roles[j].connotations[k].score / max_score;
+                    subsubnode.style.color = 'hsl(43, ' + Math.round(100 * score) + '%, ' + Math.round(50 * score) + '%)';
+                    subnode.appendChild(subsubnode);
+
+                    // subsubnode = global.document.createElement('div');
+                    // subsubnode.appendChild(global.document.createTextNode(entries[i % 3][j][2]));
+                    // subsubnode.style.width = '100%';
+                    // subnode.appendChild(subsubnode);
+                }
+
+                node.appendChild(subnode);
+            }
             tabPanels.appendChild(node);
         }
-        // Create statistics tab button
+        // Create settings tab button
         node = global.document.createElement('div');
-        node.appendChild(global.document.createTextNode('Statistics'));
+        node.appendChild(global.document.createTextNode('About'));
         node.style.flex = '1 1 auto';
         node.style.minWidth = '15%';
         node.style.margin = '1px';
@@ -202,6 +259,8 @@
         node.style.borderRadius = '2px';
         node.style.padding = '4px';
         node.style.fontStyle = 'italic';
+        node.style.display = 'flex';
+        node.style.alignItems = 'flex-end';
         node.style.backgroundColor = COLORS[2];
         node.onclick = activateTab;
         tabSet.appendChild(node);
@@ -209,11 +268,16 @@
         node = global.document.createElement('div');
         // node.appendChild(global.document.createTextNode(tabTexts[i]));
         // node.appendChild(global.document.createElement('br'));
-        node.appendChild(global.document.createTextNode('Coverage:'));
-        progressBar = global.document.createElement('progress');
-        progressBar.setAttribute('value', 20);
-        progressBar.setAttribute('max', 100);
-        node.appendChild(progressBar);
+        // node.appendChild(global.document.createTextNode('Difficulty: '));
+        // progressBar = global.document.createElement('input');
+        // progressBar.setAttribute('type', 'range');
+        // progressBar.setAttribute('min', 0);
+        // progressBar.setAttribute('max', 100);
+        // progressBar.setAttribute('value', 20);
+        // node.appendChild(progressBar);
+
+        node.appendChild(global.document.createTextNode('Yokome'))
+        
         tabPanels.appendChild(node);
         if (tabSet.childNodes.length > 0) { // TODO Remove, should always be the case if statistics are used
             activateTabOf(tabSet.childNodes[0]);
@@ -221,117 +285,26 @@
         }
     }
 
-    function processElementsAndText(nodeFilter, callback) {
-        // Iterator for text elements only
-        var treeWalker = global.document.createTreeWalker(
-                global.document.body,
-                global.NodeFilter.SHOW_ELEMENT | global.NodeFilter.SHOW_TEXT,
-                nodeFilter,
-                false),
-            nodes = [],
-            node = treeWalker.nextNode(),
-            i;
-        // Store all text nodes in array, as a TreeWalker does not support deletion
-        // during iteration
-        while (node) {
-            nodes.push(node);
-            node = treeWalker.nextNode();
-        }
-        // Process text nodes
-        i = nodes.length;
-        while (i--) {
-            callback(nodes[i]);
-        }
-        // global.console.log(nodes.length);
-    }
-
     function contains(rectangle, point) {
         return (rectangle.left <= point[0] && rectangle.right >= point[0]
                 && rectangle.top <= point[1] && rectangle.bottom >= point[1]);
+    }
+
+    function anyContains(rectangles, point) {
+        var i = rectangles.length;
+        while (i--) {
+            if (contains(rectangles[i], point)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     function resetTimeoutStart() {
         currentTimeoutStart = global.Date.now();
     }
 
-    function resetTabsAfterTimeout(n) {
-        if (global.Date.now() >= currentTimeoutStart + TIMEOUT) {
-            // console.log(n);
-            if ('lexemes' in n) {
-                resetTabs(n.lexemes);
-            }
-        }
-    }
-
-    function showLexemes(event) {
-        var nodes, node, i, rectangle,
-            cursor = getCursorPosition(event);
-        // Only search for the word hovered over if the cursor left the old one
-        if (currentRectangle === undefined
-            || !contains(currentRectangle, cursor)) {
-            // Search for the word hovered over
-            nodes = event.target.childNodes;
-            i = nodes.length;
-            // TODO Use binary search instead for efficiency for long texts
-            // FIXME Does not take into account that words can span multiple
-            // lines. Therefore, some words "shadow" others.
-            while (i--) {
-                if (nodes[i].nodeType === global.Node.TEXT_NODE) {
-                    // Create temporary span element to measure out text node
-                    node = global.document.createElement('span');
-                    node.appendChild(global.document.createTextNode(nodes[i].nodeValue));
-                    event.target.insertBefore(node, nodes[i]);
-                    // Measure out text node
-                    rectangle = node.getBoundingClientRect();
-                    // Immediately remove temporary span element
-                    event.target.removeChild(node);
-                    // If the word was found, update rectangle information
-                    if (contains(rectangle, cursor)) {
-                        currentRectangle = rectangle;
-                        resetTimeoutStart();
-                        global.setTimeout(function () {resetTabsAfterTimeout(nodes[i]);}, TIMEOUT);
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
-    function splitNode(node, response, head, tail) {
-        var i, j, max_i, max_j, l, replacement;
-        if (response.language === 'jpn') {
-            max_i = response.tokens.length;
-            // Insert leading space
-            replacement = global.document.createTextNode(head);
-            node.parentNode.insertBefore(replacement, node);
-            for (i = 0; i < max_i; i++) {
-                // Insert token
-                replacement = global.document.createTextNode(response.tokens[i][0].word_graphic);
-                node.parentNode.insertBefore(replacement, node);
-                // XXX Do not store information directly in node
-                if (!('lexemes' in replacement)) {
-                    replacement.lexemes = [];
-                    max_j = response.tokens[i].length;
-                    for (j = 0; j < max_j; j++) {
-                        l = response.tokens[i][j].lexeme;
-                        // TODO Also add information on non-lexeme results
-                        if (l !== null) {
-                            replacement.lexemes.push(l);
-                        }
-                    }
-                }
-            }
-            // Insert trailing space
-            replacement = global.document.createTextNode(tail);
-            node.parentNode.insertBefore(replacement, node);
-            // Remove original text
-            // node.parentNode.style.border = '1px dotted red';
-            node.parentNode.onmousemove = showLexemes;
-            node.parentNode.onmouseleave = resetTimeoutStart;
-            node.parentNode.removeChild(node);
-        }
-    }
-
+    // TODO Remove head/tail syntax
     function httpGetAsyncWithData(url, text, node, callback, head, tail) {
         // TODO Do not retry on a HTTP 400 response
         var tries = TRIES,
@@ -357,13 +330,200 @@
         tries -= 1;
         request.send(data);
     }
-    
+
+    // function printLexemes(node, lexemes, head, tail) {
+    //     console.log(lexemes);
+    // }
+
+    function resetTabsAfterTimeout(n) {
+        if (global.Date.now() >= currentTimeoutStart + TIMEOUT) {
+<<<<<<< Updated upstream:src/ui/web_interface.js
+            // console.log(n);
+            if ('lexemes' in n) {
+                resetTabs(n.lexemes);
+=======
+            if ('wilps_lemmas' in n) {
+                console.log(n);
+                if ('wilps_lexemes' in n) {
+                    resetTabs(n, n.wilps_lexemes, null, null);
+                } else {
+                    httpGetAsyncWithData(
+                        'http://localhost:5003/wsd/disambiguate?lang=jpn',
+                        {'i': n.wilps_i, 'tokens': n.wilps_sentence},
+                        n,
+                        resetTabs,
+                        null,
+                        null);
+                }
+>>>>>>> Stashed changes:yokome/deployment/web_interface.js
+            }
+        }
+    }
+
+<<<<<<< Updated upstream:src/ui/web_interface.js
+    function showLexemes(event) {
+        var nodes, node, i, rectangle,
+=======
+    function showLemmas(event) {
+        var nodes, node, charNode, i, j, max_j, rectangle, rectangles,
+            found = false,
+>>>>>>> Stashed changes:yokome/deployment/web_interface.js
+            cursor = getCursorPosition(event);
+        // Only search for the word hovered over if the cursor left the old one
+        if (currentRectangles === undefined
+            || !anyContains(currentRectangles, cursor)) {
+            // Search for the word hovered over
+            nodes = event.target.childNodes;
+            i = nodes.length;
+            // TODO Use binary search instead for efficiency for long texts
+            // FIXME Does not take into account that words can span multiple
+            // lines. Therefore, some words "shadow" others.
+            while (i--) {
+                node = nodes[i];
+                rectangles = [];
+                if (node.nodeType === global.Node.TEXT_NODE) {
+                    max_j = node.nodeValue.length;
+                    for (j = 0; j < max_j; j++) {
+                        // Create temporary span element to measure out text node
+                        charNode = global.document.createElement('span');
+                        charNode.appendChild(global.document.createTextNode(node.nodeValue[j]));
+                        event.target.insertBefore(charNode, node);
+                        // Measure out text node
+                        rectangle = charNode.getBoundingClientRect();
+                        rectangles.push(rectangle);
+                        if (contains(rectangle, cursor)) {
+                            found = true;
+                        }
+                    }
+                    // Remove temporary span elements
+                    while (j--) {
+                        event.target.removeChild(node.previousSibling);
+                    }
+                    if (found) {
+                        // Update rectangle information
+                        currentRectangles = rectangles;
+                        // Update info box
+                        resetTimeoutStart();
+                        global.setTimeout(function () {resetTabsAfterTimeout(node);}, TIMEOUT);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    function splitNode(node, response, head, tail) {
+        var i, j, k, max_i, max_j, max_k, l, sentence, replacement, span, ruby, rt;
+        if (response.language === 'jpn') {
+            max_i = response.sentences.length;
+            // Insert leading space
+            replacement = global.document.createTextNode(head);
+            node.parentNode.insertBefore(replacement, node);
+            for (i = 0; i < max_i; i++) {
+<<<<<<< Updated upstream:src/ui/web_interface.js
+                // Insert token
+                replacement = global.document.createTextNode(response.tokens[i][0].word_graphic);
+                node.parentNode.insertBefore(replacement, node);
+                // XXX Do not store information directly in node
+                if (!('lexemes' in replacement)) {
+                    replacement.lexemes = [];
+                    max_j = response.tokens[i].length;
+                    for (j = 0; j < max_j; j++) {
+                        l = response.tokens[i][j].lexeme;
+                        // TODO Also add information on non-lexeme results
+                        if (l !== null) {
+                            replacement.lexemes.push(l);
+=======
+                sentence = response.sentences[i];
+                max_j = sentence.length;
+                for (j = 0; j < max_j; j++) {
+                    // Insert token
+                    replacement = global.document.createTextNode(sentence[j][0].surface_form.graphic);
+                    node.parentNode.insertBefore(replacement, node);
+                    replacement.wilps_lemmas = [];
+                    replacement.wilps_sentence = sentence;
+                    replacement.wilps_i = j;
+                    max_k = sentence[j].length;
+                    for (k = 0; k < max_k; k++) {
+                        l = sentence[j][k].lemma;
+                        if (l !== null) {
+                            span = global.document.createElement('span');
+                            ruby = global.document.createElement('ruby');
+                            ruby.appendChild(global.document.createTextNode(l.graphic));
+                            rt = global.document.createElement('rt');
+                            rt.appendChild(global.document.createTextNode(l.phonetic));
+                            ruby.appendChild(rt);
+                            span.appendChild(ruby);
+                            replacement.wilps_lemmas.push(span);
+>>>>>>> Stashed changes:yokome/deployment/web_interface.js
+                        }
+                    }
+                }
+            }
+            // Insert trailing space
+            replacement = global.document.createTextNode(tail);
+            node.parentNode.insertBefore(replacement, node);
+            // Remove original text
+            // node.parentNode.style.border = '1px dotted red';
+            node.parentNode.onmousemove = showLexemes;
+            node.parentNode.onmouseleave = resetTimeoutStart;
+            node.parentNode.removeChild(node);
+        }
+    }
+
+    function resetTokenizerTimeoutStart() {
+        tokenizerTimeoutStart = global.Date.now();
+    }
+
     function replace(node) {
-        var text = node.nodeValue,
-            head = text.match(/^\s*/),
-            tail = text.match(/\s*$/);
-        httpGetAsyncWithData('http://localhost:5003/tokenizer/tokenize?lang=jpn',
-                             text, node, splitNode, head, tail);
+        if (global.Date.now() >= tokenizerTimeoutStart + TIMEOUT) {
+            console.log(node);
+            node.parentNode.onmouseenter = resetTokenizerTimeoutStart;
+            node.parentNode.onmouseleave = null;
+            var text = node.nodeValue,
+                head = text.match(/^\s*/),
+                tail = text.match(/\s*$/);
+            httpGetAsyncWithData('http://localhost:5003/tokenizer/tokenize?lang=jpn',
+                                 text, node, splitNode, head, tail);
+        }
+    }
+
+    function processElementsAndText(nodeFilter) {
+        // Iterator for text elements only
+        var treeWalker = global.document.createTreeWalker(
+                global.document.body,
+                global.NodeFilter.SHOW_ELEMENT | global.NodeFilter.SHOW_TEXT,
+                nodeFilter,
+                false),
+            nodes = [],
+            node = treeWalker.nextNode(),
+            i;
+        // Store all text nodes in array, as a TreeWalker does not support deletion
+        // during iteration
+        while (node) {
+            nodes.push(node);
+            node = treeWalker.nextNode();
+        }
+        // Process text nodes
+        i = nodes.length;
+        while (i--) {
+            node = nodes[i].parentNode;
+            node.onmouseenter = function (event) {
+                resetTokenizerTimeoutStart();
+                global.setTimeout(
+                    function () {
+                        var j;
+                        for (j = 0; j < event.target.childNodes.length; j++) {
+                            if (event.target.childNodes[j].nodeType === global.Node.TEXT_NODE) {
+                                replace(event.target.childNodes[j]);
+                            }
+                        }
+                    },
+                    TIMEOUT);
+            };
+            node.onmouseleave = resetTokenizerTimeoutStart;
+        }
+        // global.console.log(nodes.length);
     }
 
     function moveBox(event) {
@@ -470,5 +630,5 @@
 
     // XXX For long pages, only process text nodes visible on the current
     // viewport (i.e. on semi-demand)
-    processElementsAndText(nodeFilter, replace);
+    processElementsAndText(nodeFilter);
 }());

@@ -104,6 +104,7 @@ class OrAndTree(DataTree):
     instances of AndOrTree, i.e. they semantically represent cooccurrences.
 
     Nodes of this type may carry satellite data.
+
     """
 
     def __setitem__(self, index, value):
@@ -130,6 +131,7 @@ class AndOrTree(StructureTree):
     be instances of OrAndTree, i.e. they semantically are alternatives.
 
     Nodes of this type do not carry any satellite data.
+
     """
 
     def __setitem__(self, index, value):
@@ -155,6 +157,7 @@ class DataOnlyTree(DataTree):
     be other instances of DataOnlyTree.
     
     Nodes of this type may carry satellite data.
+
     """
 
     def __setitem__(self, index, value):
@@ -206,6 +209,7 @@ class LabeledTree(Container, Iterable, Sized):
         using bracket notation.
 
         :raises KeyError: If ``label`` is a ``tuple``
+
         """
 
         # Principle of least astonishment: Prevent misinterpretation of
@@ -229,6 +233,7 @@ class LabeledTree(Container, Iterable, Sized):
             additional keys.  It then requests accessing satellite data.
 
         :raises KeyError: If ``label`` is ``None``
+
         """
 
         if label is None:
@@ -243,6 +248,7 @@ class LabeledTree(Container, Iterable, Sized):
         Slicing and arbitrary-length queries are currently not supported.
 
         :raises NotImplementedError: If ``data`` is a ``slice`` or ``Ellipsis``
+
         """
 
         if isinstance(data, slice):
@@ -260,6 +266,7 @@ class LabeledTree(Container, Iterable, Sized):
         of ``LabeledTree``.
 
         :raises TypeError: If ``node`` is not an instance of ``LabeledTree``
+
         """
 
         if not isinstance(node, LabeledTree):
@@ -276,6 +283,7 @@ class LabeledTree(Container, Iterable, Sized):
         satellite data.
 
         :param x: path specification through the tree
+
         """
         return self._contains(x)
 
@@ -334,7 +342,9 @@ class LabeledTree(Container, Iterable, Sized):
 
         :param key: path specification through tree
         
-        :rtype: satellite data, ``LabeledTree``, or an iterator over ``LabeledTree``s
+        :rtype: satellite data, ``LabeledTree``, or an iterator over
+        ``LabeledTree``s
+
         """
         return self._getitem(key)
 
@@ -433,6 +443,7 @@ class LabeledTree(Container, Iterable, Sized):
         Specifying the empty path is equivalent to calling :meth:`detach`.
 
         :param key: path specification through tree
+
         """
         self._delitem(key)
 
@@ -656,6 +667,7 @@ class TemplateTree(LabeledTree):
         of ``TemplateTree``.
 
         :raises TypeError: If ``node`` is not an instance of ``TemplateTree``
+
         """
         if not isinstance(node, TemplateTree):
             raise TypeError('Children of %r may only be instances of %r'
@@ -881,22 +893,30 @@ class TemplateTree(LabeledTree):
 
         This function has the following properties:
 
-        * The score is in the interval [0, 1], with only a complete match scoring 1,
-          and only an empty match scoring 0.  Trees that have their roots at
-          different levels in the hierarchy receive a match score of 0.
+        * The score is in the interval [0, 1], with only a complete match
+          scoring 1, and only an empty match scoring 0.  Trees that have their
+          roots at different levels in the hierarchy receive a match score of 0.
 
-        * Data in children nodes makes a contribution of at most half of the
-          contribution of their parent nodes to the overall score.
+        * Data in a child node makes a contribution of at most half of the
+          contribution of the data in its parent node to the overall score.
 
-        * Sibling nodes
+        * Sibling nodes make a higher contribution to the overall score than
+          child nodes.
+
+        * Additional/missing child nodes that are not in conflict with other
+          child nodes result in a reduced score.
+
+        For equal scores, children that are specified earlier are considered
+        first to be part of the match result.
 
         Nodes in unrelated parts of the hierarchy do not affect the score.  The
         same holds for overspecification: Descendant nodes in the token tree
         that are not found in the lexeme tree are not considered.
 
-        In case of multiple inheritance, behavior on TemplateTree overrides
-        behavior on DataOnlyTree.  A Resulting TemplateTree match contains the
-        data from the input, but adheres to this TemplateTree's restrictions.
+        In case of multiple inheritance, the behavior on ``TemplateTree``
+        overrides the behavior on ``DataOnlyTree``.  A resulting
+        ``TemplateTree`` match contains the data from the input, but adheres to
+        this ``TemplateTree``'s restrictions.
 
         """
 

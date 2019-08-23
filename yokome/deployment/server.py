@@ -19,22 +19,43 @@ import sys
 import traceback
 import click
 import re
-from subprocess import Popen, PIPE
 from urllib.parse import unquote_plus
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
+<<<<<<< Updated upstream:src/ui/server.py
 
+=======
+
+
+if __name__ == '__main__':
+    sys.path.append(os.path.abspath(os.path.dirname(os.path.abspath(__file__))
+                                    + '/../..'))
+    from yokome.features.symbol_stream import to_symbol_stream, ascii_fold
+    from yokome.features.jpn import segmenter, strip, stream_tokenizer, stream_tokenizer, fullwidth_fold, iteration_fold, repetition_contraction, combining_voice_mark_fold
+    from yokome.models import wsd
+else:
+    from ..features.symbol_stream import to_symbol_stream, ascii_fold
+    from ..features.jpn import segmenter, strip, stream_tokenizer, stream_tokenizer, fullwidth_fold, iteration_fold, repetition_contraction, combining_voice_mark_fold
+    from ..models import wsd
+
+>>>>>>> Stashed changes:yokome/deployment/server.py
 
 # Server settings
 
 PORT = 5003
 """int: Server port to start on."""
 
-SERVANT = 'tokenizer'
+TOKEN_SERVANT = 'tokenizer'
 """str: Tokenizer API location."""
 
-SERVICE = 'tokenize'
+TOKEN_SERVICE = 'tokenize'
 """str: Tokenization API location for tokenizer API."""
+
+WSD_SERVANT = 'wsd'
+"""str: WSD API location."""
+
+WSD_SERVICE = 'disambiguate'
+"""str: Disambiguation API location for WSD API."""
 
 
 # ISO 639-3 language codes
@@ -57,8 +78,16 @@ KANA_RANGES = ((0x3041, 0x3096),        # Hiragana
 
 The ranges contain pronouncable characters only and are expressed as pairs of
 start (including) and end (including) characters.
+
 """
 
+<<<<<<< Updated upstream:src/ui/server.py
+=======
+DATABASE_FILE = os.path.abspath(os.path.expanduser(
+    os.path.dirname(os.path.abspath(__file__)) + '/../../data/processed/data.db'))
+
+
+>>>>>>> Stashed changes:yokome/deployment/server.py
 
 # HTTP protocol-based errors
 
@@ -94,6 +123,7 @@ def detect_language(text):
     # Standard value
     return None
 
+<<<<<<< Updated upstream:src/ui/server.py
 def to_dict(token):
     """Turn an array of JUMAN++-style token annotations into a dictionary."""
     assert ((token[0] == ' ') == ('代表表記: / ' in token[11])
@@ -143,10 +173,13 @@ def match_reading(splits):
     return [re.sub('\\\\ ', ' ', ' '.join(splits[j*i:(j+1)*i]))
             for j in range(3)]
 
+=======
+>>>>>>> Stashed changes:yokome/deployment/server.py
 class Handler(BaseHTTPRequestHandler):
     """Handler for all incoming HTTP requests.
     
     Defines the API.
+    
     """
     
     debug = False
@@ -191,6 +224,7 @@ class Handler(BaseHTTPRequestHandler):
         
         First, check whether all data that is required by Handler.tokenize is
         provided.  Then, return the tokenized data.
+
         """
         if isinstance(data, EmptyBodyException):
             raise UnprocessableEntityError('Message body missing')
@@ -202,84 +236,60 @@ class Handler(BaseHTTPRequestHandler):
             return Handler.tokenize(data, params['lang'])
         return Handler.tokenize(data)
 
-    def tokenize(expression, language=None):
-        """Tokenize the specified expression for the specified language.
+    def tokenize(text, language=None):
+        """Tokenize the specified text for the specified language.
         
-        Attempt to detect the language of the expression if no language is
+        Attempt to detect the language of the text if no language is
         provided.  For Japanese, apply the JUMAN++ morphological analyzer
         (Morita et al. 2015).
+
         """
         if language is None:
-            language = detect_language(expression)
+            language = detect_language(text)
         if language == JAPANESE:
-            # Call JUMAN++ Japanese morphological analyzer
-            process = Popen(['jumanpp'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
-            output, error = process.communicate(input=expression.encode())
-            # TODO Detect process failure
-            # TODO Handle error messages
-            
-            # Parse tokenizer output format
-            # 
-            # The output is one-token-per-line, with space-separated
-            # annotations.  There are twelve annotations for regular tokens and
-            # twelve annotations and an additional '@ ' at the beginning of
-            # lines to mark the beginning of alternatives for a preceding
-            # regular token.
-            # 
-            # Start processing from the end, since there are ambiguities for the
-            # first three annotation types: Spaces are denoted as '\ ', while
-            # backslashes are denoted by '\' only, resulting in conflicting
-            # interpretations for '\ ' as "space", and "backslash" + "end of
-            # annotation", respectively.
-            #
-            # Furthermore, '"' is not escaped or enclosed in single quotation
-            # marks, while the last annotation, if existent, is always enclosed
-            # in double quotation marks.  Thus, manual line splitting is
-            # necessary, and cannot be done via shlex.
-            #
-            # The remaining annotation types seem to be a fixed set of keywords,
-            # with odd and even annotations encoding the same information, once
-            # in string form and once as a numerical ID.
-            output = [line for line in output.decode().split('\n')
-                      if line != 'EOS' and line != '']
-            assert all([line.endswith(' NIL')
-                        or re.match('^"[^"]*" ', line[::-1]) is not None
-                        for line in output])
-            output = [re.fullmatch('^(.*) ("[^"]*"|NIL)$', line).groups()
-                      for line in output]
-            output = [[rest.split(' '), ('' if notes == 'NIL' else notes[1:-1])]
-                      for rest, notes in output]
-            assert all(len(rest) >= 11 for rest, _ in output)
-            output = [((['@'] + match_reading(rest[1:-8]))
-                       if (rest[0] == '@'
-                           # '@' itself has only one morphological variant
-                           and (rest[-9] != '@' or len(rest[:-8]) > 3))
-                       else match_reading(rest[:-8]))
-                      + rest[-8:] + [notes]
-                      for rest, notes in output]
-            # If passing all asserts up to this point in this function and in
-            # match_reading, the output is now an array version of the output
-            # format of JUMAN++, so as to fulfill the following condition:
-            # 
-            #     ``assert all([len(line) == 12 or
-            #                   (line[0] == '@' and len(line) == 13)
-            #                   for line in output])``
-            tokens = []
-            for line in output:
-                if len(line) <= 12:
-                    tokens.append([to_dict(line)])
-                else:
-                    assert len(tokens) > 0
-                    tokens[-1].append(to_dict(line[1:]))
-            response = {'language': language, 'tokens': tokens}
+            # TODO Handle case that there is no token (only omitted characters)
+            sentences = list(
+                list(stream_tokenizer(fullwidth_fold(ascii_fold(iteration_fold(
+                    repetition_contraction(combining_voice_mark_fold(
+                        sentence)))))))
+                for sentence in strip(segmenter(to_symbol_stream(text))))
+            response = {'language': language, 'sentences': sentences}
         else:
             response = {'language': language}
         return response
+
+    def check_disambiguate(params, data):
+        """Check data and disambiguate it.
+        
+        First, check whether all data that is required by Handler.disambiguate
+        is provided.  Then, return scored lexeme entries.
+
+        """
+        if isinstance(data, EmptyBodyException):
+            raise UnprocessableEntityError('Message body missing')
+        if type(data) != dict:
+            raise UnprocessableEntityError('Malformed message body')
+        if 'lang' not in params:
+            raise BadRequestError("Language 'lang' missing")
+        if 'i' not in data:
+            raise BadRequestError("Token index 'i' missing")
+        if 'tokens' not in data:
+            raise BadRequestError("Tokens 'tokens' missing")
+        return Handler.disambiguate(data['tokens'], int(data['i']), params['lang'])
+
+
+    def disambiguate(tokens, i, language):
+        """Disambiguate the token at index ``i`` for the specified language."""
+        if language != JAPANESE:
+            raise NotImplementedError('Language not supported')
+        return {'language': language, 'lexemes': wsd.disambiguate(tokens, i)}
+
 
     def do_OPTIONS(self):
         """Respond to an HTTP OPTIONS request.
         
         Allow the HTTP POST method for cross-origin resource sharing (CORS).
+
         """
         self.send_response(200)         # OK
         self.send_header('Access-Control-Allow-Origin', '*')
@@ -292,12 +302,12 @@ class Handler(BaseHTTPRequestHandler):
         """Read the URL of a HTTP POST request and call the appropriate function
         to process the API call.
         
-        See also:
-            Handler.do_POST
+        .. seealso:: :py:meth:`Handler.do_POST`
+
         """
-        if re.match('^/%s/%s(\\?|/?$)' % (SERVANT, SERVICE), self.path):
-            params_str = (self.path[len(SERVANT)+len(SERVICE)+3:]
-                          if re.match('^/%s/%s\\?' % (SERVANT, SERVICE), self.path)
+        if re.match('^/%s/%s(\\?|/?$)' % (TOKEN_SERVANT, TOKEN_SERVICE), self.path):
+            params_str = (self.path[len(TOKEN_SERVANT)+len(TOKEN_SERVICE)+3:]
+                          if re.match('^/%s/%s\\?' % (TOKEN_SERVANT, TOKEN_SERVICE), self.path)
                           else '')
             params = Handler.parse_params(params_str)
             try:
@@ -306,6 +316,17 @@ class Handler(BaseHTTPRequestHandler):
                 return Handler.check_tokenize(params, exception)
             else:
                 return Handler.check_tokenize(params, data)
+        elif re.match('^/%s/%s(\\?|/?$)' % (WSD_SERVANT, WSD_SERVICE), self.path):
+            params_str = (self.path[len(WSD_SERVANT)+len(WSD_SERVICE)+3:]
+                          if re.match('^/%s/%s\\?' % (WSD_SERVANT, WSD_SERVICE), self.path)
+                          else '')
+            params = Handler.parse_params(params_str)
+            try:
+                data = self.parse_body()
+            except EmptyBodyException as exception:
+                return Handler.check_disambiguate(params, exception)
+            else:
+                return Handler.check_disambiguate(params, data)
         else:
             raise NotFoundError('Nonexistent location')
 
@@ -318,8 +339,8 @@ class Handler(BaseHTTPRequestHandler):
         substitute for GET to fetch content, since GET does not support sending
         the necessary message body from the client side.
         
-        See also:
-            Handler.handle_POST
+        .. seealso:: :py:meth:`Handler.handle_POST`
+        
         """
         try:
             response = self.handle_POST()

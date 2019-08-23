@@ -42,6 +42,9 @@
         "_doc": {
             "dynamic": "strict",
             "properties": {
+                "language": {"type": "keyword"},
+                "entry_id": {"type": "integer"},
+                "sense_id": {"type": "integer"},
                 "lemmas": {
                     "properties": {
                         "graphic": {"type": "keyword"},

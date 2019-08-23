@@ -24,7 +24,7 @@ from elasticsearch import Elasticsearch, RequestError
 if __name__ == '__main__':
     sys.path.append(os.path.abspath(os.path.dirname(os.path.abspath(__file__))
                                     + '/../..'))
-    from src.features.dictionary import Lexeme
+    from yokome.features.dictionary import Lexeme
 else:
     from ..features.dictionary import Lexeme
 
@@ -34,7 +34,7 @@ SETUP_FILE = os.path.abspath(os.path.dirname(os.path.abspath(__file__))
                              + '/../../data/crafted'
                              + '/jpn_inverse_dictionary_setup.json')
 DICTIONARY_FILE = os.path.abspath(os.path.dirname(os.path.abspath(__file__))
-                                  + '/../../data/processed/JMdict.db')
+                                  + '/../../data/processed/data.db')
 RESTRICTIONS_FILE = os.path.abspath(os.path.dirname(os.path.abspath(__file__))
                                     + '/../../data/crafted'
                                     + '/jpn_pos_restrictions.json')
@@ -77,7 +77,10 @@ if __name__ == '__main__':
                     es.create(index=INDEX_NAME,
                               doc_type='_doc',
                               id='jpn:%d:%d' % (entry_id, sense.sense_id),
-                              body={'lemmas': lemmas,
+                              body={'language': 'jpn',
+                                    'entry_id': entry_id,
+                                    'sense_id': sense.sense_id,
+                                    'lemmas': lemmas,
                                     'pos': normalized_pos_tags,
                                     'glosses': [gloss
                                                 for _, gloss in sense.glosses]})

@@ -29,9 +29,9 @@ import sqlite3 as sql
 if __name__ == '__main__':
     sys.path.append(os.path.abspath(os.path.dirname(os.path.abspath(__file__))
                                     + '/../..'))
-    from src.data.jpn import is_reading, hiragana_to_katakana
+    from yokome.features.jpn import is_reading, hiragana_to_katakana
 else:
-    from .jpn import is_reading, hiragana_to_katakana
+    from ..features.jpn import is_reading, hiragana_to_katakana
 
 
 UK = 'word usually written using kana alone'
@@ -306,7 +306,7 @@ if __name__ == '__main__':
     resource_dir = os.path.abspath(os.path.expanduser(
         os.path.dirname(os.path.abspath(__file__)) + '/../../data/processed'))
     Path(resource_dir).mkdir(exist_ok=True)
-    database_file = resource_dir + '/JMdict.db'
+    database_file = resource_dir + '/data.db'
     # assert not Path(database_file).exists(), 'Database file already existing'
     if Path(database_file).exists():
         assert Path(database_file).is_file()
@@ -333,6 +333,7 @@ if __name__ == '__main__':
         c.execute('PRAGMA foreign_keys=ON')
         print('    Creating tables...')
         # Surface forms for dictionary searches
+        # XXX Inconsistent use of the term 'lemmas': use 'base_forms' istead
         # XXX Use 'reading', or at least 'phonemic' instead of 'phonetic'
         c.execute('''CREATE TABLE lemmas (
             graphic TEXT NOT NULL,

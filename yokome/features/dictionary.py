@@ -18,7 +18,7 @@
 import re
 import sqlite3 as sql
 
-from ..data.jpn import hiragana_to_katakana
+from .jpn import hiragana_to_katakana
 from ..data.jmdict_to_db import GLOSS_SEPARATOR
 from .tree import TemplateTree
 
@@ -35,7 +35,7 @@ def circled_number(number, bold_circle=True):
     elif number < 21 and bold_circle:
         return chr(0x24e0 + number)
     elif bold_circle:
-        raise ValueError()
+        return '[%s]' % (number,) # raise ValueError()
     elif number < 30:
         return chr(0x323c + number)
     elif number == 30:
@@ -45,7 +45,7 @@ def circled_number(number, bold_circle=True):
     elif number < 51:
         return chr(0x328d + number)
     else:
-        raise ValueError()
+        return '(%s)' % (number,) # raise ValueError()
 
 
 class Lexeme():
