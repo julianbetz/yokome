@@ -16,15 +16,14 @@
 
 
 import sys
+import os
+import logging
 import traceback
 import click
 import re
 from urllib.parse import unquote_plus
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
-<<<<<<< Updated upstream:src/ui/server.py
-
-=======
 
 
 if __name__ == '__main__':
@@ -38,7 +37,6 @@ else:
     from ..features.jpn import segmenter, strip, stream_tokenizer, stream_tokenizer, fullwidth_fold, iteration_fold, repetition_contraction, combining_voice_mark_fold
     from ..models import wsd
 
->>>>>>> Stashed changes:yokome/deployment/server.py
 
 # Server settings
 
@@ -81,13 +79,12 @@ start (including) and end (including) characters.
 
 """
 
-<<<<<<< Updated upstream:src/ui/server.py
-=======
-DATABASE_FILE = os.path.abspath(os.path.expanduser(
-    os.path.dirname(os.path.abspath(__file__)) + '/../../data/processed/data.db'))
+JUMAN_TRANSLATOR_FILE = os.path.abspath(
+    os.path.dirname(os.path.abspath(__file__))
+    + '/../../data/interim/juman_pos_translator.json')
+with open(JUMAN_TRANSLATOR_FILE, 'r') as f:
+    JUMAN_TRANSLATOR = json.load(f)
 
-
->>>>>>> Stashed changes:yokome/deployment/server.py
 
 # HTTP protocol-based errors
 
@@ -123,58 +120,7 @@ def detect_language(text):
     # Standard value
     return None
 
-<<<<<<< Updated upstream:src/ui/server.py
-def to_dict(token):
-    """Turn an array of JUMAN++-style token annotations into a dictionary."""
-    assert ((token[0] == ' ') == ('代表表記: / ' in token[11])
-            and (token[0] == ' ') == (token[11] == '代表表記: / ')
-            and '  ' not in token[11])
-    # TODO Remove "だ" suffix from na-adj., "v" from lexeme form of nominalized
-    # verbs and turn phonetic representation into katakana for better
-    # interoperability with JMdict
-    return {'word_graphic': token[0],
-            'word_phonetic': token[1],
-            'lemma': token[2],
-            'pos1': token[3],
-            'pos2': None if token[5] == '*' else token[5],
-            'class': None if token[7] == '*' else token[7],
-            'flexion': None if token[9] == '*' else token[9],
-            # TODO Handle non-explicit lexemes
-            # XXX Use a regex that captures a note directly, without relying on
-            #     the assertion above
-            # XXX Analyze the notes' substructure
-            'lexeme': (None if '代表表記:' not in token[11]
-                       else token[11][5:] if token[0] == ' '
-                       else re.search('代表表記:([^ ]*)', token[11]).group(1)),
-            'notes': ([] if token[11] == ''
-                      else [token[11]] if token[0] == ' '
-                      # XXX Not covered by the assertions: Space could occur
-                      #     within one note
-                      else token[11].split(' '))}
 
-def match_reading(splits):
-    """Match graphic and phonetic word representations and lemma.
-    
-    Discern the notations '\ ' for space and '\' for backslash (with ' ' as
-    field separator) in JUMAN++ output.
-
-    Args: 
-        splits (list<str>): section for word token (graphic), word token
-            (phonetic), and lemma, split on ' ' from a joint string
-            representation with ' ' as separator.  The input may contain more
-            than three elements.
-    """
-    # Space and backslash do not take part in morphological variations, thus all
-    # three annotations contain the same number of splits
-    assert len(splits) % 3 == 0
-    i = len(splits) // 3
-    # After discriminating word token (graphic), word token (phonetic) and
-    # lemma, all sequences of '\ ' necessarily denote spaces, not backslashes
-    return [re.sub('\\\\ ', ' ', ' '.join(splits[j*i:(j+1)*i]))
-            for j in range(3)]
-
-=======
->>>>>>> Stashed changes:yokome/deployment/server.py
 class Handler(BaseHTTPRequestHandler):
     """Handler for all incoming HTTP requests.
     

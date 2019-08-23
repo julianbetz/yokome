@@ -337,11 +337,6 @@
 
     function resetTabsAfterTimeout(n) {
         if (global.Date.now() >= currentTimeoutStart + TIMEOUT) {
-<<<<<<< Updated upstream:src/ui/web_interface.js
-            // console.log(n);
-            if ('lexemes' in n) {
-                resetTabs(n.lexemes);
-=======
             if ('wilps_lemmas' in n) {
                 console.log(n);
                 if ('wilps_lexemes' in n) {
@@ -355,19 +350,13 @@
                         null,
                         null);
                 }
->>>>>>> Stashed changes:yokome/deployment/web_interface.js
             }
         }
     }
 
-<<<<<<< Updated upstream:src/ui/web_interface.js
-    function showLexemes(event) {
-        var nodes, node, i, rectangle,
-=======
     function showLemmas(event) {
         var nodes, node, charNode, i, j, max_j, rectangle, rectangles,
             found = false,
->>>>>>> Stashed changes:yokome/deployment/web_interface.js
             cursor = getCursorPosition(event);
         // Only search for the word hovered over if the cursor left the old one
         if (currentRectangles === undefined
@@ -420,20 +409,6 @@
             replacement = global.document.createTextNode(head);
             node.parentNode.insertBefore(replacement, node);
             for (i = 0; i < max_i; i++) {
-<<<<<<< Updated upstream:src/ui/web_interface.js
-                // Insert token
-                replacement = global.document.createTextNode(response.tokens[i][0].word_graphic);
-                node.parentNode.insertBefore(replacement, node);
-                // XXX Do not store information directly in node
-                if (!('lexemes' in replacement)) {
-                    replacement.lexemes = [];
-                    max_j = response.tokens[i].length;
-                    for (j = 0; j < max_j; j++) {
-                        l = response.tokens[i][j].lexeme;
-                        // TODO Also add information on non-lexeme results
-                        if (l !== null) {
-                            replacement.lexemes.push(l);
-=======
                 sentence = response.sentences[i];
                 max_j = sentence.length;
                 for (j = 0; j < max_j; j++) {
@@ -455,7 +430,6 @@
                             ruby.appendChild(rt);
                             span.appendChild(ruby);
                             replacement.wilps_lemmas.push(span);
->>>>>>> Stashed changes:yokome/deployment/web_interface.js
                         }
                     }
                 }
@@ -465,7 +439,7 @@
             node.parentNode.insertBefore(replacement, node);
             // Remove original text
             // node.parentNode.style.border = '1px dotted red';
-            node.parentNode.onmousemove = showLexemes;
+            node.parentNode.onmousemove = showLemmas;
             node.parentNode.onmouseleave = resetTimeoutStart;
             node.parentNode.removeChild(node);
         }
