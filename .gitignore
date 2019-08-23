@@ -4,7 +4,9 @@
 data/*/*
 !data/crafted/*
 virtualenvs/*
+notebooks/*
 lib/*
 models/*
+*.pyc
 
 !**/.gitkeep
