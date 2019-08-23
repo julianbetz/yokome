@@ -42,7 +42,7 @@ def longest_common_prefix_len(a, b):
 
 _JUMAN_TRANSLATOR_FILE = os.path.abspath(
     os.path.dirname(os.path.abspath(__file__))
-    + '/../../data/interim/juman_pos_translator.json')
+    + '/../../data/crafted/juman_pos_translator.json')
 with open(_JUMAN_TRANSLATOR_FILE, 'r') as f:
     JUMAN_TRANSLATOR = json.load(f, object_hook=list_as_tuple_hook)
 def _flatten_dict(d):

@@ -81,7 +81,7 @@ start (including) and end (including) characters.
 
 JUMAN_TRANSLATOR_FILE = os.path.abspath(
     os.path.dirname(os.path.abspath(__file__))
-    + '/../../data/interim/juman_pos_translator.json')
+    + '/../../data/crafted/juman_pos_translator.json')
 with open(JUMAN_TRANSLATOR_FILE, 'r') as f:
     JUMAN_TRANSLATOR = json.load(f)
 
