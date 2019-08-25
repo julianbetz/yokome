@@ -49,33 +49,35 @@ def circled_number(number, bold_circle=True):
 
 
 class Lexeme():
-    def __init__(self, conn, entry_id, restrictions):
+    def __init__(self, conn, language_code, entry_id, restrictions):
         c = conn.cursor()
+        self.language_code = language_code
         self.entry_id = entry_id
-        self.headwords = tuple(c.execute('SELECT nonkana, reading FROM lexemes WHERE entry_id = ? ORDER BY sequence_id', (self.entry_id,)))
+        self.headwords = tuple(c.execute('SELECT nonkana, reading FROM lexemes WHERE language = ? AND entry_id = ? ORDER BY sequence_id', (self.language_code, self.entry_id)))
         if not self.headwords:
-            raise ValueError('Unable to find entry with ID %d' % (self.entry_id,))
+            raise ValueError('Unable to find entry with ID %d for language %r' % (self.entry_id, self.language_code))
         # TODO Ensure that there is a suitable index for this query
-        same_main_headword_entries = tuple(other_entry_id for (other_entry_id,) in c.execute('SELECT entry_id FROM lexemes WHERE nonkana IS ? AND reading = ? AND sequence_id = 1 ORDER BY entry_id' if self.headwords[0][0] is None else 'SELECT entry_id FROM lexemes WHERE nonkana = ? AND reading = ? AND sequence_id = 1 ORDER BY entry_id', self.headwords[0]))
+        same_main_headword_entries = tuple(other_entry_id for (other_entry_id,) in c.execute('SELECT entry_id FROM lexemes WHERE language = ? AND nonkana IS ? AND reading = ? AND sequence_id = 1 ORDER BY entry_id' if self.headwords[0][0] is None else 'SELECT entry_id FROM lexemes WHERE language = ? AND nonkana = ? AND reading = ? AND sequence_id = 1 ORDER BY entry_id', (self.language_code, *self.headwords[0])))
         self.discriminator = next(j for j, other_entry_id in enumerate(same_main_headword_entries, start=1) if other_entry_id == self.entry_id) if len(same_main_headword_entries) > 1 else None
         self.roles = []
         current_pos_list_id = None
         sense_ids = []
-        for (pos_list_id, sense_id) in tuple(c.execute('SELECT pos_list_id, sense_id FROM roles WHERE entry_id = ? ORDER BY sense_id', (self.entry_id,))):
+        for (pos_list_id, sense_id) in tuple(c.execute('SELECT pos_list_id, sense_id FROM roles WHERE language = ? AND entry_id = ? ORDER BY sense_id', (self.language_code, self.entry_id,))):
             if (current_pos_list_id is not None
                 and current_pos_list_id != pos_list_id):
-                self.roles.append(Role(conn, self.entry_id, current_pos_list_id, sense_ids, restrictions))
+                self.roles.append(Role(conn, self.language_code, self.entry_id, current_pos_list_id, sense_ids, restrictions))
                 sense_ids = []
             current_pos_list_id = pos_list_id
             sense_ids.append(sense_id)
         else:
             if current_pos_list_id is not None:
-                self.roles.append(Role(conn, self.entry_id, current_pos_list_id, sense_ids, restrictions))
+                self.roles.append(Role(conn, self.language_code, self.entry_id, current_pos_list_id, sense_ids, restrictions))
                 
 
     def __repr__(self):
-        return ('<%s(%d) %s【%s】%s>'
+        return ('<%s(%r, %d) %s【%s】%s>'
                 % (self.__class__.__name__,
+                   self.language_code,
                    self.entry_id,
                    self.headwords[0][0],
                    self.headwords[0][1],
@@ -95,18 +97,20 @@ class Lexeme():
 
 
     @staticmethod
-    def lookup(conn, graphic, phonetic, restrictions):
+    def lookup(conn, language_code, graphic, phonetic, restrictions):
         c = conn.cursor()
-        entry_ids = tuple(c.execute('SELECT entry_id FROM lemmas WHERE graphic = ? and phonetic = ?', (graphic, hiragana_to_katakana(phonetic))))
-        return tuple(Lexeme(conn, entry_id, restrictions) for (entry_id,) in entry_ids)
+        entry_ids = tuple(c.execute('SELECT entry_id FROM lemmas WHERE language = ? AND graphic = ? and phonetic = ?', (language_code, graphic, hiragana_to_katakana(phonetic))))
+        return tuple(Lexeme(conn, language_code, entry_id, restrictions) for (entry_id,) in entry_ids)
+
 
 class Role():
-    def __init__(self, conn, entry_id, pos_list_id, sense_ids, restrictions):
+    def __init__(self, conn, language_code, entry_id, pos_list_id, sense_ids, restrictions):
         c = conn.cursor()
+        self.language_code = language_code
         self.entry_id = entry_id
-        self.pos_tags = tuple(pos for (pos,) in c.execute('SELECT pos FROM pos_lists WHERE pos_list_id = ? ORDER BY sequence_id', (pos_list_id,)))
+        self.pos_tags = tuple(pos for (pos,) in c.execute('SELECT pos FROM pos_lists WHERE language = ? AND pos_list_id = ? ORDER BY sequence_id', (self.language_code, pos_list_id)))
         self.restrictions = restrictions
-        self.senses = tuple(Sense(conn, self.entry_id, sense_id) for sense_id in sense_ids)
+        self.senses = tuple(Sense(conn, self.language_code, self.entry_id, sense_id) for sense_id in sense_ids)
 
     def normalized_pos_tags(self):
         """Translate the list of POS tags as used in the dictionary to a list of
@@ -122,8 +126,9 @@ class Role():
         return TemplateTree.parse(self.normalized_pos_tags(), self.restrictions)
 
     def __repr__(self):
-        return ('<%s(%d, %r, %r)>'
+        return ('<%s(%r, %d, %r, %r)>'
                 % (self.__class__.__name__,
+                   self.language_code,
                    self.entry_id,
                    self.pos_tags,
                    self.senses))
@@ -133,15 +138,16 @@ class Role():
 
 
 class Sense():
-    def __init__(self, conn, entry_id, sense_id):
+    def __init__(self, conn, language_code, entry_id, sense_id):
         c = conn.cursor()
+        self.language_code = language_code
         self.entry_id = entry_id
         self.sense_id = sense_id
-        self.glosses = tuple(c.execute('SELECT type, gloss FROM glosses WHERE entry_id = ? AND sense_id = ? ORDER BY sequence_id', (self.entry_id, self.sense_id)))
+        self.glosses = tuple(c.execute('SELECT type, gloss FROM glosses WHERE language = ? AND entry_id = ? AND sense_id = ? ORDER BY sequence_id', (self.language_code, self.entry_id, self.sense_id)))
 
     def __repr__(self):
-        return ('<%s(%d, %d)>'
-                % (self.__class__.__name__, self.entry_id, self.sense_id))
+        return ('<%s(%r, %d, %d)>'
+                % (self.__class__.__name__, self.language_code, self.entry_id, self.sense_id))
 
     def __str__(self):
         return (circled_number(self.sense_id) + ' '
