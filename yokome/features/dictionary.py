@@ -19,8 +19,14 @@ import re
 import sqlite3 as sql
 
 from .jpn import hiragana_to_katakana
-from ..data.jmdict_to_db import GLOSS_SEPARATOR
 from .tree import TemplateTree
+
+
+GLOSS_SEPARATOR = '▪'
+"""A character that separates different glosses for the same sense.
+
+Asserted not to occur in the text of any gloss.
+"""
 
 
 def circled_number(number, bold_circle=True):

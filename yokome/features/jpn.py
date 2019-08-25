@@ -1181,7 +1181,7 @@ def parse_jumanpp_output(output):
 def chasen_loader(filename):
     """Loads a file from the JEITA corpus and yields symbols from it."""
     reader = ChasenCorpusReader(os.path.abspath(os.path.dirname(
-        os.path.abspath(__file__)) + '/../../data/raw'),
+        os.path.abspath(__file__)) + '/../../data/raw/Yokome_jpn_corpus'),
                                 filename, encoding='utf-8')
     for word in reader.words():
         for c in word:
