@@ -16,7 +16,7 @@
 
 
 from . import Language
-from ..data.corpus.jpn import load_dev_sentence_ids, _lookup_tokenizer, _lemma_extractor
+from ..data.jpn.corpus import load_dev_sentence_ids, _lookup_tokenizer, _lemma_extractor
 
 
 JPN = Language('jpn', 'Japanese',

@@ -44,7 +44,7 @@ def _chasen_file_finder(corpus):
         raise ValueError('Unknown corpus')
     for _, _, files in os.walk(os.path.abspath(
             os.path.dirname(os.path.abspath(__file__))
-            + '/../../../data/raw/jeita_%s' % (corpus,))):
+            + '/../../../data/raw/Yokome_jpn_corpus/jeita_%s' % (corpus,))):
         for f in sorted(files):
             if f.endswith('.chasen'):
                 yield f
@@ -89,9 +89,27 @@ _JEITA_AOZORA_NON_RESERVE_FILES, _JEITA_AOZORA_RESERVE_FILES = train_test_split(
 _JEITA_AOZORA_DEVELOPMENT_FILES, _JEITA_AOZORA_TEST_FILES = train_test_split(_JEITA_AOZORA_NON_RESERVE_FILES, test_size=0.25, random_state=_SPLIT_R, shuffle=False)
 _JEITA_GENPAKU_NON_RESERVE_FILES, _JEITA_GENPAKU_RESERVE_FILES = train_test_split(_JEITA_GENPAKU_FILES, test_size=0.2, random_state=_SPLIT_R, shuffle=True)
 _JEITA_GENPAKU_DEVELOPMENT_FILES, _JEITA_GENPAKU_TEST_FILES = train_test_split(_JEITA_GENPAKU_NON_RESERVE_FILES, test_size=0.25, random_state=_SPLIT_R, shuffle=False)
-RSV_FILES = tuple(shuffle(_JEITA_AOZORA_RESERVE_FILES + _JEITA_GENPAKU_RESERVE_FILES, random_state=_SPLIT_R))
-TST_FILES = tuple(shuffle(_JEITA_AOZORA_TEST_FILES + _JEITA_GENPAKU_TEST_FILES, random_state=_SPLIT_R))
-DEV_FILES = tuple(shuffle(_JEITA_AOZORA_DEVELOPMENT_FILES + _JEITA_GENPAKU_DEVELOPMENT_FILES, random_state=_SPLIT_R))
+_RSV_FILES = tuple(shuffle(_JEITA_AOZORA_RESERVE_FILES + _JEITA_GENPAKU_RESERVE_FILES, random_state=_SPLIT_R))
+_TST_FILES = tuple(shuffle(_JEITA_AOZORA_TEST_FILES + _JEITA_GENPAKU_TEST_FILES, random_state=_SPLIT_R))
+_DEV_FILES = tuple(shuffle(_JEITA_AOZORA_DEVELOPMENT_FILES + _JEITA_GENPAKU_DEVELOPMENT_FILES, random_state=_SPLIT_R))
+
+
+def rsv_files():
+    """Get the filenames of the reserved corpus documents."""
+    global _RSV_FILES
+    return _RSV_FILES
+
+
+def tst_files():
+    """Get the filenames of the corpus documents for tests."""
+    global _TST_FILES
+    return _TST_FILES
+
+
+def dev_files():
+    """Get the filenames of the corpus documents for development."""
+    global _DEV_FILES
+    return _DEV_FILES
 
 
 def load_dev_sentence_ids(n_samples=None):
@@ -157,7 +175,7 @@ def _lemma_extractor(tokens):
 
 
 # def tests():
-#     yield from _generate_file_names_and_symbol_streams(TST_FILES)
+#     yield from _generate_file_names_and_symbol_streams(tst_files())
 
 
 # XXX Couln't this be done without else clauses after for?
@@ -177,7 +195,7 @@ def validate_file(f):
             previous_non_jpn_word = None
             for word in ChasenCorpusReader(
                     os.path.abspath(os.path.dirname(os.path.abspath(__file__))
-                                    + '/../../../data/raw'),
+                                    + '/../../../data/raw/Yokome_jpn_corpus'),
                     f, encoding='utf-8').words():
                 if any(in_ranges(ord(c), _JPN_RANGES) for c in word):
                     previous_non_jpn_word = None

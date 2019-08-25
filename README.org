@@ -17,3 +17,23 @@ multilinguality in mind.
   #+BEGIN_SRC sh
     jumanpp
   #+END_SRC
+
+** Licensing
+
+This project is licensed under the Apache License,
+Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0).
+
+The following data is required for the Japanese version to work:
+
+- [[http://www.edrdg.org/jmdict/j_jmdict.html][JMdict]]
+  - Published under the Creative Commons Attribution-ShareAlike Licence
+    (V3.0)
+
+- The JEITA Public Morphologically Tagged Corpus (in ChaSen format)
+  - Created and distributed by [[http://lilyx.net/][Masato Hagiwara]]
+  - Data originating from [[http://www.aozora.gr.jp/][Aozora Bunko]] and [[http://www.genpaku.org/][Project Sugita Genpaku]]
+  - A copy can be found at
+    [[https://github.com/julianbetz/Yokome_jpn_corpus.git]], containing
+    copyright information for the individual files.
+
+The required can be downloaded using the command ``make data``.

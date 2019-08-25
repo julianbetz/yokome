@@ -21,23 +21,17 @@ import json
 import sqlite3 as sql
 from elasticsearch import Elasticsearch, RequestError
 
-if __name__ == '__main__':
-    sys.path.append(os.path.abspath(os.path.dirname(os.path.abspath(__file__))
-                                    + '/../..'))
-    from yokome.features.dictionary import Lexeme
-else:
-    from ..features.dictionary import Lexeme
+_PROJECT_ROOT = os.path.abspath(os.path.dirname(os.path.abspath(__file__))
+                                + '/../../..')
+if _PROJECT_ROOT not in sys.path:
+    sys.path.append(_PROJECT_ROOT)
+from yokome.features.dictionary import Lexeme
 
 
 INDEX_NAME = 'jpn_inverse_dictionary'
-SETUP_FILE = os.path.abspath(os.path.dirname(os.path.abspath(__file__))
-                             + '/../../data/crafted'
-                             + '/jpn_inverse_dictionary_setup.json')
-DICTIONARY_FILE = os.path.abspath(os.path.dirname(os.path.abspath(__file__))
-                                  + '/../../data/processed/data.db')
-RESTRICTIONS_FILE = os.path.abspath(os.path.dirname(os.path.abspath(__file__))
-                                    + '/../../data/crafted'
-                                    + '/jpn_pos_restrictions.json')
+SETUP_FILE = _PROJECT_ROOT + '/data/crafted/jpn_inverse_dictionary_setup.json'
+DICTIONARY_FILE = _PROJECT_ROOT + '/data/processed/data.db'
+RESTRICTIONS_FILE = _PROJECT_ROOT + '/data/crafted/jpn_pos_restrictions.json'
 
 
 if __name__ == '__main__':
@@ -60,8 +54,8 @@ if __name__ == '__main__':
 
     with sql.connect(DICTIONARY_FILE) as conn:
         c = conn.cursor()
-        entry_ids = tuple(i for (i,)
-                          in c.execute('SELECT DISTINCT entry_id FROM roles WHERE language = "jpn"'))
+        entry_ids = tuple(i for (i,) in c.execute(
+            'SELECT DISTINCT entry_id FROM roles WHERE language = "jpn"'))
         for i, entry_id in enumerate(entry_ids):
             print('%6d/%6d' % (i + 1, len(entry_ids)))
             lexeme = Lexeme(conn, 'jpn', entry_id, restrictions)

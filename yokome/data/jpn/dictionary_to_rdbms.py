@@ -27,12 +27,12 @@ from xml.etree import ElementTree
 # TODO Use a different SQLite wrapper to allow for atomic transactions
 import sqlite3 as sql
 
-if __name__ == '__main__':
-    sys.path.append(os.path.abspath(os.path.dirname(os.path.abspath(__file__))
-                                    + '/../..'))
-    from yokome.features.jpn import is_reading, hiragana_to_katakana
-else:
-    from ..features.jpn import is_reading, hiragana_to_katakana
+_PROJECT_ROOT = os.path.abspath(os.path.dirname(os.path.abspath(__file__))
+                                + '/../../..')
+if _PROJECT_ROOT not in sys.path:
+    sys.path.append(_PROJECT_ROOT)
+from yokome.features.dictionary import GLOSS_SEPARATOR
+from yokome.features.jpn import is_reading, hiragana_to_katakana
 
 
 UK = 'word usually written using kana alone'
@@ -273,11 +273,6 @@ GLOSS_TYPES = {
     'fig': 'fig.'}
 """Mapping from JMdict gloss types to more readable representations."""
 
-GLOSS_SEPARATOR = '▪'
-"""A character that separates different glosses for the same sense.
-
-Asserted not to occur in the text of any gloss.
-"""
 
 # TODO Check whether the katakana middle dot itself is referenced from another
 # entry; add corresponding asserts
@@ -307,8 +302,7 @@ def parse_reference(reference):
 @click.argument('jmdict_file',  # The location of the XML file containing JMdict
                 type=click.Path(exists=True, file_okay=True, dir_okay=False))
 def main(jmdict_file):
-    resource_dir = os.path.abspath(os.path.expanduser(
-        os.path.dirname(os.path.abspath(__file__)) + '/../../data/processed'))
+    resource_dir = _PROJECT_ROOT + '/data/processed'
     Path(resource_dir).mkdir(exist_ok=True)
     database_file = resource_dir + '/data.db'
     # assert not Path(database_file).exists(), 'Database file already existing'
@@ -518,11 +512,10 @@ def main(jmdict_file):
                     c.executemany('INSERT INTO restrictions VALUES ("jpn", ?, ?, ?)',
                                   [(entry_id, j, stag.text) for stag in
                                    sense.findall('stagk') + sense.findall('stagr')])
-                    # XXX Remove slash in relation tag
                     c.executemany('INSERT INTO related VALUES ("jpn", ?, ?, ?, ?, ?, ?)',
                                   [(entry_id, j, rel, *parse_reference(ref))
                                    for rel, ref in
-                                   [('similar/related', x.text)
+                                   [('cross-reference', x.text)
                                     for x in sense.findall('xref')]
                                    + [('antonym', a.text)
                                       for a in sense.findall('ant')]])
