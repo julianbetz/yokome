@@ -61,15 +61,15 @@ if __name__ == '__main__':
     with sql.connect(DICTIONARY_FILE) as conn:
         c = conn.cursor()
         entry_ids = tuple(i for (i,)
-                          in c.execute('SELECT DISTINCT entry_id FROM roles'))
+                          in c.execute('SELECT DISTINCT entry_id FROM roles WHERE language = "jpn"'))
         for i, entry_id in enumerate(entry_ids):
             print('%6d/%6d' % (i + 1, len(entry_ids)))
-            lexeme = Lexeme(conn, entry_id, restrictions)
+            lexeme = Lexeme(conn, 'jpn', entry_id, restrictions)
             lemmas = [{'graphic': graphic, 'phonetic': phonetic}
                       for graphic, phonetic in c.execute(
                               '''SELECT graphic, phonetic
                                  FROM lemmas
-                                 WHERE entry_id = ?''',
+                                 WHERE language = "jpn" AND entry_id = ?''',
                               (entry_id,))]
             for role in lexeme.roles:
                 normalized_pos_tags = role.normalized_pos_tags()

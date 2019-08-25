@@ -21,6 +21,7 @@
 
 import sys
 import os
+import click
 from pathlib2 import Path
 from xml.etree import ElementTree
 # TODO Use a different SQLite wrapper to allow for atomic transactions
@@ -302,7 +303,10 @@ def parse_reference(reference):
     return result
 
 
-if __name__ == '__main__':
+@click.command()
+@click.argument('jmdict_file',  # The location of the XML file containing JMdict
+                type=click.Path(exists=True, file_okay=True, dir_okay=False))
+def main(jmdict_file):
     resource_dir = os.path.abspath(os.path.expanduser(
         os.path.dirname(os.path.abspath(__file__)) + '/../../data/processed'))
     Path(resource_dir).mkdir(exist_ok=True)
@@ -317,8 +321,7 @@ if __name__ == '__main__':
     # database_file = ':memory:'
 
     NAMESPACES = {'xml': 'http://www.w3.org/XML/1998/namespace'}
-    jmdict_file = os.path.abspath(os.path.expanduser(
-        os.path.dirname(os.path.abspath(__file__)) + '/../../data/raw/JMdict.xml'))
+    jmdict_file = os.path.abspath(os.path.expanduser(jmdict_file))
     assert Path(jmdict_file).is_file(), 'JMdict file missing'
     root = ElementTree.parse(jmdict_file).getroot()
 
@@ -336,6 +339,7 @@ if __name__ == '__main__':
         # XXX Inconsistent use of the term 'lemmas': use 'base_forms' istead
         # XXX Use 'reading', or at least 'phonemic' instead of 'phonetic'
         c.execute('''CREATE TABLE lemmas (
+            language TEXT NOT NULL,
             graphic TEXT NOT NULL,
             phonetic TEXT NOT NULL,
             entry_id INTEGER NOT NULL)''')
@@ -353,65 +357,74 @@ if __name__ == '__main__':
         # 
         # XXX Use different term for 'nonkana'
         c.execute('''CREATE TABLE lexemes (
+            language TEXT NOT NULL,
             entry_id INTEGER NOT NULL,
             sequence_id INTEGER NOT NULL,
             nonkana TEXT,
             reading TEXT NOT NULL,
-            PRIMARY KEY (entry_id, sequence_id))''')
+            PRIMARY KEY (language, entry_id, sequence_id))''')
         # Notes on graphical variants and readings
         c.execute('''CREATE TABLE orthography (
+            language TEXT NOT NULL,
             entry_id INTEGER NOT NULL,
             variant TEXT NOT NULL,
             note TEXT NOT NULL)''')
         c.execute('''CREATE TABLE roles (
+            language TEXT NOT NULL,
             entry_id INTEGER NOT NULL,
             pos_list_id INTEGER NOT NULL,
             sense_id INTEGER NOT NULL,
-            PRIMARY KEY (entry_id, sense_id))''')
+            PRIMARY KEY (language, entry_id, sense_id))''')
         c.execute('''CREATE TABLE pos_lists (
+            language TEXT NOT NULL,
             pos_list_id INTEGER NOT NULL,
             sequence_id INTEGER NOT NULL,
             pos TEXT NOT NULL,
-            PRIMARY KEY (pos_list_id, sequence_id))''')
+            PRIMARY KEY (language, pos_list_id, sequence_id))''')
         c.execute('''CREATE TABLE glosses(
+            language TEXT NOT NULL,
             entry_id INTEGER NOT NULL,
             sense_id INTEGER NOT NULL,
             sequence_id INTEGER NOT NULL,
             type TEXT,
             gloss TEXT NOT NULL,
-            PRIMARY KEY (entry_id, sense_id, sequence_id),
-            FOREIGN KEY (entry_id, sense_id) REFERENCES roles)''')
+            PRIMARY KEY (language, entry_id, sense_id, sequence_id),
+            FOREIGN KEY (language, entry_id, sense_id) REFERENCES roles)''')
         c.execute('''CREATE TABLE restrictions (
+            language TEXT NOT NULL,
             entry_id INTEGER NOT NULL,
             sense_id INTEGER NOT NULL,
             variant TEXT NOT NULL,
-            FOREIGN KEY (entry_id, sense_id) REFERENCES roles)''')
+            FOREIGN KEY (language, entry_id, sense_id) REFERENCES roles)''')
         # Similar senses and antonyms
         # XXX Directly link using entry IDs
         c.execute('''CREATE TABLE related (
+            language TEXT NOT NULL,
             entry_id INTEGER NOT NULL,
             sense_id INTEGER NOT NULL,
             relation TEXT NOT NULL,
             nonkana TEXT,
             reading TEXT,
             sense_id_other INTEGER,
-            FOREIGN KEY (entry_id, sense_id) REFERENCES roles,
+            FOREIGN KEY (language, entry_id, sense_id) REFERENCES roles,
             CHECK (nonkana IS NOT NULL OR reading IS NOT NULL))''')
         # XXX Add check for ISO 639-3 / 639-2 language code on language
         c.execute('''CREATE TABLE source_languages (
+            language TEXT NOT NULL,
             entry_id INTEGER NOT NULL,
             sense_id INTEGER NOT NULL,
-            language TEXT NOT NULL,
+            source_language TEXT NOT NULL,
             original_expression TEXT,
             wasei INTEGER NOT NULL CHECK (wasei = 0 OR wasei = 1),
-            FOREIGN KEY (entry_id, sense_id) REFERENCES roles)''') # XXX Use boolean type
+            FOREIGN KEY (language, entry_id, sense_id) REFERENCES roles)''') # XXX Use boolean type
         # Domain of use, dialect, sense information, miscellaneous
         c.execute('''CREATE TABLE notes (
+            language TEXT NOT NULL,
             entry_id INTEGER NOT NULL,
             sense_id INTEGER NOT NULL,
             note_type TEXT NOT NULL,
             note TEXT NOT NULL,
-            FOREIGN KEY (entry_id, sense_id) REFERENCES roles)''') # XXX Use IDs for notes to save storage space
+            FOREIGN KEY (language, entry_id, sense_id) REFERENCES roles)''') # XXX Use IDs for notes to save storage space
         print('    Processing entries...')
         poss_all = dict()
         poss_count = 0
@@ -424,7 +437,7 @@ if __name__ == '__main__':
                 if k_ele[0].text not in ks:
                     ks.append(k_ele[0].text)
                 k_dict[k_ele[0].text] = []
-                c.executemany('INSERT INTO orthography VALUES (?, ?, ?)',
+                c.executemany('INSERT INTO orthography VALUES ("jpn", ?, ?, ?)',
                               [(entry_id, k_ele[0].text, WRITING[ke_inf.text])
                                for ke_inf in k_ele.findall('ke_inf')])
             if not list(k_dict.keys()):
@@ -440,7 +453,7 @@ if __name__ == '__main__':
                     for k in k_dict.keys():
                         if r_ele[0].text not in k_dict[k]:
                             k_dict[k].append(r_ele[0].text)
-                c.executemany('INSERT INTO orthography VALUES (?, ?, ?)',
+                c.executemany('INSERT INTO orthography VALUES ("jpn", ?, ?, ?)',
                               [(entry_id, r_ele[0].text, WRITING[re_inf.text])
                                for re_inf in r_ele.findall('re_inf')])
             surface_forms = set() # Surface forms and normalized readings for
@@ -495,38 +508,38 @@ if __name__ == '__main__':
                                for gloss in glosses
                                if gloss.attrib['{' + NAMESPACES['xml'] + '}lang'] == 'eng'),\
                         'Separator \'%s\' found in gloss' % (GLOSS_SEPARATOR,)
-                    c.execute('INSERT INTO roles VALUES (?, ?, ?)',
+                    c.execute('INSERT INTO roles VALUES ("jpn", ?, ?, ?)',
                               (entry_id, poss_all[current_poss], j))
                     # XXX If clause not necessary due to the assert above
-                    c.executemany('INSERT INTO glosses VALUES (?, ?, ?, ?, ?)',
+                    c.executemany('INSERT INTO glosses VALUES ("jpn", ?, ?, ?, ?, ?)',
                                   [(entry_id, j, h, *gloss) for h, gloss
                                    in enumerate([(GLOSS_TYPES[gloss.attrib['g_type']] if 'g_type' in gloss.attrib else None, gloss.text) for gloss in glosses
                                                  if gloss.attrib['{' + NAMESPACES['xml'] + '}lang'] == 'eng'], start=1)])
-                    c.executemany('INSERT INTO restrictions VALUES (?, ?, ?)',
+                    c.executemany('INSERT INTO restrictions VALUES ("jpn", ?, ?, ?)',
                                   [(entry_id, j, stag.text) for stag in
                                    sense.findall('stagk') + sense.findall('stagr')])
                     # XXX Remove slash in relation tag
-                    c.executemany('INSERT INTO related VALUES (?, ?, ?, ?, ?, ?)',
+                    c.executemany('INSERT INTO related VALUES ("jpn", ?, ?, ?, ?, ?, ?)',
                                   [(entry_id, j, rel, *parse_reference(ref))
                                    for rel, ref in
                                    [('similar/related', x.text)
                                     for x in sense.findall('xref')]
                                    + [('antonym', a.text)
                                       for a in sense.findall('ant')]])
-                    c.executemany('INSERT INTO source_languages VALUES (?, ?, ?, ?, ?)',
+                    c.executemany('INSERT INTO source_languages VALUES ("jpn", ?, ?, ?, ?, ?)',
                                   [(entry_id, j, lsource.attrib['{' + NAMESPACES['xml'] + '}lang'], lsource.text if lsource.text != '' else None, 1 if 'ls_wasei' in lsource.attrib else 0)
                                    for lsource in sense.findall('lsource')])
-                    c.executemany('INSERT INTO notes VALUES (?, ?, ?, ?)',
+                    c.executemany('INSERT INTO notes VALUES ("jpn", ?, ?, ?, ?)',
                                   [(entry_id, j, *USAGE[misc.text])
                                    for misc in sense.findall('misc')])
                     # XXX Use Glottocodes or other IDs instead of dial.text
-                    c.executemany('INSERT INTO notes VALUES (?, ?, ?, ?)',
+                    c.executemany('INSERT INTO notes VALUES ("jpn", ?, ?, ?, ?)',
                                   [(entry_id, j, 'dialect', dial.text)
                                    for dial in sense.findall('dial')])
-                    c.executemany('INSERT INTO notes VALUES (?, ?, ?, ?)',
+                    c.executemany('INSERT INTO notes VALUES ("jpn", ?, ?, ?, ?)',
                                   [(entry_id, j, 'domain', DOMAINS[field.text])
                                    for field in sense.findall('field')])
-                    c.executemany('INSERT INTO notes VALUES (?, ?, ?, ?)',
+                    c.executemany('INSERT INTO notes VALUES ("jpn", ?, ?, ?, ?)',
                                   [(entry_id, j, 'remark', s_inf.text)
                                    for s_inf in sense.findall('s_inf')])
                 else:
@@ -537,39 +550,39 @@ if __name__ == '__main__':
                           if ks else [[None, k_dict[None]]]):
                 for r in rs:
                     j += 1
-                    c.execute('INSERT INTO lexemes VALUES (?, ?, ?, ?)',
+                    c.execute('INSERT INTO lexemes VALUES ("jpn", ?, ?, ?, ?)',
                               (entry_id, j, k, r))
-            c.executemany('INSERT INTO lemmas VALUES (?, ?, ?)',
+            c.executemany('INSERT INTO lemmas VALUES ("jpn", ?, ?, ?)',
                           [(surface_form, normalized_form, entry_id)
                            for surface_form, normalized_form in surface_forms])
         print('    Storing global data...')
         for poss, j in poss_all.items():
-            c.executemany('INSERT INTO pos_lists VALUES (?, ?, ?)',
+            c.executemany('INSERT INTO pos_lists VALUES ("jpn", ?, ?, ?)',
                           [(j, h, p) for h, p in enumerate(poss, start=1)])
         print('    Building indices...')
         c.execute('REINDEX')            # Optimize existing indices
         c.execute('''CREATE INDEX lemmas_graphic_phonetic_idx
-            ON lemmas (graphic, phonetic)''')
+            ON lemmas (language, graphic, phonetic)''')
         c.execute('''CREATE INDEX lexemes_nonkana_reading_idx
-            ON lexemes (nonkana, reading)''')
+            ON lexemes (language, nonkana, reading)''')
         c.execute('''CREATE INDEX orthography_entry_id_idx
-            ON orthography (entry_id)''')
+            ON orthography (language, entry_id)''')
         c.execute('''CREATE INDEX roles_find_role_sort_sense_idx
-            ON roles (entry_id, pos_list_id, sense_id)''')
+            ON roles (language, entry_id, pos_list_id, sense_id)''')
         c.execute('''CREATE INDEX pos_lists_pos_idx
-            ON pos_lists (pos)''')
+            ON pos_lists (language, pos)''')
         c.execute('''CREATE INDEX restrictions_entry_id_sense_id_idx
-            ON restrictions (entry_id, sense_id)''')
+            ON restrictions (language, entry_id, sense_id)''')
         c.execute('''CREATE INDEX related_entry_id_sense_id_idx
-            ON related (entry_id, sense_id)''')
+            ON related (language, entry_id, sense_id)''')
         c.execute('''CREATE INDEX source_languages_entry_id_sense_id_idx
-            ON source_languages (entry_id, sense_id)''')
+            ON source_languages (language, entry_id, sense_id)''')
         c.execute('''CREATE INDEX source_languages_language_idx
-            ON source_languages (language)''')
+            ON source_languages (language, source_language)''')
         c.execute('''CREATE INDEX notes_entry_id_sense_id_idx
-            ON notes (entry_id, sense_id)''')
+            ON notes (language, entry_id, sense_id)''')
         c.execute('''CREATE INDEX notes_entry_id_note_idx
-            ON notes (entry_id, note)''')
+            ON notes (language, entry_id, note)''')
         c.execute('''CREATE INDEX notes_note_idx
             ON notes (note)''')
         print('    Optimizing database...')
@@ -578,3 +591,7 @@ if __name__ == '__main__':
         c.execute('VACUUM')             # Optimize database storage space
         conn.commit()
     print('    \033[1;32mDONE\033[0m')
+
+
+if __name__ == '__main__':
+    main()
