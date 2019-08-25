@@ -112,3 +112,9 @@ data/processed/.data.db.flag: data virtualenvs
 	@. virtualenvs/py3/bin/activate && python yokome/data/jpn/dictionary_to_rdbms.py data/raw/Yokome_jpn_dictionary/JMdict.xml
 	@. virtualenvs/py3/bin/activate && python yokome/data/jpn/corpus_to_rdbms.py
 	@touch data/processed/.data.db.flag
+
+
+# Training
+# ------------------------------------------------------------------------------
+
+# hyperparameter_optimization/xvld/best_hyperparams.json:
