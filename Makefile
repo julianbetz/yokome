@@ -104,14 +104,14 @@ data: data/raw/Yokome_jpn_dictionary/JMdict.xml data/raw/Yokome_jpn_corpus
 # Data loading
 # ------------------------------------------------------------------------------
 
-data/processed/data.db: data/processed/.data.db.flag
+data/processed/data.db: data/processed/.jpn.flag
 	@touch data/processed/data.db
 
-data/processed/.data.db.flag: data virtualenvs
+data/processed/.jpn.flag: data virtualenvs
 	@rm -f data/processed/data.db
 	@. virtualenvs/py3/bin/activate && python yokome/data/jpn/dictionary_to_rdbms.py data/raw/Yokome_jpn_dictionary/JMdict.xml
-	@. virtualenvs/py3/bin/activate && python yokome/data/jpn/corpus_to_rdbms.py
-	@touch data/processed/.data.db.flag
+	@. virtualenvs/py3/bin/activate && python yokome/data/jpn/corpus_to_rdbms.py data/raw/Yokome_jpn_corpus
+	@touch data/processed/.jpn.flag
 
 
 # Training

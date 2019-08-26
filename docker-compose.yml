@@ -1,0 +1,37 @@
+version: "3.7"
+services:
+  search:
+    image: julianbetz/yokome.search:latest
+    container_name: search
+    environment:
+      - cluster.name=docker-cluster
+      - ES_JAVA_OPTS=-Xms3g -Xmx3g
+      - discovery.type=single-node
+    ulimits:
+      nproc: 65536
+      nofile: 65536
+    expose:
+      - 9200
+      - 9300
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - yokome_net
+  app:
+    image: julianbetz/yokome.app:latest
+    container_name: app
+    environment:
+      - ELASTICSEARCH_ADDRESS=inverse:9200
+    links:
+      - search:inverse
+    depends_on:
+      - search
+    networks:
+      - yokome_net
+    expose:
+      - 5003
+    ports:
+      - 5003:5003
+networks:
+  yokome_net:

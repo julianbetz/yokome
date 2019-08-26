@@ -21,8 +21,11 @@ import logging
 import traceback
 import click
 import re
+from collections import defaultdict
+from collections.abc import Sequence
 from urllib.parse import unquote_plus
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from flask import Flask, Response, url_for, request
 import json
 
 
@@ -91,11 +94,14 @@ with open(JUMAN_TRANSLATOR_FILE, 'r') as f:
 class BadRequestError(Exception):
     pass
 
+
 class NotFoundError(Exception):
     pass
 
+
 class UnsupportedMediaTypeError(Exception):
     pass
+
 
 class UnprocessableEntityError(Exception):
     pass
@@ -141,6 +147,7 @@ class Handler(BaseHTTPRequestHandler):
             raise BadRequestError('Parameters could not be parsed')
         return {unquote_plus(k): unquote_plus(v) for k, v in params}
 
+
     # TODO Catch cases in which headers are not present
     def parse_body(self):
         """Turn a JSON-encoded HTTP response body into Python objects."""
@@ -165,6 +172,7 @@ class Handler(BaseHTTPRequestHandler):
         except json.decoder.JSONDecodeError as error:
             raise BadRequestError('JSON decode error: %s' % (str(error),))
 
+
     def check_tokenize(params, data):
         """Check data and tokenize it.
         
@@ -181,6 +189,7 @@ class Handler(BaseHTTPRequestHandler):
                 raise NotImplementedError('Language not supported')
             return Handler.tokenize(data, params['lang'])
         return Handler.tokenize(data)
+
 
     def tokenize(text, language=None):
         """Tokenize the specified text for the specified language.
@@ -203,6 +212,7 @@ class Handler(BaseHTTPRequestHandler):
         else:
             response = {'language': language}
         return response
+
 
     def check_disambiguate(params, data):
         """Check data and disambiguate it.
@@ -243,6 +253,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header('Allow', 'POST')
         self.send_header('Access-Control-Allow-Methods', 'POST')
         self.end_headers()
+
     
     def handle_POST(self):
         """Read the URL of a HTTP POST request and call the appropriate function
@@ -275,6 +286,7 @@ class Handler(BaseHTTPRequestHandler):
                 return Handler.check_disambiguate(params, data)
         else:
             raise NotFoundError('Nonexistent location')
+
 
     def do_POST(self):
         """Respond to an HTTP POST request.
@@ -329,6 +341,7 @@ class Handler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(json.dumps(response).encode('ascii'))
 
+
 @click.command()
 @click.option('--debug/--no-debug', default=Handler.debug)
 def main(debug):
@@ -339,12 +352,168 @@ def main(debug):
     else:
         print('RUNNING IN \033[32mPRODUCTION MODE\033[0m')
     try:
-        server = HTTPServer(('localhost', PORT), Handler)
+        server = HTTPServer(('0.0.0.0', PORT), Handler)
         print('Started server on port %d...' % (PORT,))
         server.serve_forever()
     except KeyboardInterrupt:
         print('User requested shutdown, exiting...')
         server.socket.close()
 
+
+app = Flask(__name__)
+
+@app.route('/%s/%s' % (TOKEN_SERVANT, TOKEN_SERVICE), methods=['OPTIONS'])
+def api_tokenizer_inform():
+    response = Response('', status=200)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    response.headers['Allow'] = 'POST'
+    response.headers['Access-Control-Allow-Methods'] = 'POST'
+    return response
+
+
+def tokenize(text, language=None):
+    """Tokenize the specified text for the specified language.
+
+    Attempt to detect the language of the text if no language is provided.  For
+    Japanese, apply the JUMAN++ morphological analyzer (Morita et al. 2015).
+
+    :param str text: The text to tokenize.
+    :param str language: ISO 639-3 language code of the language the text is
+        written in.  If ``None``, the language is detected.
+
+    :return: A dictionary containing the language. The tokenized sentences are
+        contained only if there are a segmenter and tokenizer for the language.
+
+    """
+    if language is None:
+        language = detect_language(text)
+    if language == JAPANESE:
+        # TODO Handle case that there is no token (only omitted characters)
+        sentences = list(
+            list(stream_tokenizer(fullwidth_fold(ascii_fold(iteration_fold(
+                repetition_contraction(combining_voice_mark_fold(
+                    sentence)))))))
+            for sentence in strip(segmenter(to_symbol_stream(text))))
+        response = {'language': language, 'sentences': sentences}
+    else:
+        response = {'language': language}
+    return response
+
+
+@app.route('/%s/%s' % (TOKEN_SERVANT, TOKEN_SERVICE), methods=['POST'])
+def api_tokenize():
+    try:
+        data = request.get_json()
+        if not isinstance(data, dict):
+            raise UnprocessableEntityError('Malformed message body')
+        data = defaultdict(lambda: None, data)
+        language = data['language']
+        text = data['text']
+        if not isinstance(text, str):
+            raise BadRequestError("'text' value missing or not of type 'str'")
+        if language in (None, JAPANESE):
+            response = Response(json.dumps(tokenize(text, language),
+                                           ensure_ascii=True),
+                                status=200,
+                                mimetype='application/json')
+        else:
+            # TODO Apply proper error handling
+            raise NotImplementedError('Language not supported')
+    except Exception as error:
+        response = handle_error(error)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+
+
+@app.route('/%s/%s' % (WSD_SERVANT, WSD_SERVICE), methods=['OPTIONS'])
+def api_wsd_inform():
+    response = Response('', status=200)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    response.headers['Allow'] = 'POST'
+    response.headers['Access-Control-Allow-Methods'] = 'POST'
+    return response
+
+
+def disambiguate(tokens, i, language):
+    """Disambiguate the token at index ``i`` for the specified language."""
+    if language == JAPANESE:
+        return {'language': language, 'lexemes': wsd.disambiguate(tokens, i)}
+    raise NotImplementedError('Language not supported')
+
+
+# TODO Apply proper error handling
+@app.route('/%s/%s' % (WSD_SERVANT, WSD_SERVICE), methods=['POST'])
+def api_disambiguate():
+    try:
+        data = request.get_json()
+        if not isinstance(data, dict):
+            raise UnprocessableEntityError('Malformed message body')
+        data = defaultdict(lambda: None, data)
+        language = data['language']
+        if not isinstance(language, str):
+            raise BadRequestError("'language' value missing or not of type 'str'")
+        if data['i'] is None:
+            raise BadRequestError("Value for token index 'i' missing")
+        if not isinstance(data['tokens'], Sequence):
+            raise BadRequestError("'tokens' value missing or not a sequence")
+        if language in (JAPANESE,):
+            response = Response(json.dumps(disambiguate(data['tokens'],
+                                                        int(data['i']),
+                                                        language),
+                                           ensure_ascii=True),
+                                status=200,
+                                mimetype='application/json')
+        else:
+            raise NotImplementedError('Language not supported')
+    except Exception as error:
+        response = handle_error(error)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+
+
+def handle_error(error):
+    if isinstance(error, BadRequestError):
+        status = 400                    # BAD REQUEST
+        error_message = str(error)
+    elif isinstance(error, NotFoundError):
+        status = 404                    # NOT FOUND
+        error_message = str(error)
+    elif isinstance(error, UnsupportedMediaTypeError):
+        status = 415                    # UNSUPPORTED MEDIA TYPE
+        error_message = str(error)
+    elif isinstance(error, TypeError) or isinstance(error, ValueError):
+        status = 422                    # UNPROCESSABLE ENTITY
+        error_message = 'Semantically malformed request'
+    elif isinstance(error, UnprocessableEntityError):
+        status = 422                    # UNPROCESSABLE ENTITY
+        error_message = str(error)
+    elif isinstance(error, NotImplementedError):
+        status = 501                    # NOT IMPLEMENTED
+        error_message = 'Not implemented'
+    else:
+        status = 500                    # INTERNAL SERVER ERROR
+        error_message = 'Internal server error'
+    if app.debug:
+        print(traceback.format_exc(), file=sys.stderr)
+    # Write the error message to the response body.  For security purposes,
+    # internal error messages are masked.
+    return Response(error_message + '\n\n' + traceback.format_exc()
+                    if app.debug
+                    else error_message,
+                    status=status,
+                    mimetype='text/plain')
+
+
+@click.command()
+@click.option('--debug/--no-debug', default=False)
+def run_app(debug):
+    """Start the server."""
+    app.run(# ssl_context='adhoc', 
+            host='0.0.0.0', port='5003', debug=debug)
+
+
 if __name__ == '__main__':
-    main()
+    # main()
+    run_app()

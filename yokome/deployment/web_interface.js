@@ -341,10 +341,14 @@
                 console.log(n);
                 if ('wilps_lexemes' in n) {
                     resetTabs(n, n.wilps_lexemes, null, null);
+                } else if (global.location.protocol === 'https:') {
+                    alert('https:');
                 } else {
                     httpGetAsyncWithData(
-                        'http://localhost:5003/wsd/disambiguate?lang=jpn',
-                        {'i': n.wilps_i, 'tokens': n.wilps_sentence},
+                        'http://localhost:5003/wsd/disambiguate',
+                        {'language': 'jpn',
+                         'i': n.wilps_i,
+                         'tokens': n.wilps_sentence},
                         n,
                         resetTabs,
                         null,
@@ -457,8 +461,13 @@
             var text = node.nodeValue,
                 head = text.match(/^\s*/),
                 tail = text.match(/\s*$/);
-            httpGetAsyncWithData('http://localhost:5003/tokenizer/tokenize?lang=jpn',
-                                 text, node, splitNode, head, tail);
+            if (global.location.protocol === 'https:') {
+                alert('https');
+            } else {
+                httpGetAsyncWithData('http://localhost:5003/tokenizer/tokenize',
+                                     {'language': 'jpn', 'text': text},
+                                     node, splitNode, head, tail);
+            }
         }
     }
 

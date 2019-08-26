@@ -58,7 +58,7 @@ MODEL = LanguageModel(os.path.abspath(_PROJECT_ROOT + '/models/trn'),
 BATCH_SIZE = 25
 SAMPLE_SIZE = 5
 # Glosses
-ES = Elasticsearch(['localhost:9200'])
+ES = Elasticsearch([os.environ['ELASTICSEARCH_ADDRESS']])
 INDEX_NAME = 'jpn_inverse_dictionary'
 RESULT_SIZE = 25
 

@@ -308,10 +308,10 @@ def main(jmdict_file):
     # assert not Path(database_file).exists(), 'Database file already existing'
     if Path(database_file).exists():
         assert Path(database_file).is_file()
-        print('Rebuilding JMdict database...')
+        print('Rebuilding dictionary database...')
         os.remove(database_file)
     else:
-        print('Creating JMdict database...')
+        print('Creating dictionary database...')
     # database_file = ':memory:'
 
     NAMESPACES = {'xml': 'http://www.w3.org/XML/1998/namespace'}
