@@ -37,4 +37,4 @@ COPY models/trn models/trn
 COPY yokome yokome
 
 EXPOSE 5003
-CMD ["python", "yokome/deployment/server.py"]
+CMD ["python", "yokome/deployment/server.py", "--no-debug", "--insecure"]

@@ -1,0 +1,28 @@
+{
+    "manifest_version": 2,
+    "name": "Yokome",
+    "version": "1.0",
+    "description": "A personalized reading support system.",
+    "homepage_url": "https://github.com/julianbetz/Yokome",
+    "icons": {},
+    "background": {
+        "scripts": [
+            "background.js"
+        ]
+    },
+    "page_action": {
+        "default_title": "Yokome",
+        "browser_style": true
+    },
+    "permissions": [
+        "activeTab",
+        "tabs",
+        "*://localhost/*"
+    ],
+    "web_accessible_resources": [],
+    "applications": {
+        "gecko": {
+            "id": "a13fefc0-e7d9-4b68-937b-2baeb8add639@julianbetz.github.io"
+        }
+    }
+}

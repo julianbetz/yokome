@@ -4,6 +4,8 @@
 data/*/*
 !data/crafted/*
 virtualenvs/*
+*.pyc
+*.xpi
 notebooks/*
 lib/*
 models/*
@@ -11,6 +13,6 @@ hyperparameter_optimization/*
 !hyperparameter_optimization/xvld
 hyperparameter_optimization/xvld/*
 !hyperparameter_optimization/xvld/.gitkeep
-*.pyc
+doc
 
 !**/.gitkeep

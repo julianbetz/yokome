@@ -507,11 +507,21 @@ def handle_error(error):
 
 
 @click.command()
-@click.option('--debug/--no-debug', default=False)
-def run_app(debug):
-    """Start the server."""
-    app.run(# ssl_context='adhoc', 
-            host='0.0.0.0', port='5003', debug=debug)
+@click.option('--debug/--no-debug', default=False,
+              help='Whether to activate debug mode.')
+@click.option('--secure/--insecure', default=True,
+              help='Whether to use HTTPS instead of HTTP. '
+              'In case of secure connections, use a self-signed certificate.')
+def run_app(debug, secure):
+    """Start the server.
+
+    :param bool debug: Whether to activate debug mode.
+    :param bool secure: Whether to use HTTPS instead of HTTP.  In case of secure
+        connections, use a self-signed certificate.
+    
+    """
+    app.run(host='0.0.0.0', port='5003', debug=debug,
+            ssl_context='adhoc' if secure else None)
 
 
 if __name__ == '__main__':
