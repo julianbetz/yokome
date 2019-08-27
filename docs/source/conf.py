@@ -88,13 +88,25 @@ todo_include_todos = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+import sphinx_bootstrap_theme
+
+html_theme = 'bootstrap' # 'alabaster'
+html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#
-# html_theme_options = {}
+
+html_theme_options = {
+    'navbar_pagenav': False,
+    'navbar_links': [
+        ('Python Modules', 'py-modindex.html', True),
+        ('Index', 'genindex.html', True)        
+    ],
+    'source_link_position': None,
+    'bootstrap_version': '3',
+    'bootswatch_theme': 'lumen'
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -108,8 +120,10 @@ html_static_path = ['.static']
 # refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
 html_sidebars = {
     '**': [
-        'relations.html',  # needs 'show_related': True theme option to display
-        'searchbox.html',
+        # 'relations.html',  # needs 'show_related': True theme option to display
+        # 'searchbox.html',
+        # 'sourcelink.html',
+        'localtoc.html'
     ]
 }
 

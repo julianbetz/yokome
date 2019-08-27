@@ -227,7 +227,7 @@ def validate_file(f):
             previous_non_jpn_word = None
             for word in ChasenCorpusReader(
                     os.path.abspath(os.path.dirname(os.path.abspath(__file__))
-                                    + '/../../../data/raw/Yokome_jpn_corpus'),
+                                    + '/../../../data/raw/yokome-jpn-corpus'),
                     f, encoding='utf-8').words():
                 if any(in_ranges(ord(c), _JPN_RANGES) for c in word):
                     previous_non_jpn_word = None

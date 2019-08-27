@@ -13,9 +13,9 @@ services:
     expose:
       - 9200
       - 9300
-    ports:
-      - 9200:9200
-      - 9300:9300
+    # ports:
+    #   - 9200:9200
+    #   - 9300:9300
     networks:
       - yokome_net
   app:
@@ -32,6 +32,6 @@ services:
     expose:
       - 5003
     ports:
-      - 5003:5003
+      - ${PORT}:5003
 networks:
   yokome_net:
