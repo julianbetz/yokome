@@ -17,6 +17,7 @@
 
 import sys
 import os
+import click
 from fractions import Fraction
 from collections import defaultdict
 import time
@@ -129,7 +130,10 @@ async def store_corpus(conn, files, lemmas, graphics, phonetics, graphic_cs, pho
     await asyncio.gather(*tasks)
 
 
-if __name__ == '__main__':
+@click.command()
+@click.argument('corpus_dir',           # The root directory of the corpus
+                type=click.Path(exists=True, file_okay=False, dir_okay=True))
+def main(corpus_dir):
     start = time.time()
     database_file = _PROJECT_ROOT + '/data/processed/data.db'
     if os.path.exists(database_file):
@@ -178,7 +182,7 @@ if __name__ == '__main__':
         c.execute('DELETE FROM statistics WHERE language = "jpn"')
         conn.commit()
         print('    Analyzing documents:')
-        asyncio.get_event_loop().run_until_complete(store_corpus(conn, dev_files(), lemmas, graphics, phonetics, graphic_cs, phonetic_cs))
+        asyncio.get_event_loop().run_until_complete(store_corpus(conn, dev_files(corpus_dir), lemmas, graphics, phonetics, graphic_cs, phonetic_cs))
         print('    Saving statistics...')
         cumulative_count = Fraction(0, 1)
         for rank, (lemma, count) in enumerate(sorted(lemmas.items(), key=lambda x: x[1], reverse=True), start=1):
@@ -214,3 +218,7 @@ if __name__ == '__main__':
         c.execute('VACUUM')
         conn.commit()
     print('    \033[1;32mDONE\033[0m (%ds)' % (time.time() - start,))
+
+
+if __name__ == '__main__':
+    main()

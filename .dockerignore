@@ -1,0 +1,15 @@
+data
+!data/raw/JMdict.xml
+!data/crafted/rdbms_start.sql
+!data/crafted/jpn_inverse_dictionary_setup.json
+!data/crafted/jpn_pos_restrictions.json
+!data/crafted/juman_pos_translator.json
+!data/processed/data.db
+!data/processed/inverse_dictionary
+!data/deployment-initial
+virtualenvs
+lib
+models
+!models/trn
+hyperparameter_optimization
+!hyperparameter_optimization/xvld/best_hyperparams.json

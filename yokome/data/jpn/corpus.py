@@ -30,31 +30,6 @@ from ...util.collections import shuffle
 from ...util.math import prod
 
 
-_SPLIT_SEED = 775607720
-_SPLIT_R = RandomState(_SPLIT_SEED)
-_SHUFFLE_SEED = 116957683
-_JPN_RANGES = WORD_RANGES + SUPPLEMENTAL_RANGES
-DATABASE = os.path.abspath(os.path.dirname(os.path.abspath(__file__))
-                           + '/../../../data/processed/data.db')
-_sentence_ids = None
-
-
-def _chasen_file_finder(corpus):
-    if corpus not in ('aozora', 'genpaku'):
-        raise ValueError('Unknown corpus')
-    for _, _, files in os.walk(os.path.abspath(
-            os.path.dirname(os.path.abspath(__file__))
-            + '/../../../data/raw/Yokome_jpn_corpus/jeita_%s' % (corpus,))):
-        for f in sorted(files):
-            if f.endswith('.chasen'):
-                yield f
-
-_JEITA_AOZORA_FILES = tuple('jeita_aozora/%s' % (f,)
-                            for f in _chasen_file_finder('aozora'))
-_JEITA_GENPAKU_FILES = tuple('jeita_genpaku/%s' % (f,)
-                             for f in _chasen_file_finder('genpaku'))
-
-
 # All data is split into the following data sets:
 # 
 #   * Reserve (rsv) set: Not for direct use in this project, but for testing if
@@ -83,32 +58,89 @@ _JEITA_GENPAKU_FILES = tuple('jeita_genpaku/%s' % (f,)
 # sources in other languages.
 
 
-# Split off reserve and test set before filtering out bad files, as the
-# definition of 'bad' may change during the course of the project
-_JEITA_AOZORA_NON_RESERVE_FILES, _JEITA_AOZORA_RESERVE_FILES = train_test_split(_JEITA_AOZORA_FILES, test_size=0.2, random_state=_SPLIT_R, shuffle=True)
-_JEITA_AOZORA_DEVELOPMENT_FILES, _JEITA_AOZORA_TEST_FILES = train_test_split(_JEITA_AOZORA_NON_RESERVE_FILES, test_size=0.25, random_state=_SPLIT_R, shuffle=False)
-_JEITA_GENPAKU_NON_RESERVE_FILES, _JEITA_GENPAKU_RESERVE_FILES = train_test_split(_JEITA_GENPAKU_FILES, test_size=0.2, random_state=_SPLIT_R, shuffle=True)
-_JEITA_GENPAKU_DEVELOPMENT_FILES, _JEITA_GENPAKU_TEST_FILES = train_test_split(_JEITA_GENPAKU_NON_RESERVE_FILES, test_size=0.25, random_state=_SPLIT_R, shuffle=False)
-_RSV_FILES = tuple(shuffle(_JEITA_AOZORA_RESERVE_FILES + _JEITA_GENPAKU_RESERVE_FILES, random_state=_SPLIT_R))
-_TST_FILES = tuple(shuffle(_JEITA_AOZORA_TEST_FILES + _JEITA_GENPAKU_TEST_FILES, random_state=_SPLIT_R))
-_DEV_FILES = tuple(shuffle(_JEITA_AOZORA_DEVELOPMENT_FILES + _JEITA_GENPAKU_DEVELOPMENT_FILES, random_state=_SPLIT_R))
+_SPLIT_SEED = 775607720
+_SPLIT_R = RandomState(_SPLIT_SEED)
+_SHUFFLE_SEED = 116957683
+_JPN_RANGES = WORD_RANGES + SUPPLEMENTAL_RANGES
+DATABASE = os.path.abspath(os.path.dirname(os.path.abspath(__file__))
+                           + '/../../../data/processed/data.db')
+_CORPUS_DIR = None
+_RSV_FILES, _TST_FILES, _DEV_FILES = None, None, None
+_sentence_ids = None
 
 
-def rsv_files():
-    """Get the filenames of the reserved corpus documents."""
+def _chasen_file_finder(corpus_dir, corpus):
+    if corpus not in ('aozora', 'genpaku'):
+        raise ValueError('Unknown corpus')
+    for _, _, files in os.walk(os.path.abspath(corpus_dir
+                                               + '/jeita_%s' % (corpus,))):
+        for f in sorted(files):
+            if f.endswith('.chasen'):
+                yield f
+
+
+def _ensure_file_ids(corpus_dir):
+    """Make sure the IDs for all document files of the corpus are loaded.
+
+    :param str corpus_dir: The root directory of the corpus.
+    
+    :raises ValueError: If different root directories have been issued.
+
+    """
+    global _CORPUS_DIR, _RSV_FILES, _TST_FILES, _DEV_FILES
+    # Ensure data is only loaded once (Thus random states are consistent for
+    # every loading)
+    if corpus_dir is None:
+        raise TypeError("The corpus root directory has to be of type 'str'")
+    if _CORPUS_DIR is None:
+        jeita_aozora_files = tuple('jeita_aozora/%s' % (f,)
+                                   for f in _chasen_file_finder(corpus_dir, 'aozora'))
+        jeita_genpaku_files = tuple('jeita_genpaku/%s' % (f,)
+                                    for f in _chasen_file_finder(corpus_dir, 'genpaku'))
+        # Split off reserve and test set before filtering out bad files, as the
+        # definition of 'bad' may change during the course of the project
+        jeita_aozora_non_reserve_files, jeita_aozora_reserve_files = train_test_split(jeita_aozora_files, test_size=0.2, random_state=_SPLIT_R, shuffle=True)
+        jeita_aozora_development_files, jeita_aozora_test_files = train_test_split(jeita_aozora_non_reserve_files, test_size=0.25, random_state=_SPLIT_R, shuffle=False)
+        jeita_genpaku_non_reserve_files, jeita_genpaku_reserve_files = train_test_split(jeita_genpaku_files, test_size=0.2, random_state=_SPLIT_R, shuffle=True)
+        jeita_genpaku_development_files, jeita_genpaku_test_files = train_test_split(jeita_genpaku_non_reserve_files, test_size=0.25, random_state=_SPLIT_R, shuffle=False)
+        _RSV_FILES = tuple(shuffle(jeita_aozora_reserve_files + jeita_genpaku_reserve_files, random_state=_SPLIT_R))
+        _TST_FILES = tuple(shuffle(jeita_aozora_test_files + jeita_genpaku_test_files, random_state=_SPLIT_R))
+        _DEV_FILES = tuple(shuffle(jeita_aozora_development_files + jeita_genpaku_development_files, random_state=_SPLIT_R))
+        _CORPUS_DIR = corpus_dir
+    elif corpus_dir != _CORPUS_DIR:
+        raise ValueError('Inconsistent second corpus root directory issued')
+
+
+def rsv_files(corpus_dir):
+    """Get the filenames of the reserved corpus documents.
+
+    :param str corpus_dir: The root directory of the corpus.
+    
+    """
     global _RSV_FILES
+    _ensure_file_ids(corpus_dir)
     return _RSV_FILES
 
 
-def tst_files():
-    """Get the filenames of the corpus documents for tests."""
+def tst_files(corpus_dir):
+    """Get the filenames of the corpus documents for tests.
+
+    :param str corpus_dir: The root directory of the corpus.
+    
+    """
     global _TST_FILES
+    _ensure_file_ids(corpus_dir)
     return _TST_FILES
 
 
-def dev_files():
-    """Get the filenames of the corpus documents for development."""
+def dev_files(corpus_dir):
+    """Get the filenames of the corpus documents for development.
+
+    :param str corpus_dir: The root directory of the corpus.
+    
+    """
     global _DEV_FILES
+    _ensure_file_ids(corpus_dir)
     return _DEV_FILES
 
 
@@ -174,8 +206,8 @@ def _lemma_extractor(tokens):
 #                     for files in fold)
 
 
-# def tests():
-#     yield from _generate_file_names_and_symbol_streams(tst_files())
+# def tests(corpus_dir):
+#     yield from _generate_file_names_and_symbol_streams(tst_files(corpus_dir))
 
 
 # XXX Couln't this be done without else clauses after for?
