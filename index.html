@@ -1,9 +1,863 @@
+
 <!DOCTYPE html>
-<html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title>Hello world!</title>
-  </head>
-  <body>
-    <h1>Hello world!</h1>
+    <meta charset="utf-8" />
+    <title>Welcome to Yokome’s documentation! &#8212; Yokome 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-yokome-s-documentation">
+<h1>Welcome to Yokome’s documentation!<a class="headerlink" href="#welcome-to-yokome-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+<span class="target" id="module-yokome.models.wsd"></span><dl class="function">
+<dt id="yokome.models.wsd.disambiguate">
+<code class="sig-prename descclassname">yokome.models.wsd.</code><code class="sig-name descname">disambiguate</code><span class="sig-paren">(</span><em class="sig-param">tokens</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.models.wsd.disambiguate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disambiguate the token at <code class="docutils literal notranslate"><span class="pre">i</span></code> in the tokenized sentence <code class="docutils literal notranslate"><span class="pre">tokens</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tokens</strong> – A sentence, split into its tokens.</p></li>
+<li><p><strong>i</strong> (<em>int</em>) – The position of the token of interest in <code class="docutils literal notranslate"><span class="pre">tokens</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>A list of data on lexemes, ranked by their overall suitability to
+describe the meaning of the token at <code class="docutils literal notranslate"><span class="pre">i</span></code>, with their connotations in
+turn associated with their suitability.  Each element is a dictionary of
+the following form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s1">&#39;entry_id&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">ID</span> <span class="n">of</span> <span class="n">the</span> <span class="n">lexeme</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">dictionary</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="s1">&#39;headwords&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">list</span> <span class="n">of</span> <span class="n">lemmas</span> <span class="k">for</span> <span class="n">the</span> <span class="n">lexeme</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="s1">&#39;discriminator&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">int</span> <span class="k">for</span> <span class="n">lexemes</span> <span class="k">with</span> <span class="n">the</span> <span class="n">same</span> <span class="n">main</span> <span class="n">headword</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="s1">&#39;roles&#39;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s1">&#39;poss&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">POS</span> <span class="n">tag</span> <span class="nb">list</span> <span class="k">for</span> <span class="n">the</span> <span class="n">role</span><span class="o">&gt;</span><span class="p">,</span>
+      <span class="s1">&#39;connotations&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s1">&#39;sense_id&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">the</span> <span class="n">ID</span> <span class="n">of</span> <span class="n">the</span> <span class="n">connotation</span> <span class="n">within</span> <span class="n">the</span> <span class="n">lexeme</span><span class="o">&gt;</span><span class="p">,</span>
+          <span class="s1">&#39;glosses&#39;</span><span class="p">:</span> <span class="p">((</span><span class="o">&lt;</span><span class="n">gloss_type</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">gloss</span><span class="o">&gt;</span><span class="p">),</span> <span class="o">...</span><span class="p">),</span>
+          <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">connotation</span> <span class="n">score</span><span class="o">&gt;</span>
+        <span class="p">},</span>
+        <span class="o">...</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="o">...</span>
+  <span class="p">],</span>
+  <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">overall</span> <span class="n">lexeme</span> <span class="n">score</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.models.wsd.has_statistics">
+<code class="sig-prename descclassname">yokome.models.wsd.</code><code class="sig-name descname">has_statistics</code><span class="sig-paren">(</span><em class="sig-param">conn</em>, <em class="sig-param">language_code</em>, <em class="sig-param">lemma</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.models.wsd.has_statistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>See if <code class="docutils literal notranslate"><span class="pre">lemma</span></code> can be found in both the dictionary and the corpus.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conn</strong> – The database connection for the dictionary and statistics.</p></li>
+<li><p><strong>language_code</strong> (<em>str</em>) – ISO 639-3 language code of the language of interest.</p></li>
+<li><p><strong>lemma</strong> – A dictionary that contains the keys <code class="docutils literal notranslate"><span class="pre">graphic</span></code> and <code class="docutils literal notranslate"><span class="pre">phonetic</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the lemma can be found in both the dictionary and the 
+corpus, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.models.wsd.lexeme_lemma_count">
+<code class="sig-prename descclassname">yokome.models.wsd.</code><code class="sig-name descname">lexeme_lemma_count</code><span class="sig-paren">(</span><em class="sig-param">conn</em>, <em class="sig-param">language_code</em>, <em class="sig-param">lemma</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.models.wsd.lexeme_lemma_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate the number of occurrences of a lexeme-lemma combination.</p>
+<p>Get the number of occurrences of a lemma in the background corpus and
+estimate its contribution to the number of occurrences to one of its
+corresponding lexemes by dividing it by the number of lexemes for which it
+is listed as a headword.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conn</strong> – The database connection for the dictionary and statistics.</p></li>
+<li><p><strong>language_code</strong> – ISO 639-3 language code of the language of interest.</p></li>
+<li><p><strong>lemma</strong> – A dictionary that contains the keys <code class="docutils literal notranslate"><span class="pre">graphic</span></code> and <code class="docutils literal notranslate"><span class="pre">phonetic</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The number of estimated occurrences of the specified lemma with one
+of its lexemes, assuming equal distribution of the lemma among its
+lexemes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.models.wsd.n_lexemes_for_lemma">
+<code class="sig-prename descclassname">yokome.models.wsd.</code><code class="sig-name descname">n_lexemes_for_lemma</code><span class="sig-paren">(</span><em class="sig-param">conn</em>, <em class="sig-param">language_code</em>, <em class="sig-param">lemma</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#yokome.models.wsd.n_lexemes_for_lemma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of dictionary entries with <code class="docutils literal notranslate"><span class="pre">lemma</span></code> as headword.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conn</strong> – The database connection for the dictionary.</p></li>
+<li><p><strong>language_code</strong> (<em>str</em>) – ISO 639-3 language code of the language of interest.</p></li>
+<li><p><strong>lemma</strong> – A dictionary that contains the keys <code class="docutils literal notranslate"><span class="pre">graphic</span></code> and
+<code class="docutils literal notranslate"><span class="pre">phonetic</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The number of entries in the dictionary that have the specified
+lemma as one of its headwords.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.models.wsd.retrieve_substitute_lexemes">
+<code class="sig-prename descclassname">yokome.models.wsd.</code><code class="sig-name descname">retrieve_substitute_lexemes</code><span class="sig-paren">(</span><em class="sig-param">entry_id</em>, <em class="sig-param">n_senses</em>, <em class="sig-param">sense</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.models.wsd.retrieve_substitute_lexemes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for substitute lexemes with senses similary to the specified one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>entry_int</em>) – The ID of the lexeme of interest in the dictionary.</p></li>
+<li><p><strong>n_senses</strong> (<em>int</em>) – The total number of senses of the lexeme with ID
+<code class="docutils literal notranslate"><span class="pre">entry_id</span></code>.</p></li>
+<li><p><strong>sense</strong> – A list of gloss descriptions of the form <code class="docutils literal notranslate"><span class="pre">(gloss_type,</span> <span class="pre">gloss)</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>A list of dictionaries of the form</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;entry_id&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">entry</span> <span class="n">ID</span> <span class="n">of</span> <span class="n">lexeme</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="s1">&#39;lemmas&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">list</span> <span class="n">of</span> <span class="n">headwords</span> <span class="n">of</span> <span class="n">lexeme</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="s1">&#39;pos&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">tree</span> <span class="n">of</span> <span class="n">POS</span><span class="o">-</span><span class="n">tags</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="s1">&#39;glosses&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">list</span> <span class="n">of</span> <span class="n">glosses</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="s1">&#39;ir_score&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">information</span> <span class="n">retrieval</span> <span class="n">score</span><span class="o">&gt;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>of the connotations (i.e. lexeme-sense combinations) that most closely
+resemble <code class="docutils literal notranslate"><span class="pre">sense</span></code> in terms of their glosses.  All connotations that
+pertain to the lexeme with the ID <code class="docutils literal notranslate"><span class="pre">entry_id</span></code> are excluded.</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.models.wsd.score_connotation">
+<code class="sig-prename descclassname">yokome.models.wsd.</code><code class="sig-name descname">score_connotation</code><span class="sig-paren">(</span><em class="sig-param">tokens</em>, <em class="sig-param">i</em>, <em class="sig-param">sense_prior</em>, <em class="sig-param">pos_tree</em>, <em class="sig-param">role_pos_score</em>, <em class="sig-param">conn</em>, <em class="sig-param">substitute_lexemes</em>, <em class="sig-param">TOTAL_LEMMAS</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.models.wsd.score_connotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Score the substitution of the token at <code class="docutils literal notranslate"><span class="pre">i</span></code> with <code class="docutils literal notranslate"><span class="pre">substitute_lexemes</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tokens</strong> – A sentence, split into tokens.</p></li>
+<li><p><strong>i</strong> – The position of the token of interest in <code class="docutils literal notranslate"><span class="pre">tokens</span></code>.</p></li>
+<li><p><strong>sense_prior</strong> – The prior probability of the sense given the lexeme.</p></li>
+<li><p><strong>pos_tree</strong> (<a class="reference internal" href="#yokome.features.tree.TemplateTree" title="yokome.features.tree.TemplateTree"><em>yokome.features.tree.TemplateTree</em></a>) – The POS tree of the role to
+which the connotation belongs.</p></li>
+<li><p><strong>role_pos_score</strong> – The summed scores of the matches between <code class="docutils literal notranslate"><span class="pre">pos_tree</span></code>
+and each POS tree that pertains to a candidate lemma of the token of
+interest so that the candidate lemma is a headword of the lexeme to
+which the connotation belongs.</p></li>
+<li><p><strong>conn</strong> – The database connection for the dictionary and statistics.</p></li>
+<li><p><strong>substitute_lexemes</strong> – A list of dicts that describe lexemes that could be
+used as substitutes for the token of interest.</p></li>
+<li><p><strong>TOTAL_LEMMAS</strong> – The total number of lemmas (i.e. of tokens) in the corpus.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A score for the suitability of the connotation that suggested
+<code class="docutils literal notranslate"><span class="pre">substitute_lexemes</span></code> to describe the meaning of the token at <code class="docutils literal notranslate"><span class="pre">i</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.models.wsd.score_lexeme">
+<code class="sig-prename descclassname">yokome.models.wsd.</code><code class="sig-name descname">score_lexeme</code><span class="sig-paren">(</span><em class="sig-param">tokens</em>, <em class="sig-param">i</em>, <em class="sig-param">pos_trees</em>, <em class="sig-param">conn</em>, <em class="sig-param">lexeme</em>, <em class="sig-param">TOTAL_LEMMAS</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.models.wsd.score_lexeme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disambiguate the token at <code class="docutils literal notranslate"><span class="pre">i</span></code> using the connotations of <code class="docutils literal notranslate"><span class="pre">lexeme</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tokens</strong> – A sentence, split into its tokens.</p></li>
+<li><p><strong>i</strong> – The position of the token of interest in <code class="docutils literal notranslate"><span class="pre">tokens</span></code>.</p></li>
+<li><p><strong>pos_trees</strong> (<em>list</em><em>[</em><a class="reference internal" href="#yokome.features.tree.TemplateTree" title="yokome.features.tree.TemplateTree"><em>yokome.features.tree.TemplateTree</em></a><em>]</em>) – A list of POS trees of
+the token at <code class="docutils literal notranslate"><span class="pre">i</span></code>, each pertaining to one of the candidate lemmas
+of this token, restricted to those tokens that are headwords of
+<code class="docutils literal notranslate"><span class="pre">lexeme</span></code>.</p></li>
+<li><p><strong>conn</strong> – The database connection for the dictionary and statistics.</p></li>
+<li><p><strong>lexeme</strong> (<em>yokome.features.dictionary.Lexeme</em>) – An entry in the dictionary that
+possibly describes the meaning of the token at <code class="docutils literal notranslate"><span class="pre">i</span></code>.</p></li>
+<li><p><strong>TOTAL_LEMMAS</strong> – The total number of lemmas (i.e. of tokens) in the corpus.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>A dictionary of data on the lexeme, together with the lexemes overall
+suitability to describe the meaning of the token at <code class="docutils literal notranslate"><span class="pre">i</span></code>. Each
+connotations in turn is associated with its suitability.  The dictionary
+is of the following form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s1">&#39;entry_id&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">ID</span> <span class="n">of</span> <span class="n">the</span> <span class="n">lexeme</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">dictionary</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="s1">&#39;headwords&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">list</span> <span class="n">of</span> <span class="n">lemmas</span> <span class="k">for</span> <span class="n">the</span> <span class="n">lexeme</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="s1">&#39;discriminator&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">int</span> <span class="k">for</span> <span class="n">lexemes</span> <span class="k">with</span> <span class="n">the</span> <span class="n">same</span> <span class="n">main</span> <span class="n">headword</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="s1">&#39;roles&#39;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s1">&#39;poss&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">POS</span> <span class="n">tag</span> <span class="nb">list</span> <span class="k">for</span> <span class="n">the</span> <span class="n">role</span><span class="o">&gt;</span><span class="p">,</span>
+      <span class="s1">&#39;connotations&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s1">&#39;sense_id&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">the</span> <span class="n">ID</span> <span class="n">of</span> <span class="n">the</span> <span class="n">connotation</span> <span class="n">within</span> <span class="n">the</span> <span class="n">lexeme</span><span class="o">&gt;</span><span class="p">,</span>
+          <span class="s1">&#39;glosses&#39;</span><span class="p">:</span> <span class="p">((</span><span class="o">&lt;</span><span class="n">gloss_type</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">gloss</span><span class="o">&gt;</span><span class="p">),</span> <span class="o">...</span><span class="p">),</span>
+          <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">connotation</span> <span class="n">score</span><span class="o">&gt;</span>
+        <span class="p">},</span>
+        <span class="o">...</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="o">...</span>
+  <span class="p">],</span>
+  <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">overall</span> <span class="n">lexeme</span> <span class="n">score</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.models.wsd.total_lemmas">
+<code class="sig-prename descclassname">yokome.models.wsd.</code><code class="sig-name descname">total_lemmas</code><span class="sig-paren">(</span><em class="sig-param">conn</em>, <em class="sig-param">language_code</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.models.wsd.total_lemmas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of lemmas (i.e. of tokens) in the background corpus.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conn</strong> – The database connection for statistics.</p></li>
+<li><p><strong>language_code</strong> – ISO 639-3 language code of the language of interest.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The total number of lemmas in the background corpus.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-yokome.features.symbol_stream"></span><dl class="exception">
+<dt id="yokome.features.symbol_stream.BracketingError">
+<em class="property">exception </em><code class="sig-prename descclassname">yokome.features.symbol_stream.</code><code class="sig-name descname">BracketingError</code><span class="sig-paren">(</span><em class="sig-param">bracketing_structure</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.symbol_stream.BracketingError" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">bracketing_structure</span></code> is a symbol stream.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.symbol_stream.enumerate_alternatives">
+<code class="sig-prename descclassname">yokome.features.symbol_stream.</code><code class="sig-name descname">enumerate_alternatives</code><span class="sig-paren">(</span><em class="sig-param">sentence</em><span class="sig-paren">)</span> &#x2192; Iterator<a class="headerlink" href="#yokome.features.symbol_stream.enumerate_alternatives" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate all sentence alternatives in sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sentence</strong> – A sentence, split into tokens.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An iterable over iterables over tokens, one for each token in the
+original sentence.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.symbol_stream.in_ranges">
+<code class="sig-prename descclassname">yokome.features.symbol_stream.</code><code class="sig-name descname">in_ranges</code><span class="sig-paren">(</span><em class="sig-param">char</em>, <em class="sig-param">ranges</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.symbol_stream.in_ranges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines whether the given character is in one of the ranges.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.symbol_stream.sample_alternatives">
+<code class="sig-prename descclassname">yokome.features.symbol_stream.</code><code class="sig-name descname">sample_alternatives</code><span class="sig-paren">(</span><em class="sig-param">sentence</em>, <em class="sig-param">n</em>, <em class="sig-param">seed</em><span class="sig-paren">)</span> &#x2192; Iterator<a class="headerlink" href="#yokome.features.symbol_stream.sample_alternatives" title="Permalink to this definition">¶</a></dt>
+<dd><p>From all sentence alternatives, sample <code class="docutils literal notranslate"><span class="pre">n</span></code> instances uniformly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sentence</strong> – A sentence, split into tokens.</p></li>
+<li><p><strong>n</strong> – The number of sample to generate.</p></li>
+<li><p><strong>seed</strong> – <dl class="simple">
+<dt>Random seed used for the random number generator.  For</dt><dd><p>non-seeded behavior, use <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">return</dt>
+<dd class="field-odd"><p>An iterable over iterables over tokens, one for each token in the
+original sentence.</p>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.symbol_stream.validate_brackets">
+<code class="sig-prename descclassname">yokome.features.symbol_stream.</code><code class="sig-name descname">validate_brackets</code><span class="sig-paren">(</span><em class="sig-param">symbol_stream</em>, <em class="sig-param">brackets</em><span class="sig-paren">)</span> &#x2192; Iterator<a class="headerlink" href="#yokome.features.symbol_stream.validate_brackets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate the stream’s bracketing structure.</p>
+<p>Yield the symbols from the symbol stream verbatim while checking for
+unbalanced and mismatched brackets.  Raise <code class="docutils literal notranslate"><span class="pre">BracketingError</span></code> after
+yielding every symbol in an invalid input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>symbol_stream</strong> – A stream over symbols.</p></li>
+<li><p><strong>brackets</strong> – A dictionary where the keys are the chars for the opening
+brackets and their values are the corresponding closing brackets.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A stream over the same symbols as the input.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#yokome.features.symbol_stream.BracketingError" title="yokome.features.symbol_stream.BracketingError"><strong>BracketingError</strong></a> – If brackets in the symbol stream are unbalanced or
+mismatched</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-yokome.features.corpus"></span><dl class="function">
+<dt id="yokome.features.corpus.generate_graphic_character_vocabulary">
+<code class="sig-prename descclassname">yokome.features.corpus.</code><code class="sig-name descname">generate_graphic_character_vocabulary</code><span class="sig-paren">(</span><em class="sig-param">conn</em>, <em class="sig-param">min_coverage</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.corpus.generate_graphic_character_vocabulary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a vocabulary of characters from graphic representations of lemmas
+that covers at least the specified portion of the corpus.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.corpus.generate_lemma_vocabulary">
+<code class="sig-prename descclassname">yokome.features.corpus.</code><code class="sig-name descname">generate_lemma_vocabulary</code><span class="sig-paren">(</span><em class="sig-param">conn</em>, <em class="sig-param">min_coverage</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.corpus.generate_lemma_vocabulary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a vocabulary that covers at least the specified portion of the
+corpus.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.corpus.generate_phonetic_character_vocabulary">
+<code class="sig-prename descclassname">yokome.features.corpus.</code><code class="sig-name descname">generate_phonetic_character_vocabulary</code><span class="sig-paren">(</span><em class="sig-param">conn</em>, <em class="sig-param">min_coverage</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.corpus.generate_phonetic_character_vocabulary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a vocabulary of characters from phonetic representations of lemmas
+that covers at least the specified portion of the corpus.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.corpus.lemma_coverage">
+<code class="sig-prename descclassname">yokome.features.corpus.</code><code class="sig-name descname">lemma_coverage</code><span class="sig-paren">(</span><em class="sig-param">conn</em>, <em class="sig-param">graphic</em>, <em class="sig-param">phonetic</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#yokome.features.corpus.lemma_coverage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide a measure of difficulty/infrequency for the specified lemma.</p>
+<p>We here define a type’s corpus coverage as the proportion of tokens in a
+corpus that are instances of types that are at least as frequent as the type
+of interest.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conn</strong> – Database connection for statistics.</p></li>
+<li><p><strong>graphic</strong> (<em>str</em>) – Graphic lemma variant of interest.</p></li>
+<li><p><strong>phonetic</strong> (<em>str</em>) – Phonetic lemma variant of interest.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The portion of tokens in the background corpus that are instances 
+of types that are at least as frequent as the type of interest.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-yokome.features.dictionary"></span><dl class="data">
+<dt id="yokome.features.dictionary.GLOSS_SEPARATOR">
+<code class="sig-prename descclassname">yokome.features.dictionary.</code><code class="sig-name descname">GLOSS_SEPARATOR</code><em class="property"> = '▪'</em><a class="headerlink" href="#yokome.features.dictionary.GLOSS_SEPARATOR" title="Permalink to this definition">¶</a></dt>
+<dd><p>A character that separates different glosses for the same sense.</p>
+<p>Asserted not to occur in the text of any gloss.</p>
+</dd></dl>
+
+<span class="target" id="module-yokome.features.tree"></span><dl class="class">
+<dt id="yokome.features.tree.AndOrTree">
+<em class="property">class </em><code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">AndOrTree</code><a class="headerlink" href="#yokome.features.tree.AndOrTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>A tree node that conjunctively gathers disjunctive children.</p>
+<p>Semantically, children of this node represent cooccurrences.  They may only
+be instances of OrAndTree, i.e. they semantically are alternatives.</p>
+<p>Nodes of this type do not carry any satellite data.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="yokome.features.tree.DataOnlyTree">
+<em class="property">class </em><code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">DataOnlyTree</code><span class="sig-paren">(</span><em class="sig-param">value=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.DataOnlyTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>A tree node that conjunctively gathers conjunctive children.</p>
+<p>Semantically, children of this node represent cooccurrences.  They may only
+be other instances of DataOnlyTree.</p>
+<p>Nodes of this type may carry satellite data.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="yokome.features.tree.DataTree">
+<em class="property">class </em><code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">DataTree</code><span class="sig-paren">(</span><em class="sig-param">value=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.DataTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>A tree structure with satellite data.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="yokome.features.tree.InvalidDataError">
+<em class="property">exception </em><code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">InvalidDataError</code><a class="headerlink" href="#yokome.features.tree.InvalidDataError" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="yokome.features.tree.InvalidEntryError">
+<em class="property">exception </em><code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">InvalidEntryError</code><span class="sig-paren">(</span><em class="sig-param">reason</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.InvalidEntryError" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="yokome.features.tree.MissingDataException">
+<em class="property">exception </em><code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">MissingDataException</code><a class="headerlink" href="#yokome.features.tree.MissingDataException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="yokome.features.tree.OrAndTree">
+<em class="property">class </em><code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">OrAndTree</code><span class="sig-paren">(</span><em class="sig-param">value=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.OrAndTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>A tree that disjunctively gathers AndOrTree children.</p>
+<p>Semantically, children of this node are alternatives.  They may only be
+instances of AndOrTree, i.e. they semantically represent cooccurrences.</p>
+<p>Nodes of this type may carry satellite data.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="yokome.features.tree.StructureTree">
+<em class="property">class </em><code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">StructureTree</code><a class="headerlink" href="#yokome.features.tree.StructureTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>A tree data structure without satellite data.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="yokome.features.tree.TemplateTree">
+<em class="property">class </em><code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">TemplateTree</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">restrictions=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.TemplateTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data is required to be hashable.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="yokome.features.tree.Tree">
+<em class="property">class </em><code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">Tree</code><a class="headerlink" href="#yokome.features.tree.Tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>A generic tree data structure.</p>
+</dd></dl>
+
+<span class="target" id="module-yokome.features.jpn"></span><dl class="function">
+<dt id="yokome.features.jpn.chasen_loader">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">chasen_loader</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.chasen_loader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a file from the JEITA corpus and yields symbols from it.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.hiragana_to_katakana">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">hiragana_to_katakana</code><span class="sig-paren">(</span><em class="sig-param">phrase</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.hiragana_to_katakana" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert hiragana to katakana.</p>
+<p>Do not handle the use of prolonged sound marks.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.is_reading">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">is_reading</code><span class="sig-paren">(</span><em class="sig-param">phrase</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#yokome.features.jpn.is_reading" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether the specified phrase is a reading representation.</p>
+<p>Reading representations contain only characters from the hiragana, hiragana
+phonetic extensions, katakana and katakana phonetic extensions unicode
+blocks, as well as the wave dash (U+301c) and the fullwidth tilde (U+ff5e).
+The unused code points U+3040, U+3097 and U+3091 are excluded.</p>
+<p>Phrases that consist <strong>only</strong> of the wave dash, the fullwidth tilde, or the
+katakana middle dot (U+30fb) are <strong>not</strong> considered readings.  In JMdict,
+they are used as the headlines for descriptive entries for these forms of
+punctuation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>phrase</strong> (<em>str</em>) – The phrase to test.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the specified phrase is a reading representation, False
+otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.match_reading">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">match_reading</code><span class="sig-paren">(</span><em class="sig-param">splits</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.match_reading" title="Permalink to this definition">¶</a></dt>
+<dd><p>Match graphic and phonetic word representations and lemma.</p>
+<p>Discern the notations ‘’ for space and ‘’ for backslash (with ‘ ‘ as
+field separator) in JUMAN++ output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>splits</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – section for word token (graphic), word token
+(phonetic), and lemma, split on ‘ ‘ from a joint string
+representation with ‘ ‘ as separator.  The input may contain more
+than three elements.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.segmenter">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">segmenter</code><span class="sig-paren">(</span><em class="sig-param">symbol_stream</em>, <em class="sig-param">whitespace_marks_end_of_paragraph=False</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.segmenter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accept a stream of symbols and yield symbol streams for each sentence.</p>
+<p>This function works most reliably with balanced bracketing.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.to_dict">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">to_dict</code><span class="sig-paren">(</span><em class="sig-param">token</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn an array of JUMAN++-style token annotations into a dictionary.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.tokenize_async">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">tokenize_async</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">partially_annotated=False</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.tokenize_async" title="Permalink to this definition">¶</a></dt>
+<dd><p>While waiting for the result of tokenization is performed asynchronously,
+the token candidates are yielded in a blocking fashion, i.e. every coroutine
+building on this tokenizer has access to all resulting tokens without
+interference of other coroutines.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.tokenize_stream_async">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">tokenize_stream_async</code><span class="sig-paren">(</span><em class="sig-param">symbol_stream</em>, <em class="sig-param">partially_annotated=False</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.tokenize_stream_async" title="Permalink to this definition">¶</a></dt>
+<dd><p>While waiting for the result of tokenization is performed asynchronously,
+the token candidates are yielded in a blocking fashion, i.e. every coroutine
+building on this tokenizer has access to all resulting tokens without
+interference of other coroutines.</p>
+</dd></dl>
+
+<span class="target" id="module-yokome.deployment.server"></span><dl class="exception">
+<dt id="yokome.deployment.server.BadRequestError">
+<em class="property">exception </em><code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">BadRequestError</code><a class="headerlink" href="#yokome.deployment.server.BadRequestError" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="yokome.deployment.server.ENGLISH">
+<code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">ENGLISH</code><em class="property"> = 'eng'</em><a class="headerlink" href="#yokome.deployment.server.ENGLISH" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: ISO 639-3 language code for English.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="yokome.deployment.server.EmptyBodyException">
+<em class="property">exception </em><code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">EmptyBodyException</code><a class="headerlink" href="#yokome.deployment.server.EmptyBodyException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="yokome.deployment.server.Handler">
+<em class="property">class </em><code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">Handler</code><span class="sig-paren">(</span><em class="sig-param">request</em>, <em class="sig-param">client_address</em>, <em class="sig-param">server</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.deployment.server.Handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for all incoming HTTP requests.</p>
+<p>Defines the API.</p>
+<dl class="method">
+<dt id="yokome.deployment.server.Handler.check_disambiguate">
+<code class="sig-name descname">check_disambiguate</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.deployment.server.Handler.check_disambiguate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check data and disambiguate it.</p>
+<p>First, check whether all data that is required by Handler.disambiguate
+is provided.  Then, return scored lexeme entries.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yokome.deployment.server.Handler.check_tokenize">
+<code class="sig-name descname">check_tokenize</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.deployment.server.Handler.check_tokenize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check data and tokenize it.</p>
+<p>First, check whether all data that is required by Handler.tokenize is
+provided.  Then, return the tokenized data.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="yokome.deployment.server.Handler.debug">
+<code class="sig-name descname">debug</code><em class="property"> = False</em><a class="headerlink" href="#yokome.deployment.server.Handler.debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>bool: Whether to output detailed information in case of errors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yokome.deployment.server.Handler.disambiguate">
+<code class="sig-name descname">disambiguate</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">language</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.deployment.server.Handler.disambiguate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disambiguate the token at index <code class="docutils literal notranslate"><span class="pre">i</span></code> for the specified language.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yokome.deployment.server.Handler.do_OPTIONS">
+<code class="sig-name descname">do_OPTIONS</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yokome.deployment.server.Handler.do_OPTIONS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Respond to an HTTP OPTIONS request.</p>
+<p>Allow the HTTP POST method for cross-origin resource sharing (CORS).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yokome.deployment.server.Handler.do_POST">
+<code class="sig-name descname">do_POST</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yokome.deployment.server.Handler.do_POST" title="Permalink to this definition">¶</a></dt>
+<dd><p>Respond to an HTTP POST request.</p>
+<p>Mainly handle server errors globally and finalize the response.</p>
+<p>Rather than for updating a resource on the server, POST is used as a
+substitute for GET to fetch content, since GET does not support sending
+the necessary message body from the client side.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#yokome.deployment.server.Handler.handle_POST" title="yokome.deployment.server.Handler.handle_POST"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Handler.handle_POST()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="yokome.deployment.server.Handler.handle_POST">
+<code class="sig-name descname">handle_POST</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yokome.deployment.server.Handler.handle_POST" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the URL of a HTTP POST request and call the appropriate function
+to process the API call.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#yokome.deployment.server.Handler.do_POST" title="yokome.deployment.server.Handler.do_POST"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Handler.do_POST()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="yokome.deployment.server.Handler.parse_body">
+<code class="sig-name descname">parse_body</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yokome.deployment.server.Handler.parse_body" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn a JSON-encoded HTTP response body into Python objects.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yokome.deployment.server.Handler.parse_params">
+<code class="sig-name descname">parse_params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yokome.deployment.server.Handler.parse_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn a URL parameter string into a dictionary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yokome.deployment.server.Handler.tokenize">
+<code class="sig-name descname">tokenize</code><span class="sig-paren">(</span><em class="sig-param">language=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.deployment.server.Handler.tokenize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tokenize the specified text for the specified language.</p>
+<p>Attempt to detect the language of the text if no language is
+provided.  For Japanese, apply the JUMAN++ morphological analyzer
+(Morita et al. 2015).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="data">
+<dt id="yokome.deployment.server.JAPANESE">
+<code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">JAPANESE</code><em class="property"> = 'jpn'</em><a class="headerlink" href="#yokome.deployment.server.JAPANESE" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: ISO 639-3 language code for Japanese.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="yokome.deployment.server.KANA_RANGES">
+<code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">KANA_RANGES</code><em class="property"> = ((12353, 12438), (12449, 12538))</em><a class="headerlink" href="#yokome.deployment.server.KANA_RANGES" title="Permalink to this definition">¶</a></dt>
+<dd><p>tuple&lt;tuple&lt;int&gt;&gt;: Character ranges of kana characters.</p>
+<p>The ranges contain pronouncable characters only and are expressed as pairs of
+start (including) and end (including) characters.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="yokome.deployment.server.KANA_RATIO">
+<code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">KANA_RATIO</code><em class="property"> = 0.05</em><a class="headerlink" href="#yokome.deployment.server.KANA_RATIO" title="Permalink to this definition">¶</a></dt>
+<dd><p>float: Minimum kana rate for immediate JPN detection.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="yokome.deployment.server.NotFoundError">
+<em class="property">exception </em><code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">NotFoundError</code><a class="headerlink" href="#yokome.deployment.server.NotFoundError" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="yokome.deployment.server.PORT">
+<code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">PORT</code><em class="property"> = 5003</em><a class="headerlink" href="#yokome.deployment.server.PORT" title="Permalink to this definition">¶</a></dt>
+<dd><p>int: Server port to start on.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="yokome.deployment.server.TOKEN_SERVANT">
+<code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">TOKEN_SERVANT</code><em class="property"> = 'tokenizer'</em><a class="headerlink" href="#yokome.deployment.server.TOKEN_SERVANT" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: Tokenizer API location.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="yokome.deployment.server.TOKEN_SERVICE">
+<code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">TOKEN_SERVICE</code><em class="property"> = 'tokenize'</em><a class="headerlink" href="#yokome.deployment.server.TOKEN_SERVICE" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: Tokenization API location for tokenizer API.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="yokome.deployment.server.UnprocessableEntityError">
+<em class="property">exception </em><code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">UnprocessableEntityError</code><a class="headerlink" href="#yokome.deployment.server.UnprocessableEntityError" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="yokome.deployment.server.UnsupportedMediaTypeError">
+<em class="property">exception </em><code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">UnsupportedMediaTypeError</code><a class="headerlink" href="#yokome.deployment.server.UnsupportedMediaTypeError" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="yokome.deployment.server.WSD_SERVANT">
+<code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">WSD_SERVANT</code><em class="property"> = 'wsd'</em><a class="headerlink" href="#yokome.deployment.server.WSD_SERVANT" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: WSD API location.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="yokome.deployment.server.WSD_SERVICE">
+<code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">WSD_SERVICE</code><em class="property"> = 'disambiguate'</em><a class="headerlink" href="#yokome.deployment.server.WSD_SERVICE" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: Disambiguation API location for WSD API.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.deployment.server.disambiguate">
+<code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">disambiguate</code><span class="sig-paren">(</span><em class="sig-param">tokens</em>, <em class="sig-param">i</em>, <em class="sig-param">language</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.deployment.server.disambiguate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disambiguate the token at index <code class="docutils literal notranslate"><span class="pre">i</span></code> for the specified language.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.deployment.server.tokenize">
+<code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">tokenize</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">language=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.deployment.server.tokenize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tokenize the specified text for the specified language.</p>
+<p>Attempt to detect the language of the text if no language is provided.  For
+Japanese, apply the JUMAN++ morphological analyzer (Morita et al. 2015).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>str</em>) – The text to tokenize.</p></li>
+<li><p><strong>language</strong> (<em>str</em>) – ISO 639-3 language code of the language the text is
+written in.  If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the language is detected.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary containing the language. The tokenized sentences are
+contained only if there are a segmenter and tokenizer for the language.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-yokome.util.persistence"></span><dl class="function">
+<dt id="yokome.util.persistence.quote">
+<code class="sig-prename descclassname">yokome.util.persistence.</code><code class="sig-name descname">quote</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.util.persistence.quote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Quote a value unambigously w.r.t. its data type.</p>
+<p>The result can be used during import into a relational database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> – The value to transform.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">'null'</span></code> if <code class="docutils literal notranslate"><span class="pre">value</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">'true'</span></code> if it is <code class="docutils literal notranslate"><span class="pre">True</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'false'</span> <span class="pre">if</span> <span class="pre">it</span> <span class="pre">is</span> <span class="pre">``False</span></code>.  For numeric values, the result is the
+corresponding string representation.  Infinite values are represented by
+<code class="docutils literal notranslate"><span class="pre">'inf'</span></code> and <code class="docutils literal notranslate"><span class="pre">'-inf'</span></code>, respectively;  not-a-number is represented by
+<code class="docutils literal notranslate"><span class="pre">'nan'</span></code>.  For strings, the result is the string itself, surrounded by
+<code class="docutils literal notranslate"><span class="pre">'&quot;'</span></code>, and with the characters <code class="docutils literal notranslate"><span class="pre">'&quot;'</span></code>, <code class="docutils literal notranslate"><span class="pre">'\'</span></code>, <code class="docutils literal notranslate"><span class="pre">'\b'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'\t'</span></code>, <code class="docutils literal notranslate"><span class="pre">'\n'</span></code>, <code class="docutils literal notranslate"><span class="pre">'\v'</span></code>, <code class="docutils literal notranslate"><span class="pre">'\f'</span></code> and <code class="docutils literal notranslate"><span class="pre">'\r'</span></code> escaped using
+<code class="docutils literal notranslate"><span class="pre">'\'</span></code>.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>TypeError</strong> – If <code class="docutils literal notranslate"><span class="pre">value</span></code> is neither <code class="docutils literal notranslate"><span class="pre">None</span></code> nor of type <code class="docutils literal notranslate"><span class="pre">bool</span></code>,
+<code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code> or <code class="docutils literal notranslate"><span class="pre">str</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.util.persistence.write_quoted">
+<code class="sig-prename descclassname">yokome.util.persistence.</code><code class="sig-name descname">write_quoted</code><span class="sig-paren">(</span><em class="sig-param">file</em>, <em class="sig-param">row</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.util.persistence.write_quoted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a row of quoted CSV values to a file.</p>
+<p>The values in <code class="docutils literal notranslate"><span class="pre">row</span></code> are quoted so that their data type can be detected
+unambiguously (see <a class="reference internal" href="#yokome.util.persistence.quote" title="yokome.util.persistence.quote"><code class="xref py py-func docutils literal notranslate"><span class="pre">yokome.util.persistence.quote()</span></code></a> for a detailed
+explanation).  Furthermore, they are separated by the character <code class="docutils literal notranslate"><span class="pre">','</span></code>.
+Lines are separated with <code class="docutils literal notranslate"><span class="pre">'\n'</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> – The file to write to.  It has to be open.</p></li>
+<li><p><strong>row</strong> – An iterable of data values.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-yokome.util.math"></span><dl class="function">
+<dt id="yokome.util.math.prod">
+<code class="sig-prename descclassname">yokome.util.math.</code><code class="sig-name descname">prod</code><span class="sig-paren">(</span><em class="sig-param">iterable</em>, <em class="sig-param">start=1</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.util.math.prod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiplies <code class="docutils literal notranslate"><span class="pre">start</span></code> and the items of an <code class="docutils literal notranslate"><span class="pre">iterable</span></code>.</p>
+<p>The items are processed from left to right. <code class="docutils literal notranslate"><span class="pre">start</span></code> defaults to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+</dd></dl>
+
+<span class="target" id="module-yokome.util.concurrency"></span><dl class="class">
+<dt id="yokome.util.concurrency.MemoryLock">
+<em class="property">class </em><code class="sig-prename descclassname">yokome.util.concurrency.</code><code class="sig-name descname">MemoryLock</code><span class="sig-paren">(</span><em class="sig-param">sleep</em>, <em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.util.concurrency.MemoryLock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context manager for memory reservation.</p>
+<p>This does not lock the physical memory, but is only intended as a means of
+communication for multiple asynchronous tasks that jointly require more
+memory than the system is expected to be able to provide.</p>
+<p>Locking is solely based on the total size of the system memory and the
+<strong>explicitly</strong> requested memory size on entering the context manager.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="yokome.util.concurrency.SubprocessLock">
+<em class="property">class </em><code class="sig-prename descclassname">yokome.util.concurrency.</code><code class="sig-name descname">SubprocessLock</code><span class="sig-paren">(</span><em class="sig-param">sleep</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.util.concurrency.SubprocessLock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context manager limiting the number of parallel processes.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Julian Betz.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
   </body>
 </html>

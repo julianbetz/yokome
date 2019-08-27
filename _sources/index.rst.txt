@@ -1,0 +1,56 @@
+.. Yokome documentation master file, created by
+   sphinx-quickstart on Thu Aug 22 16:32:10 2019.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to Yokome's documentation!
+==================================
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
+.. automodule:: yokome.models.wsd
+   :members:
+
+.. automodule:: yokome.features.symbol_stream
+   :members:
+
+.. automodule:: yokome.features.corpus
+   :members:
+
+.. automodule:: yokome.features.dictionary
+   :members:
+
+.. automodule:: yokome.features.tree
+   :members:
+
+.. automodule:: yokome.features.jpn
+   :members:
+
+.. .. automodule:: yokome.data.rdbms_import
+..    :members:
+
+.. .. automodule:: yokome.data.jmdict_to_db
+..    :members:
+
+.. automodule:: yokome.deployment.server
+   :members:
+
+.. automodule:: yokome.util.persistence
+   :members:
+
+.. automodule:: yokome.util.math
+   :members:
+
+.. automodule:: yokome.util.concurrency
+   :members:
