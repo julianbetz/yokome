@@ -4,7 +4,9 @@
     "version": "1.0",
     "description": "A personalized reading support system.",
     "homepage_url": "https://github.com/julianbetz/yokome",
-    "icons": {},
+    "icons": {
+        "48": "img/logo.svg"
+    },
     "background": {
         "scripts": [
             "background.js"

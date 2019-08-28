@@ -22,3 +22,6 @@ COPY yokome/deployment/start.sh /init/start.sh
 COPY data/processed/inverse_dictionary /import
 RUN chown -R elasticsearch:elasticsearch /init
 RUN su elasticsearch -c "elasticsearch -p /init/epid" & /bin/bash /init/start.sh; kill $(cat /init/epid) && tail --pid="$(cat /init/epid)" -f /dev/null
+
+COPY README.rst /init/README.rst
+COPY LICENSE /init/LICENSE

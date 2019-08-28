@@ -602,7 +602,7 @@ def iteration_fold(symbol_stream):
         yield out
 
 
-# FIXME
+# TODO
 #
 # XXX Add support for voiced repetition mark misspelings using voiced sound mark
 # and combining voiced sound mark
@@ -670,107 +670,107 @@ def _mid_split(phrase):
     return None
         
 
-# FIXME
-def _validate_repeat_marks(last_token_alternatives, repeat_marks):
-    first_char = ord(last_token_alternatives[0]['surface_form']['graphic'][0])
-    return ((all(repeat_mark[0]['surface_form']['graphic'] == chr(REPEAT_MARK) for repeat_mark in repeat_marks)
-             and in_ranges(first_char, HIRAGANA_RANGES + KATAKANA_RANGES + IDEOGRAPHIC_RANGES))
-            or (all(repeat_mark[0]['surface_form']['graphic'] == chr(VOICED_REPEAT_MARK) for repeat_mark in repeat_marks)
-                and ((first_char in VOICABLE and len(repeat_marks) < 2) or first_char in VOICED or in_ranges(first_char, IDEOGRAPHIC_RANGES)))
-            or (all(repeat_mark[0]['surface_form']['graphic'] == chr(REPEAT_MARK) if i % 2 == 0 else repeat_mark[0]['surface_form']['graphic'] == chr(VOICED_REPEAT_MARK) for i, repeat_mark in enumerate(repeat_marks, start=1))
-                and (first_char in VOICABLE or first_char in VOICED or in_ranges(first_char, IDEOGRAPHIC_RANGES)))
-            or (all(repeat_mark[0]['surface_form']['graphic'] == chr(REPEAT_MARK) if i % 2 == 1 else repeat_mark[0]['surface_form']['graphic'] == chr(VOICED_REPEAT_MARK) for i, repeat_mark in enumerate(repeat_marks, start=1))
-                and first_char in VOICED or in_ranges(first_char, IDEOGRAPHIC_RANGES)))
+# # FIXME
+# def _validate_repeat_marks(last_token_alternatives, repeat_marks):
+#     first_char = ord(last_token_alternatives[0]['surface_form']['graphic'][0])
+#     return ((all(repeat_mark[0]['surface_form']['graphic'] == chr(REPEAT_MARK) for repeat_mark in repeat_marks)
+#              and in_ranges(first_char, HIRAGANA_RANGES + KATAKANA_RANGES + IDEOGRAPHIC_RANGES))
+#             or (all(repeat_mark[0]['surface_form']['graphic'] == chr(VOICED_REPEAT_MARK) for repeat_mark in repeat_marks)
+#                 and ((first_char in VOICABLE and len(repeat_marks) < 2) or first_char in VOICED or in_ranges(first_char, IDEOGRAPHIC_RANGES)))
+#             or (all(repeat_mark[0]['surface_form']['graphic'] == chr(REPEAT_MARK) if i % 2 == 0 else repeat_mark[0]['surface_form']['graphic'] == chr(VOICED_REPEAT_MARK) for i, repeat_mark in enumerate(repeat_marks, start=1))
+#                 and (first_char in VOICABLE or first_char in VOICED or in_ranges(first_char, IDEOGRAPHIC_RANGES)))
+#             or (all(repeat_mark[0]['surface_form']['graphic'] == chr(REPEAT_MARK) if i % 2 == 1 else repeat_mark[0]['surface_form']['graphic'] == chr(VOICED_REPEAT_MARK) for i, repeat_mark in enumerate(repeat_marks, start=1))
+#                 and first_char in VOICED or in_ranges(first_char, IDEOGRAPHIC_RANGES)))
 
 
-# FIXME
-def _repetition_fold_once(text_pre, last_token_alternatives, repeat_marks, text_post, tokenizer):
-    if last_token_alternatives is None:
-        for repeat_mark in repeat_marks:
-            yield repeat_mark
-        return
-    if not repeat_marks:
-        yield last_token_alternatives
-        return
-    if not _validate_repeat_marks(last_token_alternatives, repeat_marks):
-        # Fallback
-        yield last_token_alternatives
-        for repeat_mark in repeat_marks:
-            yield repeat_mark
-        return        
-    folded_token_alternatives = []
-    first_repetition = last_token_alternatives[0]['surface_form']['graphic']
-    first_char = ord(first_repetition[0])
-    if repeat_marks[0][0]['surface_form']['graphic'] == chr(VOICED_REPEAT_MARK):
-        if first_char in VOICABLE:
-            second_repetition = chr(voice(first_char)) + last_token_alternatives[0]['surface_form']['graphic'][1:]
-        else:
-            second_repetition = first_repetition
-    else:
-        second_repetition = first_repetition
-    tokens = [token_alternatives for token_alternatives in tokenizer(text_pre + '\t' + first_repetition + second_repetition + '\t' + text_post, True)]
-    # JUMAN++ returns exactly one list of token alternatives for the part
-    # surrounded with tabs when called with partially annotated text. Find this
-    # token list
-    l = 0
-    for token_alternatives in tokens:
-        if l >= len(text_pre):
-            break
-        l += len(token_alternatives[0]['surface_form']['graphic'])
-    token_alternatives = tuple((token, _mid_split(token['surface_form']['phonetic'])) for token in token_alternatives if token['pos'] not in JUMAN_UNDETERMINABLE_POS)
-    token_alternatives = tuple((token, mid_split) for token, mid_split in token_alternatives if mid_split is not None)
-    for token, mid_split in token_alternatives:
-        token['surface_form']['graphic'] = first_repetition
-        for repeat_mark in repeat_marks:
-            token['surface_form']['graphic'] += repeat_mark[0]['surface_form']['graphic']
-        token['surface_form']['phonetic'] *= (len(repeat_marks) + 1) // 2
-        if len(repeat_marks) % 2 == 0:
-            token['surface_form']['phonetic'] += mid_split[0]
-    if token_alternatives:
-        yield tuple(token for token, _ in token_alternatives)
-    else:
-        yield last_token_alternatives
-        for repeat_mark in repeat_marks:
-            yield repeat_mark
+# # FIXME
+# def _repetition_fold_once(text_pre, last_token_alternatives, repeat_marks, text_post, tokenizer):
+#     if last_token_alternatives is None:
+#         for repeat_mark in repeat_marks:
+#             yield repeat_mark
+#         return
+#     if not repeat_marks:
+#         yield last_token_alternatives
+#         return
+#     if not _validate_repeat_marks(last_token_alternatives, repeat_marks):
+#         # Fallback
+#         yield last_token_alternatives
+#         for repeat_mark in repeat_marks:
+#             yield repeat_mark
+#         return        
+#     folded_token_alternatives = []
+#     first_repetition = last_token_alternatives[0]['surface_form']['graphic']
+#     first_char = ord(first_repetition[0])
+#     if repeat_marks[0][0]['surface_form']['graphic'] == chr(VOICED_REPEAT_MARK):
+#         if first_char in VOICABLE:
+#             second_repetition = chr(voice(first_char)) + last_token_alternatives[0]['surface_form']['graphic'][1:]
+#         else:
+#             second_repetition = first_repetition
+#     else:
+#         second_repetition = first_repetition
+#     tokens = [token_alternatives for token_alternatives in tokenizer(text_pre + '\t' + first_repetition + second_repetition + '\t' + text_post, True)]
+#     # JUMAN++ returns exactly one list of token alternatives for the part
+#     # surrounded with tabs when called with partially annotated text. Find this
+#     # token list
+#     l = 0
+#     for token_alternatives in tokens:
+#         if l >= len(text_pre):
+#             break
+#         l += len(token_alternatives[0]['surface_form']['graphic'])
+#     token_alternatives = tuple((token, _mid_split(token['surface_form']['phonetic'])) for token in token_alternatives if token['pos'] not in JUMAN_UNDETERMINABLE_POS)
+#     token_alternatives = tuple((token, mid_split) for token, mid_split in token_alternatives if mid_split is not None)
+#     for token, mid_split in token_alternatives:
+#         token['surface_form']['graphic'] = first_repetition
+#         for repeat_mark in repeat_marks:
+#             token['surface_form']['graphic'] += repeat_mark[0]['surface_form']['graphic']
+#         token['surface_form']['phonetic'] *= (len(repeat_marks) + 1) // 2
+#         if len(repeat_marks) % 2 == 0:
+#             token['surface_form']['phonetic'] += mid_split[0]
+#     if token_alternatives:
+#         yield tuple(token for token, _ in token_alternatives)
+#     else:
+#         yield last_token_alternatives
+#         for repeat_mark in repeat_marks:
+#             yield repeat_mark
 
 
-# FIXME
-def repetition_fold(char_stream, tokenizer):
-    text = to_text(s for s, *original in repetition_contraction((c,) for c in char_stream))
-    if chr(REPEAT_MARK) in text or chr(VOICED_REPEAT_MARK) in text:
-        last_token_alternatives = None
-        last_offset = 0
-        repeat_marks = []
-        assert '\t' not in text             # Would break JUMAN++ tokenization of
-                                            # partially annotated text
-        for token_alternatives in tokenizer(text):
-            assert len(token_alternatives) > 0 and all(len(token_alternative['surface_form']['graphic']) == len(token_alternatives[0]['surface_form']['graphic']) for token_alternative in token_alternatives)
-            # print(token_alternatives)
-            if (len(token_alternatives) == 1
-                and (token_alternatives[0]['surface_form']['graphic']
-                     == chr(REPEAT_MARK)
-                     or token_alternatives[0]['surface_form']['graphic']
-                     == chr(VOICED_REPEAT_MARK))):
-                repeat_marks.append(token_alternatives)
-            else:
-                segment_len = ((0 if last_token_alternatives is None
-                                else len(last_token_alternatives[0]['surface_form']['graphic']))
-                               + sum(len(repeat_mark[0]['surface_form']['graphic'])
-                                     for repeat_mark in repeat_marks))
-                for o in _repetition_fold_once(text[:last_offset], last_token_alternatives, repeat_marks, text[last_offset+segment_len:], tokenizer):
-                    yield o
-                last_token_alternatives = token_alternatives
-                last_offset += segment_len
-                repeat_marks = []
-        segment_len = ((0 if last_token_alternatives is None
-                        else len(last_token_alternatives[0]['surface_form']['graphic']))
-                       + sum(len(repeat_mark[0]['surface_form']['graphic'])
-                             for repeat_mark in repeat_marks))
-        for o in _repetition_fold_once(text[:last_offset], last_token_alternatives, repeat_marks, text[last_offset+segment_len:], tokenizer):
-            yield o
-    else:
-        for token_alternatives in tokenizer(text):
-            yield token_alternatives
+# # FIXME
+# def repetition_fold(char_stream, tokenizer):
+#     text = to_text(s for s, *original in repetition_contraction((c,) for c in char_stream))
+#     if chr(REPEAT_MARK) in text or chr(VOICED_REPEAT_MARK) in text:
+#         last_token_alternatives = None
+#         last_offset = 0
+#         repeat_marks = []
+#         assert '\t' not in text             # Would break JUMAN++ tokenization of
+#                                             # partially annotated text
+#         for token_alternatives in tokenizer(text):
+#             assert len(token_alternatives) > 0 and all(len(token_alternative['surface_form']['graphic']) == len(token_alternatives[0]['surface_form']['graphic']) for token_alternative in token_alternatives)
+#             # print(token_alternatives)
+#             if (len(token_alternatives) == 1
+#                 and (token_alternatives[0]['surface_form']['graphic']
+#                      == chr(REPEAT_MARK)
+#                      or token_alternatives[0]['surface_form']['graphic']
+#                      == chr(VOICED_REPEAT_MARK))):
+#                 repeat_marks.append(token_alternatives)
+#             else:
+#                 segment_len = ((0 if last_token_alternatives is None
+#                                 else len(last_token_alternatives[0]['surface_form']['graphic']))
+#                                + sum(len(repeat_mark[0]['surface_form']['graphic'])
+#                                      for repeat_mark in repeat_marks))
+#                 for o in _repetition_fold_once(text[:last_offset], last_token_alternatives, repeat_marks, text[last_offset+segment_len:], tokenizer):
+#                     yield o
+#                 last_token_alternatives = token_alternatives
+#                 last_offset += segment_len
+#                 repeat_marks = []
+#         segment_len = ((0 if last_token_alternatives is None
+#                         else len(last_token_alternatives[0]['surface_form']['graphic']))
+#                        + sum(len(repeat_mark[0]['surface_form']['graphic'])
+#                              for repeat_mark in repeat_marks))
+#         for o in _repetition_fold_once(text[:last_offset], last_token_alternatives, repeat_marks, text[last_offset+segment_len:], tokenizer):
+#             yield o
+#     else:
+#         for token_alternatives in tokenizer(text):
+#             yield token_alternatives
         
 
 # def segmenter(symbol_stream):
@@ -1181,7 +1181,7 @@ def parse_jumanpp_output(output):
 def chasen_loader(filename):
     """Loads a file from the JEITA corpus and yields symbols from it."""
     reader = ChasenCorpusReader(os.path.abspath(os.path.dirname(
-        os.path.abspath(__file__)) + '/../../data/raw/Yokome_jpn_corpus'),
+        os.path.abspath(__file__)) + '/../../data/raw/yokome-jpn-corpus'),
                                 filename, encoding='utf-8')
     for word in reader.words():
         for c in word:

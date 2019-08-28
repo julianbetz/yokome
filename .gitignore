@@ -8,11 +8,17 @@ virtualenvs/*
 *.xpi
 notebooks/*
 lib/*
+bin/*
 models/*
 hyperparameter_optimization/*
 !hyperparameter_optimization/xvld
 hyperparameter_optimization/xvld/*
 !hyperparameter_optimization/xvld/.gitkeep
-doc
+docs/*
+!docs/build
+docs/build/*
+!docs/build/html
+docs/build/html/*
+!docs/build/html/.gitkeep
 
 !**/.gitkeep

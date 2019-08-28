@@ -5,7 +5,7 @@ services:
     container_name: search
     environment:
       - cluster.name=docker-cluster
-      - ES_JAVA_OPTS=-Xms3g -Xmx3g
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
       - discovery.type=single-node
     ulimits:
       nproc: 65536
@@ -13,9 +13,9 @@ services:
     expose:
       - 9200
       - 9300
-    ports:
-      - 9200:9200
-      - 9300:9300
+    # ports:
+    #   - 9200:9200
+    #   - 9300:9300
     networks:
       - yokome_net
   app:
