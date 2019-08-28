@@ -35,6 +35,8 @@ COPY data/crafted/jpn_pos_restrictions.json data/crafted/jpn_pos_restrictions.js
 COPY hyperparameter_optimization/xvld/best_hyperparams.json hyperparameter_optimization/xvld/best_hyperparams.json
 COPY models/trn models/trn
 COPY yokome yokome
+COPY README.rst README.rst
+COPY LICENSE LICENSE
 
 EXPOSE 5003
 CMD ["python", "yokome/deployment/server.py", "--no-debug", "--insecure"]

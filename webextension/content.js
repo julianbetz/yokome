@@ -363,7 +363,26 @@
         // progressBar.setAttribute('value', 20);
         // node.appendChild(progressBar);
 
-        node.appendChild(document.createTextNode('Yokome'))
+        node.innerHTML = '<p><b>Yokome 1.0</b><br />'
+            + '\u00a9 Copyright 2019, Julian Betz.<br />'
+            + 'Licensed under the Apache License, Version 2.0. '
+            + 'Find the <a href="https://github.com/julianbetz/yokome">'
+            + 'source code</a> on GitHub.</p>'
+            + '<p>The Japanese version makes use of the following data:'
+            + '<ul>'
+            + '<li><a href="http://www.edrdg.org/jmdict/j_jmdict.html">'
+            + 'JMdict</a>: Published by the <a href="http://www.edrdg.org/">'
+            + 'Electronic Dictionary Research and Development Group</a> under '
+            + 'the <a href="http://www.edrdg.org/edrdg/licence.html">'
+            + 'Creative Commons Attribution-ShareAlike Licence (V3.0)</a></li>'
+            + '<li>JEITA Public Morphologically Tagged Corpus (in ChaSen '
+            + 'format): Created and distributed by <a href="http://lilyx.net/">'
+            + 'Masato Hagiwara</a> with data originating from '
+            + '<a href="http://www.aozora.gr.jp/">Aozora Bunko</a> and '
+            + '<a href="http://www.genpaku.org/">Project Sugita Genpaku</a>'
+            + '</li>'
+            + '</ul>'
+            + '</p>';
         
         tabPanels.appendChild(node);
         if (tabSet.childNodes.length > 0) { // XXX Remove, should always be the case if statistics are used
@@ -561,13 +580,14 @@
         infoBox.style.fontSize = FONT_SIZE + 'px';
         infoBox.style.lineHeight = '1em';
         infoBox.style.opacity = 0.5; // 0.02;
+        infoBox.style.filter = 'saturate(0%)';
         infoBox.onmouseenter = function (event) {
             event.target.style.opacity = 1.0;
-            // event.target.style.filter = 'saturate(100%)';
+            event.target.style.filter = 'saturate(100%)';
         };
         infoBox.onmouseleave = function (event) {
             event.target.style.opacity = 0.5;
-            // event.target.style.filter = 'saturate(0%)';
+            event.target.style.filter = 'saturate(0%)';
         };
         document.body.appendChild(infoBox);
         

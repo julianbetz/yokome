@@ -755,7 +755,7 @@ class TemplateTree(LabeledTree):
         return super().__getitem__(key)
 
 
-    # FIXME Check parent links in restrictions
+    # TODO Check parent links in restrictions
     def __setitem__(self, key, value):
         # Unify input representations
         if not isinstance(key, tuple):

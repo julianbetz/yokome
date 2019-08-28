@@ -32,6 +32,6 @@ services:
     expose:
       - 5003
     ports:
-      - ${PORT}:5003
+      - 5003:5003
 networks:
   yokome_net:
