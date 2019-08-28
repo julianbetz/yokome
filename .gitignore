@@ -20,5 +20,7 @@ docs/build/*
 !docs/build/html
 docs/build/html/*
 !docs/build/html/.gitkeep
+!docs/source/.static
+!docs/source/.templates
 
 !**/.gitkeep
