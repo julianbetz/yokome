@@ -142,7 +142,7 @@ In the space below the tabs, the different connotations of the selected entry
 appear.  Again, the more intense the yellow coloring gets, the more likely is
 this connotation the one meant in the text.
 
-In the "About" tab you can find more information on Yokome.
+In the ``About`` tab you can find more information on Yokome.
 
 If you feel that Yokome disturbs your interaction with the page, you can move it
 to any of the other corners by clicking on one of the triangles around the box.
