@@ -61,12 +61,12 @@ Start the background service:
    cd yokome
    PORT=5003 docker-compose up
 
-This will start the service on port 5003 on localhost.  If you want the service
-to use a different port, replace ``5003`` with the port number of your choice.
+This will start the service on port 5003 on localhost.  The plugin will expect
+that the service runs on this port.
 
-The web extension is known to work with Firefox Developer Edition 69.0b16
+The web extension is known to work with Firefox Developer Edition 70.0b1
 (64-bit).  You can get this version from
-`<https://download-installer.cdn.mozilla.net/pub/devedition/releases/69.0b16/>`_.
+`<https://download-installer.cdn.mozilla.net/pub/devedition/releases/70.0b1/>`_.
 Extract the archive, open the resulting directory and start Firefox.
 
 The extension is unsigned, so you have to give Firefox permission to run it.

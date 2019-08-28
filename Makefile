@@ -124,7 +124,7 @@ data/processed/.jpn.flag: data virtualenvs
 # ------------------------------------------------------------------------------
 
 bin/yokome.xpi:
-	@cd yokome/deployment/plugin && zip -r -FS ../../../bin/yokome.xpi *
+	@cd webextension && zip -r -FS ../bin/yokome.xpi *
 
 ## Package the web extension
 plugin: bin/yokome.xpi
