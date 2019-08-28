@@ -97,6 +97,7 @@
 <li><a class="reference internal" href="#">Yokome</a><ul>
 <li><a class="reference internal" href="#requirements">Requirements</a></li>
 <li><a class="reference internal" href="#how-to-start-yokome">How to start Yokome</a></li>
+<li><a class="reference internal" href="#how-to-use-yokome">How to Use Yokome</a></li>
 <li><a class="reference internal" href="#about-the-name">About the name</a></li>
 <li><a class="reference internal" href="#licensing">Licensing</a></li>
 </ul>
@@ -127,11 +128,11 @@ packaged as a Firefox WebExtension.</p>
 <p>The startup procedure below has been tested on Ubuntu 18.04.3 LTS.  The
 explanations assume that the following programs are available on your system:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">git</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">docker</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tar</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">zip</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">bzip2</span></code></p></li>
+<li><p>git</p></li>
+<li><p>docker</p></li>
+<li><p>tar</p></li>
+<li><p>zip</p></li>
+<li><p>bzip2</p></li>
 </ul>
 <p>Yokome will most certainly not work on Windows &lt; 6.0 (Vista).</p>
 </div>
@@ -143,7 +144,7 @@ explanations assume that the following programs are available on your system:</p
 </div>
 <p>Start the background service:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> yokome
-<span class="nv">PORT</span><span class="o">=</span><span class="m">5003</span> docker-compose up
+docker-compose up
 </pre></div>
 </div>
 <p>This will start the service on port 5003 on localhost.  The plugin will expect
@@ -180,6 +181,45 @@ you downloaded).</p></li>
 </li>
 </ul>
 </div>
+<div class="section" id="how-to-use-yokome">
+<h2>How to Use Yokome<a class="headerlink" href="#how-to-use-yokome" title="Permalink to this headline">¶</a></h2>
+<p>Open a page of your choice with target-language content.  Yokome works on both
+HTTP and HTTPS web pages.</p>
+<div class="figure align-center" id="id1">
+<a class="reference internal image-reference" href="_images/address_bar.png"><img alt="symbol in address bar" src="_images/address_bar.png" style="width: 119.0px; height: 39.0px;" /></a>
+<p class="caption"><span class="caption-text">Symbol in address bar.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<p>In the address bar, to its right side, you will find a symobol that looks like a
+circle.  Click that symbol to activate Yokome on the current page.  After you
+activated Yokome, a box will start to hover over the left lower corner of the
+page.  This is where dictionary results will be displayed.  The box is
+transparent as long as you do not interact with it.  This is so that you can see
+what is displayed behind it on the web page.  To see what is shown on the box,
+move the cursor over it.</p>
+<div class="figure align-center" id="id2">
+<a class="reference internal image-reference" href="_images/tabs.png"><img alt="multi-colored tabs" src="_images/tabs.png" style="width: 352.0px; height: 183.0px;" /></a>
+<p class="caption"><span class="caption-text">Multi-colored tabs.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+<p>To look up a word, simply hover your mouse over it.  After some time, the
+results appear in the box.  If there are multiple dictionary entries that apply
+to the word you looked up, they show as tabs at the top of the box.  The first
+one is selected and its entries are shown below.  Click on any of the other tabs
+to show their information.</p>
+<p>The tabs are colored based on how likely their entries represent the word in the
+text.  The more intense the yellow coloring, the more likely the entry applies.</p>
+<div class="figure align-center" id="id3">
+<a class="reference internal image-reference" href="_images/connotations.png"><img alt="multi-colored connotations" src="_images/connotations.png" style="width: 350.0px; height: 183.0px;" /></a>
+<p class="caption"><span class="caption-text">Multi-colored connotations.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+<p>In the space below the tabs, the different connotations of the selected entry
+appear.  Again, the more intense the yellow coloring gets, the more likely is
+this connotation the one meant in the text.</p>
+<p>In the “About” tab you can find more information on Yokome.</p>
+<p>If you feel that Yokome disturbs your interaction with the page, you can move it
+to any of the other corners by clicking on one of the triangles around the box.</p>
+<p>If you want to deactivate Yokome on the current page, you can click the symbol
+in the address bar again.</p>
+</div>
 <div class="section" id="about-the-name">
 <h2>About the name<a class="headerlink" href="#about-the-name" title="Permalink to this headline">¶</a></h2>
 <p>From the Japanese dictionary JMdict:</p>
@@ -206,8 +246,8 @@ finding a word requires only a sidelong glance.</p>
 <ul class="simple">
 <li><p><a class="reference external" href="http://www.edrdg.org/jmdict/j_jmdict.html">JMdict</a></p>
 <ul>
-<li><p>Published by the Electronic Dictionary Research and Development Group under
-the Creative Commons Attribution-ShareAlike Licence (V3.0)</p></li>
+<li><p>Published by the <a class="reference external" href="http://www.edrdg.org/">Electronic Dictionary Research and Development Group</a> under the <a class="reference external" href="http://www.edrdg.org/edrdg/licence.html">Creative Commons Attribution-ShareAlike
+Licence (V3.0)</a></p></li>
 <li><p>A copy of the 2019-05-15 version can be found at
 <a class="reference external" href="https://github.com/julianbetz/yokome-jpn-dictionary.git">https://github.com/julianbetz/yokome-jpn-dictionary.git</a>.</p></li>
 </ul>
@@ -223,7 +263,7 @@ copyright information for the individual files.</p></li>
 </ul>
 </li>
 </ul>
-<p>The required data can be downloaded using the command <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">data</span></code> (requires <code class="docutils literal notranslate"><span class="pre">git</span></code>, <code class="docutils literal notranslate"><span class="pre">tar</span></code>, <code class="docutils literal notranslate"><span class="pre">bzip2</span></code> and <code class="docutils literal notranslate"><span class="pre">gzip</span></code>).</p>
+<p>The required data can be downloaded using the command <code class="code bash docutils literal notranslate"><span class="pre">make</span> <span class="pre">data</span></code> (requires git, tar, bzip2 and gzip).</p>
 </div>
 </div>
 
