@@ -105,8 +105,6 @@ HTTP and HTTPS web pages.
    :alt: symbol in address bar
    :align: center
 
-   Symbol in address bar.
-
 In the address bar, to its right side, you will find a symobol that looks like a
 circle.  Click that symbol to activate Yokome on the current page.  After you
 activated Yokome, a box will start to hover over the left lower corner of the
@@ -119,8 +117,6 @@ move the cursor over it.
    :scale: 50%
    :alt: multi-colored tabs
    :align: center
-
-   Multi-colored tabs.
 
 To look up a word, simply hover your mouse over it.  After some time, the
 results appear in the box.  If there are multiple dictionary entries that apply
@@ -135,8 +131,6 @@ text.  The more intense the yellow coloring, the more likely the entry applies.
    :scale: 50%
    :alt: multi-colored connotations
    :align: center
-
-   Multi-colored connotations.
 
 In the space below the tabs, the different connotations of the selected entry
 appear.  Again, the more intense the yellow coloring gets, the more likely is
