@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>yokome.models.wsd &#8212; Yokome 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="yokome.util" href="../util.html" />
+    <link rel="prev" title="yokome.models" href="../models.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          Yokome</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../py-modindex.html">Python Modules</a></li>
+                <li><a href="../../../genindex.html">Index</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../yokome.html"><code class="docutils literal notranslate"><span class="pre">yokome</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="../models.html" title="Previous Chapter: yokome.models"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; yokome.models</span>
+    </a>
+  </li>
+  <li>
+    <a href="../util.html" title="Next Chapter: yokome.util"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">yokome.util &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">yokome.models.wsd</span></code></a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <div class="section" id="module-yokome.models.wsd">
+<span id="yokome-models-wsd"></span><h1><code class="docutils literal notranslate"><span class="pre">yokome.models.wsd</span></code><a class="headerlink" href="#module-yokome.models.wsd" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="yokome.models.wsd.disambiguate">
+<code class="sig-prename descclassname">yokome.models.wsd.</code><code class="sig-name descname">disambiguate</code><span class="sig-paren">(</span><em class="sig-param">tokens</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.models.wsd.disambiguate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disambiguate the token at <code class="docutils literal notranslate"><span class="pre">i</span></code> in the tokenized sentence <code class="docutils literal notranslate"><span class="pre">tokens</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tokens</strong> – A sentence, split into its tokens.</p></li>
+<li><p><strong>i</strong> (<em>int</em>) – The position of the token of interest in <code class="docutils literal notranslate"><span class="pre">tokens</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>A list of data on lexemes, ranked by their overall suitability to
+describe the meaning of the token at <code class="docutils literal notranslate"><span class="pre">i</span></code>, with their connotations in
+turn associated with their suitability.  Each element is a dictionary of
+the following form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s1">&#39;entry_id&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">ID</span> <span class="n">of</span> <span class="n">the</span> <span class="n">lexeme</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">dictionary</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="s1">&#39;headwords&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">list</span> <span class="n">of</span> <span class="n">lemmas</span> <span class="k">for</span> <span class="n">the</span> <span class="n">lexeme</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="s1">&#39;discriminator&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">int</span> <span class="k">for</span> <span class="n">lexemes</span> <span class="k">with</span> <span class="n">the</span> <span class="n">same</span> <span class="n">main</span> <span class="n">headword</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="s1">&#39;roles&#39;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s1">&#39;poss&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">POS</span> <span class="n">tag</span> <span class="nb">list</span> <span class="k">for</span> <span class="n">the</span> <span class="n">role</span><span class="o">&gt;</span><span class="p">,</span>
+      <span class="s1">&#39;connotations&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s1">&#39;sense_id&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">the</span> <span class="n">ID</span> <span class="n">of</span> <span class="n">the</span> <span class="n">connotation</span> <span class="n">within</span> <span class="n">the</span> <span class="n">lexeme</span><span class="o">&gt;</span><span class="p">,</span>
+          <span class="s1">&#39;glosses&#39;</span><span class="p">:</span> <span class="p">((</span><span class="o">&lt;</span><span class="n">gloss_type</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">gloss</span><span class="o">&gt;</span><span class="p">),</span> <span class="o">...</span><span class="p">),</span>
+          <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">connotation</span> <span class="n">score</span><span class="o">&gt;</span>
+        <span class="p">},</span>
+        <span class="o">...</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="o">...</span>
+  <span class="p">],</span>
+  <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">overall</span> <span class="n">lexeme</span> <span class="n">score</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.models.wsd.has_statistics">
+<code class="sig-prename descclassname">yokome.models.wsd.</code><code class="sig-name descname">has_statistics</code><span class="sig-paren">(</span><em class="sig-param">conn</em>, <em class="sig-param">language_code</em>, <em class="sig-param">lemma</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.models.wsd.has_statistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>See if <code class="docutils literal notranslate"><span class="pre">lemma</span></code> can be found in both the dictionary and the corpus.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conn</strong> – The database connection for the dictionary and statistics.</p></li>
+<li><p><strong>language_code</strong> (<em>str</em>) – ISO 639-3 language code of the language of interest.</p></li>
+<li><p><strong>lemma</strong> – A dictionary that contains the keys <code class="docutils literal notranslate"><span class="pre">graphic</span></code> and <code class="docutils literal notranslate"><span class="pre">phonetic</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the lemma can be found in both the dictionary and the 
+corpus, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.models.wsd.lexeme_lemma_count">
+<code class="sig-prename descclassname">yokome.models.wsd.</code><code class="sig-name descname">lexeme_lemma_count</code><span class="sig-paren">(</span><em class="sig-param">conn</em>, <em class="sig-param">language_code</em>, <em class="sig-param">lemma</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.models.wsd.lexeme_lemma_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate the number of occurrences of a lexeme-lemma combination.</p>
+<p>Get the number of occurrences of a lemma in the background corpus and
+estimate its contribution to the number of occurrences to one of its
+corresponding lexemes by dividing it by the number of lexemes for which it
+is listed as a headword.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conn</strong> – The database connection for the dictionary and statistics.</p></li>
+<li><p><strong>language_code</strong> – ISO 639-3 language code of the language of interest.</p></li>
+<li><p><strong>lemma</strong> – A dictionary that contains the keys <code class="docutils literal notranslate"><span class="pre">graphic</span></code> and <code class="docutils literal notranslate"><span class="pre">phonetic</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The number of estimated occurrences of the specified lemma with one
+of its lexemes, assuming equal distribution of the lemma among its
+lexemes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.models.wsd.n_lexemes_for_lemma">
+<code class="sig-prename descclassname">yokome.models.wsd.</code><code class="sig-name descname">n_lexemes_for_lemma</code><span class="sig-paren">(</span><em class="sig-param">conn</em>, <em class="sig-param">language_code</em>, <em class="sig-param">lemma</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#yokome.models.wsd.n_lexemes_for_lemma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of dictionary entries with <code class="docutils literal notranslate"><span class="pre">lemma</span></code> as headword.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conn</strong> – The database connection for the dictionary.</p></li>
+<li><p><strong>language_code</strong> (<em>str</em>) – ISO 639-3 language code of the language of interest.</p></li>
+<li><p><strong>lemma</strong> – A dictionary that contains the keys <code class="docutils literal notranslate"><span class="pre">graphic</span></code> and
+<code class="docutils literal notranslate"><span class="pre">phonetic</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The number of entries in the dictionary that have the specified
+lemma as one of its headwords.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.models.wsd.retrieve_substitute_lexemes">
+<code class="sig-prename descclassname">yokome.models.wsd.</code><code class="sig-name descname">retrieve_substitute_lexemes</code><span class="sig-paren">(</span><em class="sig-param">entry_id</em>, <em class="sig-param">n_senses</em>, <em class="sig-param">sense</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.models.wsd.retrieve_substitute_lexemes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for substitute lexemes with senses similary to the specified one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>entry_int</em>) – The ID of the lexeme of interest in the dictionary.</p></li>
+<li><p><strong>n_senses</strong> (<em>int</em>) – The total number of senses of the lexeme with ID
+<code class="docutils literal notranslate"><span class="pre">entry_id</span></code>.</p></li>
+<li><p><strong>sense</strong> – A list of gloss descriptions of the form <code class="docutils literal notranslate"><span class="pre">(gloss_type,</span> <span class="pre">gloss)</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>A list of dictionaries of the form</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;entry_id&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">entry</span> <span class="n">ID</span> <span class="n">of</span> <span class="n">lexeme</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="s1">&#39;lemmas&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">list</span> <span class="n">of</span> <span class="n">headwords</span> <span class="n">of</span> <span class="n">lexeme</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="s1">&#39;pos&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">tree</span> <span class="n">of</span> <span class="n">POS</span><span class="o">-</span><span class="n">tags</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="s1">&#39;glosses&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">list</span> <span class="n">of</span> <span class="n">glosses</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="s1">&#39;ir_score&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">information</span> <span class="n">retrieval</span> <span class="n">score</span><span class="o">&gt;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>of the connotations (i.e. lexeme-sense combinations) that most closely
+resemble <code class="docutils literal notranslate"><span class="pre">sense</span></code> in terms of their glosses.  All connotations that
+pertain to the lexeme with the ID <code class="docutils literal notranslate"><span class="pre">entry_id</span></code> are excluded.</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.models.wsd.score_connotation">
+<code class="sig-prename descclassname">yokome.models.wsd.</code><code class="sig-name descname">score_connotation</code><span class="sig-paren">(</span><em class="sig-param">tokens</em>, <em class="sig-param">i</em>, <em class="sig-param">sense_prior</em>, <em class="sig-param">pos_tree</em>, <em class="sig-param">role_pos_score</em>, <em class="sig-param">conn</em>, <em class="sig-param">substitute_lexemes</em>, <em class="sig-param">TOTAL_LEMMAS</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.models.wsd.score_connotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Score the substitution of the token at <code class="docutils literal notranslate"><span class="pre">i</span></code> with <code class="docutils literal notranslate"><span class="pre">substitute_lexemes</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tokens</strong> – A sentence, split into tokens.</p></li>
+<li><p><strong>i</strong> – The position of the token of interest in <code class="docutils literal notranslate"><span class="pre">tokens</span></code>.</p></li>
+<li><p><strong>sense_prior</strong> – The prior probability of the sense given the lexeme.</p></li>
+<li><p><strong>pos_tree</strong> (<a class="reference internal" href="../features/tree.html#yokome.features.tree.TemplateTree" title="yokome.features.tree.TemplateTree"><em>yokome.features.tree.TemplateTree</em></a>) – The POS tree of the role to
+which the connotation belongs.</p></li>
+<li><p><strong>role_pos_score</strong> – The summed scores of the matches between <code class="docutils literal notranslate"><span class="pre">pos_tree</span></code>
+and each POS tree that pertains to a candidate lemma of the token of
+interest so that the candidate lemma is a headword of the lexeme to
+which the connotation belongs.</p></li>
+<li><p><strong>conn</strong> – The database connection for the dictionary and statistics.</p></li>
+<li><p><strong>substitute_lexemes</strong> – A list of dicts that describe lexemes that could be
+used as substitutes for the token of interest.</p></li>
+<li><p><strong>TOTAL_LEMMAS</strong> – The total number of lemmas (i.e. of tokens) in the corpus.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A score for the suitability of the connotation that suggested
+<code class="docutils literal notranslate"><span class="pre">substitute_lexemes</span></code> to describe the meaning of the token at <code class="docutils literal notranslate"><span class="pre">i</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.models.wsd.score_lexeme">
+<code class="sig-prename descclassname">yokome.models.wsd.</code><code class="sig-name descname">score_lexeme</code><span class="sig-paren">(</span><em class="sig-param">tokens</em>, <em class="sig-param">i</em>, <em class="sig-param">pos_trees</em>, <em class="sig-param">conn</em>, <em class="sig-param">lexeme</em>, <em class="sig-param">TOTAL_LEMMAS</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.models.wsd.score_lexeme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disambiguate the token at <code class="docutils literal notranslate"><span class="pre">i</span></code> using the connotations of <code class="docutils literal notranslate"><span class="pre">lexeme</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tokens</strong> – A sentence, split into its tokens.</p></li>
+<li><p><strong>i</strong> – The position of the token of interest in <code class="docutils literal notranslate"><span class="pre">tokens</span></code>.</p></li>
+<li><p><strong>pos_trees</strong> (<em>list</em><em>[</em><a class="reference internal" href="../features/tree.html#yokome.features.tree.TemplateTree" title="yokome.features.tree.TemplateTree"><em>yokome.features.tree.TemplateTree</em></a><em>]</em>) – A list of POS trees of
+the token at <code class="docutils literal notranslate"><span class="pre">i</span></code>, each pertaining to one of the candidate lemmas
+of this token, restricted to those tokens that are headwords of
+<code class="docutils literal notranslate"><span class="pre">lexeme</span></code>.</p></li>
+<li><p><strong>conn</strong> – The database connection for the dictionary and statistics.</p></li>
+<li><p><strong>lexeme</strong> (<em>yokome.features.dictionary.Lexeme</em>) – An entry in the dictionary that
+possibly describes the meaning of the token at <code class="docutils literal notranslate"><span class="pre">i</span></code>.</p></li>
+<li><p><strong>TOTAL_LEMMAS</strong> – The total number of lemmas (i.e. of tokens) in the corpus.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>A dictionary of data on the lexeme, together with the lexemes overall
+suitability to describe the meaning of the token at <code class="docutils literal notranslate"><span class="pre">i</span></code>. Each
+connotations in turn is associated with its suitability.  The dictionary
+is of the following form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s1">&#39;entry_id&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">ID</span> <span class="n">of</span> <span class="n">the</span> <span class="n">lexeme</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">dictionary</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="s1">&#39;headwords&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">list</span> <span class="n">of</span> <span class="n">lemmas</span> <span class="k">for</span> <span class="n">the</span> <span class="n">lexeme</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="s1">&#39;discriminator&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">int</span> <span class="k">for</span> <span class="n">lexemes</span> <span class="k">with</span> <span class="n">the</span> <span class="n">same</span> <span class="n">main</span> <span class="n">headword</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="s1">&#39;roles&#39;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s1">&#39;poss&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">POS</span> <span class="n">tag</span> <span class="nb">list</span> <span class="k">for</span> <span class="n">the</span> <span class="n">role</span><span class="o">&gt;</span><span class="p">,</span>
+      <span class="s1">&#39;connotations&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s1">&#39;sense_id&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">the</span> <span class="n">ID</span> <span class="n">of</span> <span class="n">the</span> <span class="n">connotation</span> <span class="n">within</span> <span class="n">the</span> <span class="n">lexeme</span><span class="o">&gt;</span><span class="p">,</span>
+          <span class="s1">&#39;glosses&#39;</span><span class="p">:</span> <span class="p">((</span><span class="o">&lt;</span><span class="n">gloss_type</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">gloss</span><span class="o">&gt;</span><span class="p">),</span> <span class="o">...</span><span class="p">),</span>
+          <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">connotation</span> <span class="n">score</span><span class="o">&gt;</span>
+        <span class="p">},</span>
+        <span class="o">...</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="o">...</span>
+  <span class="p">],</span>
+  <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">overall</span> <span class="n">lexeme</span> <span class="n">score</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.models.wsd.total_lemmas">
+<code class="sig-prename descclassname">yokome.models.wsd.</code><code class="sig-name descname">total_lemmas</code><span class="sig-paren">(</span><em class="sig-param">conn</em>, <em class="sig-param">language_code</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.models.wsd.total_lemmas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of lemmas (i.e. of tokens) in the background corpus.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conn</strong> – The database connection for statistics.</p></li>
+<li><p><strong>language_code</strong> – ISO 639-3 language code of the language of interest.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The total number of lemmas in the background corpus.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, Julian Betz.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

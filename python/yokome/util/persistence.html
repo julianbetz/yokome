@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>yokome.util.persistence &#8212; Yokome 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Yokome Firefox WebExtension" href="../../../webextension.html" />
+    <link rel="prev" title="yokome.util.math" href="math.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          Yokome</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../py-modindex.html">Python Modules</a></li>
+                <li><a href="../../../genindex.html">Index</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../yokome.html"><code class="docutils literal notranslate"><span class="pre">yokome</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="math.html" title="Previous Chapter: yokome.util.math"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; yokome.util.math</span>
+    </a>
+  </li>
+  <li>
+    <a href="../../../webextension.html" title="Next Chapter: Yokome Firefox WebExtension"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Yokome Firefo... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">yokome.util.persistence</span></code></a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <div class="section" id="module-yokome.util.persistence">
+<span id="yokome-util-persistence"></span><h1><code class="docutils literal notranslate"><span class="pre">yokome.util.persistence</span></code><a class="headerlink" href="#module-yokome.util.persistence" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="yokome.util.persistence.quote">
+<code class="sig-prename descclassname">yokome.util.persistence.</code><code class="sig-name descname">quote</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.util.persistence.quote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Quote a value unambigously w.r.t. its data type.</p>
+<p>The result can be used during import into a relational database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> – The value to transform.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">'null'</span></code> if <code class="docutils literal notranslate"><span class="pre">value</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">'true'</span></code> if it is <code class="docutils literal notranslate"><span class="pre">True</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'false'</span> <span class="pre">if</span> <span class="pre">it</span> <span class="pre">is</span> <span class="pre">``False</span></code>.  For numeric values, the result is the
+corresponding string representation.  Infinite values are represented by
+<code class="docutils literal notranslate"><span class="pre">'inf'</span></code> and <code class="docutils literal notranslate"><span class="pre">'-inf'</span></code>, respectively;  not-a-number is represented by
+<code class="docutils literal notranslate"><span class="pre">'nan'</span></code>.  For strings, the result is the string itself, surrounded by
+<code class="docutils literal notranslate"><span class="pre">'&quot;'</span></code>, and with the characters <code class="docutils literal notranslate"><span class="pre">'&quot;'</span></code>, <code class="docutils literal notranslate"><span class="pre">'\'</span></code>, <code class="docutils literal notranslate"><span class="pre">'\b'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'\t'</span></code>, <code class="docutils literal notranslate"><span class="pre">'\n'</span></code>, <code class="docutils literal notranslate"><span class="pre">'\v'</span></code>, <code class="docutils literal notranslate"><span class="pre">'\f'</span></code> and <code class="docutils literal notranslate"><span class="pre">'\r'</span></code> escaped using
+<code class="docutils literal notranslate"><span class="pre">'\'</span></code>.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>TypeError</strong> – If <code class="docutils literal notranslate"><span class="pre">value</span></code> is neither <code class="docutils literal notranslate"><span class="pre">None</span></code> nor of type <code class="docutils literal notranslate"><span class="pre">bool</span></code>,
+<code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code> or <code class="docutils literal notranslate"><span class="pre">str</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.util.persistence.write_quoted">
+<code class="sig-prename descclassname">yokome.util.persistence.</code><code class="sig-name descname">write_quoted</code><span class="sig-paren">(</span><em class="sig-param">file</em>, <em class="sig-param">row</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.util.persistence.write_quoted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a row of quoted CSV values to a file.</p>
+<p>The values in <code class="docutils literal notranslate"><span class="pre">row</span></code> are quoted so that their data type can be detected
+unambiguously (see <a class="reference internal" href="#yokome.util.persistence.quote" title="yokome.util.persistence.quote"><code class="xref py py-func docutils literal notranslate"><span class="pre">yokome.util.persistence.quote()</span></code></a> for a detailed
+explanation).  Furthermore, they are separated by the character <code class="docutils literal notranslate"><span class="pre">','</span></code>.
+Lines are separated with <code class="docutils literal notranslate"><span class="pre">'\n'</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> – The file to write to.  It has to be open.</p></li>
+<li><p><strong>row</strong> – An iterable of data values.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, Julian Betz.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
