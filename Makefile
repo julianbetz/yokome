@@ -123,7 +123,8 @@ data/processed/.jpn.flag: data virtualenvs
 # Plugin
 # ------------------------------------------------------------------------------
 
-bin/yokome.xpi:
+bin/yokome.xpi: $(wildcard webextension/**/*)
+	@rm -f bin/yokome.xpi
 	@cd webextension && zip -r -FS ../bin/yokome.xpi *
 
 ## Package the web extension
