@@ -17,9 +17,10 @@
 
 
 until curl --silent -X GET "http://localhost:9200/_cat/health?h=status" | grep -q "^\(green\|yellow\)\$"; do
-    echo 'Waiting for search platform...'
+    echo 'Waiting for Elasticsearch...'
     sleep 1
 done
-echo 'Search platform running'
-curl -X PUT -H 'content-type: application/json' "http://localhost:9200/_snapshot/inverse_dictionary" -d '{"type": "fs", "settings": {"location": "/import", "compress": true, "readonly": true}}'
+echo 'Elasticsearch running'
+curl -X PUT -H 'content-type: application/json' "http://localhost:9200/_snapshot/inverse_dictionary" -d '{"type": "fs", "settings": {"location": "/init/inverse_dictionary", "compress": true, "readonly": true}}'
 curl -X POST "http://localhost:9200/_snapshot/inverse_dictionary/snapshot/_restore?wait_for_completion=true"
+rm -r /init/inverse_dictionary

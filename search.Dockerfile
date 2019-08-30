@@ -17,11 +17,10 @@
 
 FROM docker.elastic.co/elasticsearch/elasticsearch:6.5.4
 
-RUN echo 'path.repo: ["/import"]' >> /usr/share/elasticsearch/config/elasticsearch.yml
 COPY yokome/deployment/start.sh /init/start.sh
-COPY data/processed/inverse_dictionary /import
-RUN chown -R elasticsearch:elasticsearch /init
-RUN su elasticsearch -c "elasticsearch -p /init/epid" & /bin/bash /init/start.sh; kill $(cat /init/epid) && tail --pid="$(cat /init/epid)" -f /dev/null
+COPY data/deployment/inverse_dictionary /init/inverse_dictionary
+RUN chown -R elasticsearch:elasticsearch /init \
+        && echo 'path.repo: ["/init/inverse_dictionary"]' >> /usr/share/elasticsearch/config/elasticsearch.yml \
+        && su elasticsearch -c "elasticsearch -p /init/epid" & /bin/bash /init/start.sh; kill $(cat /init/epid) && tail --pid="$(cat /init/epid)" -f /dev/null
 
-COPY README.rst /init/README.rst
-COPY LICENSE /init/LICENSE
+COPY README.rst LICENSE /init/

@@ -24,7 +24,7 @@ import re
 from collections import defaultdict
 from collections.abc import Sequence
 from urllib.parse import unquote_plus
-from http.server import BaseHTTPRequestHandler, HTTPServer
+# from http.server import BaseHTTPRequestHandler, HTTPServer
 from flask import Flask, Response, url_for, request
 import json
 
@@ -196,7 +196,7 @@ def detect_language(text):
         
 #         Attempt to detect the language of the text if no language is
 #         provided.  For Japanese, apply the JUMAN++ morphological analyzer
-#         (Morita et al. 2015).
+#         (Morita, Kawahara, Kurohashi 2015).
 
 #         """
 #         if language is None:
@@ -376,7 +376,8 @@ def tokenize(text, language=None):
     """Tokenize the specified text for the specified language.
 
     Attempt to detect the language of the text if no language is provided.  For
-    Japanese, apply the JUMAN++ morphological analyzer (Morita et al. 2015).
+    Japanese, apply the JUMAN++ morphological analyzer (Morita, Kawahara,
+    Kurohashi 2015).
 
     :param str text: The text to tokenize.
     :param str language: ISO 639-3 language code of the language the text is

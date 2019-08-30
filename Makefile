@@ -21,7 +21,7 @@
 # ==============================================================================
 
 
-.PHONY: help build plugin
+.PHONY: help build yokome.app yokome.search clean
 .DEFAULT_GOAL := help
 
 
@@ -75,12 +75,13 @@ lib/elasticsearch:
 	@cd lib && tar -xzf elasticsearch-6.5.4.tar.gz && rm elasticsearch-6.5.4.tar.gz
 	@mv lib/elasticsearch-6.5.4 lib/elasticsearch
 
-# lib/jumanpp-1.02:
-# 	@curl -o lib/jumanpp-1.02.tar.xz 'http://lotus.kuee.kyoto-u.ac.jp/nl-resource/jumanpp/jumanpp-1.02.tar.xz'
+lib/jumanpp-1.02.tar.xz:
+	@curl -o lib/jumanpp-1.02.tar.xz 'http://lotus.kuee.kyoto-u.ac.jp/nl-resource/jumanpp/jumanpp-1.02.tar.xz'
 # 	@cd lib && tar -xJf jumanpp-1.02.tar.xz && rm jumanpp-1.02.tar.xz
 # 	@cd lib/jumanpp-1.02 && ./configure && make && sudo make install
 
-lib: lib/elasticsearch # lib/jumanpp-1.02
+## Download necessary files from other projects
+lib: lib/elasticsearch lib/jumanpp-1.02.tar.xz
 
 
 # Data
@@ -107,7 +108,7 @@ data: data/raw/yokome-jpn-dictionary/JMdict.xml data/raw/yokome-jpn-corpus
 data/processed/data.db: data/processed/.jpn.flag
 	@touch data/processed/data.db
 
-data/processed/.jpn.flag: data virtualenvs
+data/processed/.jpn.flag: data
 	@rm -f data/processed/data.db
 	@. virtualenvs/py3/bin/activate && python yokome/data/jpn/dictionary_to_rdbms.py data/raw/yokome-jpn-dictionary/JMdict.xml
 	@. virtualenvs/py3/bin/activate && python yokome/data/jpn/corpus_to_rdbms.py data/raw/yokome-jpn-corpus
@@ -120,15 +121,46 @@ data/processed/.jpn.flag: data virtualenvs
 # hyperparameter_optimization/xvld/best_hyperparams.json:
 
 
-# Plugin
+# Deployment
 # ------------------------------------------------------------------------------
 
 bin/yokome.xpi: $(wildcard webextension/**/*)
 	@rm -f bin/yokome.xpi
 	@cd webextension && zip -r -FS ../bin/yokome.xpi *
 
-## Package the web extension
-plugin: bin/yokome.xpi
+define DROP_SENTENCES
+import sqlite3 as sql
 
-## Create all binary files from source code
-build: plugin
+with sql.connect('data/deployment/.data.db.make') as conn:
+    c = conn.cursor()
+    c.execute('DROP TABLE sentences')
+    conn.commit()
+    c.execute('VACUUM')
+    conn.commit()
+endef
+
+export DROP_SENTENCES
+data/deployment/data.db: data/processed/data.db
+	@rm -f data/deployment/.data.db.make
+	@cp data/processed/data.db data/deployment/.data.db.make
+	@. virtualenvs/py3/bin/activate && python -c "$$DROP_SENTENCES"
+	@cd data/deployment && mv .data.db.make data.db
+
+yokome.app: data/deployment/data.db lib/jumanpp-1.02.tar.xz
+	@docker build -t julianbetz/yokome.app -f app.Dockerfile .
+
+yokome.search:
+	@sudo sysctl -w vm.max_map_count=262144 && docker build --ulimit nproc=65536 --ulimit nofile=65536 -t julianbetz/yokome.search -f search.Dockerfile .
+
+## Package the web extension and build all docker services
+build: bin/yokome.xpi yokome.app yokome.search
+
+
+# Clean
+# ------------------------------------------------------------------------------
+
+## Remove all temporary data
+clean:
+	@rm -rf lib/elasticsearch-6.5.4.tar.gz lib/elasticsearch-6.5.4
+	@rm data/raw/.yokome-jpn-corpus.make
+	@rm data/deployment/.data.db.make
