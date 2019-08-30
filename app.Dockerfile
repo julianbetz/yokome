@@ -19,24 +19,30 @@ FROM python:3.6-slim
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y --no-install-recommends curl xz-utils gcc g++ libboost-all-dev make # libpq-dev
+# Dependencies
+COPY lib/jumanpp-1.02.tar.xz lib/jumanpp-1.02.tar.xz
+COPY requirements/app.txt requirements.txt
+RUN apt-get update && apt-get install -y --no-install-recommends xz-utils gcc g++ make libboost-all-dev \
+        && cd lib && tar -xJf jumanpp-1.02.tar.xz \
+        && cd jumanpp-1.02 && ./configure && make && make install \
+        && cd .. && rm -r jumanpp-1.02 \
+        && pip install -r /app/requirements.txt \
+        && apt-get remove -y xz-utils gcc g++ make && apt-get autoremove -y
 
-RUN mkdir lib && curl -o lib/jumanpp-1.02.tar.xz 'http://lotus.kuee.kyoto-u.ac.jp/nl-resource/jumanpp/jumanpp-1.02.tar.xz'
-RUN cd lib && tar -xJf jumanpp-1.02.tar.xz && rm jumanpp-1.02.tar.xz \
-        && cd jumanpp-1.02 && ./configure && make && make install
+# Data
+COPY data/deployment/data.db data/processed/data.db
 
-COPY requirements/py3.txt /init/requirements.txt
-RUN pip install -r /init/requirements.txt && pip uninstall -y tensorflow-gpu \
-        && pip install tensorflow==1.13.1
+# POS tag meta data
+COPY data/crafted/juman_pos_translator.json data/crafted/jpn_pos_restrictions.json data/crafted/
 
-COPY data/processed/data.db data/processed/data.db
-COPY data/crafted/juman_pos_translator.json data/crafted/juman_pos_translator.json
-COPY data/crafted/jpn_pos_restrictions.json data/crafted/jpn_pos_restrictions.json
+# Model
 COPY hyperparameter_optimization/xvld/best_hyperparams.json hyperparameter_optimization/xvld/best_hyperparams.json
-COPY models/trn models/trn
+COPY models/trn/best_model models/trn/best_model
+COPY models/trn/meta.json models/trn/encoder.pickle models/trn/
+
+# Project source
 COPY yokome yokome
-COPY README.rst README.rst
-COPY LICENSE LICENSE
+COPY README.rst LICENSE ./
 
 EXPOSE 5003
-CMD ["python", "yokome/deployment/server.py", "--no-debug", "--insecure"]
+CMD ["python", "yokome/deployment/server.py", "--debug", "--insecure"]

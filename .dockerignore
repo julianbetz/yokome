@@ -4,11 +4,10 @@ data
 !data/crafted/jpn_inverse_dictionary_setup.json
 !data/crafted/jpn_pos_restrictions.json
 !data/crafted/juman_pos_translator.json
-!data/processed/data.db
 !data/processed/inverse_dictionary
-!data/deployment-initial
+!data/deployment
 virtualenvs
-lib
+lib/elasticsearch
 models
 !models/trn
 hyperparameter_optimization
