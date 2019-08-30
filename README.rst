@@ -182,4 +182,11 @@ The following data is required for the Japanese version to work:
     `<https://github.com/julianbetz/yokome-jpn-corpus.git>`_, containing
     copyright information for the individual files.
 
-The required data can be downloaded using the command :bash:`make data` (requires git, tar, bzip2 and gzip).
+The required data can be downloaded using the command :bash:`make data`
+(requires git, tar, bzip2 and gzip).
+
+Furthermore, the Japanese version makes use of the Japanese morphological
+analyzer `JUMAN++ <http://nlp.ist.i.kyoto-u.ac.jp/EN/index.php?JUMAN%2B%2B>`_
+(Morita, Kawahara, Kurohashi 2015).  JUMAN++ is distributed under the `Apache
+License, Version 2.0 <http://www.apache.org/licenses/LICENSE-2.0>`_.  You can
+obtain it via download by issuing :bash:`make lib/jumanpp-1.02.tar.xz`.
