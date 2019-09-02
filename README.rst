@@ -57,9 +57,11 @@ This will start the service on port 5003 on localhost.  The plugin will expect
 that the service runs on this port.
 
 The web extension is known to work with Firefox Developer Edition 70.0b1
-(64-bit).  You can get this version from
-`<https://download-installer.cdn.mozilla.net/pub/devedition/releases/70.0b1/>`_.
-Extract the archive, open the resulting directory and start Firefox.
+(64-bit).  To get this version, select the directory of your operating system
+and then ``en-US`` at
+`<https://github.com/julianbetz/yokome-browser/tree/master>`_.
+Download the installation files and extract/run them to have the proper Firefox
+version on your system.  Then start it.
 
 The extension is unsigned, so you have to give Firefox permission to run it.
 There are two ways to do so:
@@ -89,8 +91,10 @@ There are two ways to do so:
 How to Use Yokome
 =================
 
-Open a page of your choice with target-language content.  Yokome works on both
-HTTP and HTTPS web pages.
+Open a page of your choice with target-language content (e.g. the `Japanese
+Wikipedia main page
+<https://ja.wikipedia.org/wiki/%E3%83%A1%E3%82%A4%E3%83%B3%E3%83%9A%E3%83%BC%E3%82%B8>`_).
+Yokome works on both HTTP and HTTPS web pages.
 
 .. figure:: docs/source/.static/address_bar.png
    :scale: 50%
