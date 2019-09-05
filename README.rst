@@ -250,7 +250,7 @@ For the master project, I submit the following versions for grading:
   
   - `<https://github.com/julianbetz/yokome>`_:
 
-    - Source: release v1.0.0 (branch master, commit ???) (2019-09-05)
+    - Source: release v1.0.0 (branch master, commit 22e8f60e17d560f76c48853704e4a6c3e99d0c01) (2019-09-05)
     - Documentation: release v1.0.0-doc (branch gh-pages, commit 809f9c3218faa3de5616002d00d9906d9420abf1) (2019-09-05)
 
   - `<https://github.com/julianbetz/yokome-browser>`_: release v1.0.0 (branch master, commit 6a75f62737a04cdf4a6f3183c99a51e7ffed2721) (2019-08-29)
