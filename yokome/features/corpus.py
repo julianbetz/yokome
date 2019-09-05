@@ -32,7 +32,9 @@ def lemma_coverage(conn, graphic, phonetic) -> int:
     of interest.
 
     :param conn: Database connection for statistics.
+
     :param str graphic: Graphic lemma variant of interest.
+
     :param str phonetic: Phonetic lemma variant of interest.
 
     :return: The portion of tokens in the background corpus that are instances 
@@ -63,8 +65,17 @@ def lemma_coverage(conn, graphic, phonetic) -> int:
 
 
 def generate_lemma_vocabulary(conn, min_coverage):
-    """Generates a vocabulary that covers at least the specified portion of the
-    corpus.
+    """Generate a vocabulary of lemmas with the specified minimal corpus
+    coverage.
+
+    This is the smallest vocabulary of the most frequent words so that these
+    words together cover at least a portion of ``min_coverage`` of the corpus.
+
+    :param conn: Database connection for statistics.
+
+    :param float min_coverage: The minimal coverage.
+
+    :return: A dictionary from lemmas to their frequency rank.
 
     """
     if min_coverage < 0 or min_coverage > 1:
@@ -89,8 +100,19 @@ def generate_lemma_vocabulary(conn, min_coverage):
 
 
 def generate_graphic_character_vocabulary(conn, min_coverage):
-    """Generates a vocabulary of characters from graphic representations of lemmas
-    that covers at least the specified portion of the corpus.
+    """Generate a vocabulary of characters from graphic representations of
+    lemmas with the specified minimal corpus coverage.
+
+    This is the smallest vocabulary of the most frequent characters so that
+    these characters together cover at least a portion of ``min_coverage`` of
+    the corpus.
+
+    :param conn: Database connection for statistics.
+
+    :param float min_coverage: The minimal coverage.
+
+    :return: A dictionary from characters from graphic representations of lemmas
+        to their frequency rank.
 
     """
     if min_coverage < 0 or min_coverage > 1:
@@ -115,8 +137,19 @@ def generate_graphic_character_vocabulary(conn, min_coverage):
 
 
 def generate_phonetic_character_vocabulary(conn, min_coverage):
-    """Generates a vocabulary of characters from phonetic representations of lemmas
-    that covers at least the specified portion of the corpus.
+    """Generate a vocabulary of characters from phonetic representations of
+    lemmas with the specified minimal corpus coverage.
+
+    This is the smallest vocabulary of the most frequent characters so that
+    these characters together cover at least a portion of ``min_coverage`` of
+    the corpus.
+
+    :param conn: Database connection for statistics.
+
+    :param float min_coverage: The minimal coverage.
+
+    :return: A dictionary from characters from phonetic representations of lemmas
+        to their frequency rank.
 
     """
     if min_coverage < 0 or min_coverage > 1:
@@ -141,6 +174,24 @@ def generate_phonetic_character_vocabulary(conn, min_coverage):
 
 
 def generate_vocabulary_from(language, sentences, min_coverage):
+    """Generate a vocabulary with the specified minimal sentence coverage.
+    
+    This is the smallest vocabulary of the most frequent tokens so that these
+    tokens together cover at least a portion of ``min_coverage`` of the
+    sentences.  The tokens are determined by the ``tokenize`` method of the
+    language.
+
+    :param yokome.language.Language language: The language of interest.
+
+    :param sentences: A sequence of sentences, in a form that each sentence can
+        be tokenized using the ``tokenize`` method of the language.
+
+    :param float min_coverage: The minimal coverage.
+
+    :return: A dictionary from tokens to their frequency rank w.r.t. the
+        sentences.
+
+    """
     counts = defaultdict(lambda: Fraction(0, 1))
     for sentence in sentences:
         for candidates in language.tokenize(sentence):
@@ -165,18 +216,33 @@ def generate_vocabulary_from(language, sentences, min_coverage):
     return vocabulary
 
 
+def _prepare_sentence_from_database(sentence):
+    sentence = json.loads(sentence, object_hook=list_as_tuple_hook)
+    if isinstance(sentence, str):
+        return sentence
+    return tuple(tuple(candidates) for candidates in sentence)
+
+
 def load_sentence(DATABASE, language, file, sequence_id):
+    """Load a sentence from the database.
+
+    :param str DATABASE: The database file.
+    
+    :param str language: ISO 639-3 language code of the language of interest.
+
+    :param str file: ID of the corpus document from which the sentence stems.
+
+    :param int sequence_id: The number of the sentence in the document,
+        1-indexed.
+
+    :return: A string if the sentence only contains stop-character content
+        (espc. whitespace); a tokenized sentence otherwise.
+
+    """
     with sql.connect(DATABASE) as conn:
         try:
             (sentence,) = next(conn.cursor().execute('SELECT sentence FROM sentences WHERE language = ? AND file = ? AND sequence_id = ?', (language, file, sequence_id)))
         except StopIteration:
             raise KeyError('Sentence for %r %r %d not found in %r'
                            % (language, file, sequence_id, DATABASE))
-    return prepare_sentence_from_database(sentence)
-
-
-def prepare_sentence_from_database(sentence):
-    sentence = json.loads(sentence, object_hook=list_as_tuple_hook)
-    if isinstance(sentence, str):
-        return sentence
-    return tuple(tuple(candidates) for candidates in sentence)
+    return _prepare_sentence_from_database(sentence)

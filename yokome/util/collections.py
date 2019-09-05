@@ -19,6 +19,24 @@ import sklearn.utils
 
 
 def shuffle(*sequences, random_state=None, n_samples=None):
+    """Consistently shuffle sequences, accessing and yielding elements not
+    before they are needed.
+
+    :param sequences: Equally long sequences supporting the methods ``__len__``
+        and ``__getitem__``.
+
+    :param random_state: The random state to use for shuffling.  May be an
+        ``int`` seed for the pseudo-random number generator, a random state
+        instance, or ``None`` (in which case ``numpy.random`` is used).
+
+    :param n_samples: The number of samples to generate.  If ``None``, all
+        samples are provided.
+
+    :return: An iterable over sequence elements, in randomly permuted order if
+        only one sequence is provided.  Otherwise, an iterable over tuples of
+        sequence elements, one per sequence.
+
+    """
     if len(sequences) <= 0:
         raise ValueError('No sequences specified')
     if any(not hasattr(s, '__len__') or not hasattr(s, '__getitem__')

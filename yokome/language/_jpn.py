@@ -22,14 +22,14 @@ from ..data.jpn.corpus import load_dev_sentence_ids, _lookup_tokenizer, _lemma_e
 JPN = Language('jpn', 'Japanese',
                loader=load_dev_sentence_ids,
                tokenizer=_lookup_tokenizer,
-               max_sentence_samples=None,
                extractor=_lemma_extractor,
                parallel_extractor=_lemma_extractor)
+"""Japanese language with methods that load sentences from the corpus."""
 
 # TODO Merge with JPN
 JPN_UNSEEN = Language('jpn_unseen', 'Japanese',
                       loader=None,
                       tokenizer=lambda x: x,
-                      max_sentence_samples=None,
                       extractor=_lemma_extractor,
                       parallel_extractor=_lemma_extractor)
+"""Japanese language with methods that work on unknown text."""

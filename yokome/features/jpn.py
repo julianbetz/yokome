@@ -21,6 +21,12 @@
 #     Bopomofo extended: (0x31a0, 0x31bf)
 
 
+"""This package makes extensive use of symbol streams.  To understand how this
+data structure is defined, see :mod:`.symbol_stream`.
+
+"""
+
+
 import os
 import asyncio
 import re
@@ -34,6 +40,15 @@ from ..util.persistence import list_as_tuple_hook
 
 
 def longest_common_prefix_len(a, b):
+    """Determine the length of the longest common prefix of two strings.
+
+    :param str a: The first string.
+
+    :param str b: The second string.
+
+    :return: The length of the longest common prefix of both strings.
+
+    """
     for i, (x, y) in enumerate(zip(a, b)):
         if x != y:
             return i
@@ -437,7 +452,14 @@ MISC_SYMBOL_RANGES = (
     (0x1f900, 0x1f9ff))
 
 
-def voice(char):
+def voice(char: int) -> int:
+    """Return the voiced version of ``char``.
+
+    :param int char: An unvoiced Unicode character to voice.
+
+    :return: The Unicode character that is the voiced version of ``char``.
+
+    """
     if char not in VOICABLE:
         raise ValueError('%r cannot be voiced' % (chr(char),))
     if char == 0x3046 or char == 0x30a6:
@@ -447,7 +469,14 @@ def voice(char):
     return char + 0x0001
 
 
-def unvoice(char):
+def unvoice(char: int) -> int:
+    """Return the unvoiced version of ``char``.
+
+    :param int char: A voiced Unicode character to unvoice.
+
+    :return: The Unicode character that is the unvoiced version of ``char``.
+
+    """
     if 0x30f7 <= char and char <= 0x30fa:
         return char - 0x0008
     if char == 0x3094 or char == 0x30f4:
@@ -460,13 +489,27 @@ def unvoice(char):
 VOICED = {voice(s) for s in VOICABLE}
 
 
-def semivoice(char):
+def semivoice(char: int) -> int:
+    """Return the semi-voiced version of ``char``.
+
+    :param int char: An unvoiced Unicode character to semi-voice.
+
+    :return: The Unicode character that is the semi-voiced version of ``char``.
+
+    """
     if char not in SEMI_VOICABLE:
         raise ValueError('%r cannot be semi-voiced' % (chr(char),))
     return char + 0x0002
 
 
-def unsemivoice(char):
+def unsemivoice(char: int) -> int:
+    """Return the unvoiced version of ``char``.
+
+    :param int char: A semi-voiced Unicode character to unvoice.
+
+    :return: The Unicode character that is the unvoiced version of ``char``.
+
+    """
     if char - 0x0002 not in SEMI_VOICABLE:
         raise ValueError('%r cannot be unsemi-voiced' % (chr(char),))
     return char - 0x0002
@@ -475,7 +518,7 @@ def unsemivoice(char):
 SEMI_VOICED = {semivoice(s) for s in SEMI_VOICABLE}
 
 
-def is_reading(phrase) -> bool:
+def is_reading(phrase: str) -> bool:
     """Determine whether the specified phrase is a reading representation.
 
     Reading representations contain only characters from the hiragana, hiragana
@@ -490,9 +533,9 @@ def is_reading(phrase) -> bool:
 
     :param str phrase: The phrase to test.
 
-    :return: True if the specified phrase is a reading representation, False
-        otherwise.
-    
+    :return: ``True`` if the specified phrase is a reading representation,
+        ``False`` otherwise.
+
     """
     # TODO Use above ranges instead of explicit hex codes
     return (all((ord(c) >= 0x3041 and ord(c) <= 0x3096) # Hiragana
@@ -507,10 +550,14 @@ def is_reading(phrase) -> bool:
             and not phrase == '～')
 
 
-def hiragana_to_katakana(phrase):
+def hiragana_to_katakana(phrase: str) -> str:
     """Convert hiragana to katakana.
 
     Do not handle the use of prolonged sound marks.
+
+    :param str phrase: The phrase in which to replace all hiragana characters by
+        katakana characters.
+
     """
     # TODO Use above ranges instead of explicit hex codes
     return ''.join(
@@ -522,9 +569,23 @@ def hiragana_to_katakana(phrase):
 
 # Does not check whether non-glide chars are valid
 # Does not check how many glide chars are added
-def to_morae(symbols):
+def to_morae(symbol_stream):
+    """Group morae in a symbol stream.
+
+    A mora is a subunit of a syllable that may consist of multiple characters.
+    For Japanese, it is the logical unit of counting sounds of speech.  A
+    Japanese syllable typically consists of one mora or two morae where the
+    second mora prolongs the first.  A Japanese mora consists of a regular kana
+    letter or a kana letter and an ensuing glide sound, e.g. "ち", "ゆ" or "ちゅ
+    " (but not "ちゅう").
+
+    :param symbol_stream: A stream over symbols.
+
+    :return: A list of morae, each consisting of its symbols.
+
+    """
     morae = []
-    for symbol in symbols:
+    for symbol in symbol_stream:
         s, *original = symbol
         if s in GLIDE_CHARS and morae:
             morae[-1].append(symbol)
@@ -584,6 +645,16 @@ def _iteration_fold_once(iteration_symbols, other_symbols):
 
 
 def iteration_fold(symbol_stream):
+    """Normalize words with iteration marks.
+
+    Replace each kana/kanji iteration mark with the characters it stands for.
+
+    :param symbol_stream: A stream over symbols.
+
+    :return: A symbol stream like the input symbol stream, with iteration
+        characters replaced by the characters that they stand for.
+
+    """
     iteration_symbols = []
     other_symbols = []
     for symbol in symbol_stream:
@@ -607,6 +678,14 @@ def iteration_fold(symbol_stream):
 # XXX Add support for voiced repetition mark misspelings using voiced sound mark
 # and combining voiced sound mark
 def repetition_contraction(symbol_stream):
+    """Contract representations of repetition symbols in the input stream.
+
+    :param symbol_stream: A stream over symbols.
+
+    :return: A symbol stream like the input symbol stream, with repetition
+        symbols contracted to one symbol only.
+
+    """
     repetition_symbols = ()
     for symbol in symbol_stream:
         s, *original = symbol
@@ -623,7 +702,7 @@ def repetition_contraction(symbol_stream):
                     continue
                 if repetition_symbols[0][0] == UPPER_VOICED_REPEAT_MARK:
                     yield (VOICED_REPEAT_MARK, repetition_symbols[0], symbol)
-                    repetition_chars = ()
+                    repetition_symbols = ()
                     continue
         elif s == 0xff0f:
             for out in repetition_symbols:
@@ -826,11 +905,26 @@ def _mid_split(phrase):
 
 
 def is_content_sentence(symbol_stream):
+    """Detect whether the symbol stream contains content symbols.
+
+    :param symbol_stream: A stream over symbols.
+
+    :return: ``True`` if the symbol stream contains content symbols, else
+        ``False``.
+
+    """
     return any(symbol[0] is not None and in_ranges(symbol[0], WORD_RANGES)
                for symbol in symbol_stream)
 
 
 def content_sentences(symbol_streams):
+    """Filter out non-content symbol streams.
+
+    :param symbol_streams: An iterable over symbol streams.
+
+    :return: An iterable over all symbol streams that contain content symbols.
+
+    """
     for sentence in symbol_streams:
         sentence = tuple(sentence)
         if is_content_sentence(sentence):
@@ -838,6 +932,20 @@ def content_sentences(symbol_streams):
 
 
 def strip(symbol_streams):
+    """Remove leading and trailing whitespace from a symbol stream.
+
+    The definition of whitespace is language-dependent and refers to Japanese
+    conventions here.
+
+    As is generally the case with symbol streams, all removed whitespace can be
+    restored using :func:`.symbol_stream.expand`.
+
+    :param symbol_stream: A stream over symbols.
+
+    :return: A symbol stream like the input symbol stream, with whitespace
+        replaced by ``None``-symbols.
+
+    """
     for sentence in symbol_streams:
         sentence = list(sentence)
         for r in (range(len(sentence)), range(-1, -len(sentence) - 1, -1)):
@@ -855,7 +963,14 @@ def segmenter(symbol_stream, whitespace_marks_end_of_paragraph=False):
     """Accept a stream of symbols and yield symbol streams for each sentence.
 
     This function works most reliably with balanced bracketing.
-    
+
+    :param symbol_stream: A stream over symbols.
+
+    :param bool whitespace_marks_end_of_paragraph: Whether whitespace marks the
+        end of a paragraph in the symbol stream.
+
+    :return: An iterable over symbol streams, each corresponding to a sentence.
+
     """
     bracketing_level = 0
     end_of_quotation = False
@@ -924,11 +1039,13 @@ def match_reading(splits):
     Discern the notations '\ ' for space and '\' for backslash (with ' ' as
     field separator) in JUMAN++ output.
 
-    :param list[str] splits: section for word token (graphic), word token
-            (phonetic), and lemma, split on ' ' from a joint string
-            representation with ' ' as separator.  The input may contain more
-            than three elements.
-    
+    :param list[str] splits: The sections for word token (graphic), word token
+        (phonetic), and lemma, split on ' ' from a joint string representation
+        with ' ' as separator.  The input may contain more than three elements.
+
+    :return: A triple consisting of the graphic word token, the phonetic word
+        token, and the lemma.
+
     """
     # Space and backslash do not take part in morphological variations, thus all
     # three annotations contain the same number of splits
@@ -941,7 +1058,34 @@ def match_reading(splits):
 
 
 def to_dict(token):
-    """Turn an array of JUMAN++-style token annotations into a dictionary."""
+    """Turn an array of JUMAN++-style token annotations into a dictionary.
+
+    :param token: An array version of a line of JUMAN++ output.  It either has
+        twelve elements and is the first candidate for a token, or it has
+        thirteen elements and is a later candidate for a token.  In the latter
+        case the first element is ``'@'``.
+
+    :return: A dictionary describing the token candidate corresponding to the
+        input.  It has the following form:
+
+        .. code-block:: python
+
+           {
+             'surface_form': {'graphic': ..., 'phonetic': ...},
+             'base_form': {'graphic': ..., 'phonetic': ...},
+             'lemma': {'graphic': ..., 'phonetic': ...},
+             'pos': <list of POS tags>,
+             'inflection': <list of POS/inflection tags>
+           }
+        
+        The surface form is the inflected form as it was found in the text,
+        along with its reading in katakana.  The base form is the uninflected
+        form.  For both graphic representation and reading, it may be different
+        from the lemma for different graphic variants of the same lexeme.  The
+        lemma is the canonical form for both graphic reprepresentation and
+        reading, intended to be unique for all variants of a lexeme.
+
+    """
     assert ((token[0] == ' ') == ('代表表記: / ' in token[11])
             and (token[0] == ' ') == (token[11] == '代表表記: / ')
             and '  ' not in token[11])
@@ -999,7 +1143,7 @@ def to_dict(token):
         'surface_form': {'graphic': surface_graphic,
                          'phonetic': hiragana_to_katakana(surface_phonetic)},
         # Uninflected (and not overly repeated (see ``repetition_fold``)) form
-        # for both graphic representation and reading, may be different from the
+        # For both graphic representation and reading, may be different from the
         # lemma for different graphic variants of the same lexeme
         'base_form': {'graphic': uninflected_graphic,
                       'phonetic': hiragana_to_katakana(uninflected_phonetic)},
@@ -1020,12 +1164,21 @@ def to_dict(token):
 
 
 async def tokenize_async(text, partially_annotated=False):
-    """
+    """Tokenize a text using JUMAN++, in an asynchronous fashion.
 
     While waiting for the result of tokenization is performed asynchronously,
     the token candidates are yielded in a blocking fashion, i.e. every coroutine
     building on this tokenizer has access to all resulting tokens without
     interference of other coroutines.
+
+    :param str text: The text to tokenize.
+
+    :param bool partially_annotated: Whether the input is partially annotated.
+
+    :return: An iterable over tuples of candidates, each candidate being one of
+        the possible tokens for its token position in the iterable.  A candidate
+        is a dictionary of the form described in :func:`to_dict`.
+
     """
     async with SubprocessLock(0.1):
         # Call JUMAN++ Japanese morphological analyzer
@@ -1042,6 +1195,17 @@ async def tokenize_async(text, partially_annotated=False):
 
 
 def tokenizer(text, partially_annotated=False):
+    """Tokenize a text using JUMAN++, in a synchronous fashion.
+
+    :param str text: The text to tokenize.
+
+    :param bool partially_annotated: Whether the input is partially annotated.
+
+    :return: An iterable over tuples of candidates, each candidate being one of
+        the possible tokens for its token position in the iterable.  A candidate
+        is a dictionary of the form described in :func:`to_dict`.
+
+    """
     # Call JUMAN++ Japanese morphological analyzer
     process = Popen(
         ['jumanpp', '--partial'] if partially_annotated else ['jumanpp'],
@@ -1089,6 +1253,17 @@ def _expand_surface_forms(symbols, i, token_alternatives, prefix, partially_anno
 # text is partially annotated and all symbols are None or tab), all input is
 # lost
 def stream_tokenizer(symbol_stream, partially_annotated=False):
+    """Tokenize a symbol stream using JUMAN++, in a synchronous fashion.
+
+    :param symbol_stream: The symbol stream to tokenize.
+
+    :param bool partially_annotated: Whether the input is partially annotated.
+
+    :return: An iterable over tuples of candidates, each candidate being one of
+        the possible tokens for its token position in the iterable.  A candidate
+        is a dictionary of the form described in :func:`to_dict`.
+
+    """
     symbols = tuple(symbol_stream)
     prefix, i = _empty_affix(symbols, 0, partially_annotated)
     for token_alternatives in tokenizer(to_text(symbols), partially_annotated):
@@ -1100,13 +1275,21 @@ def stream_tokenizer(symbol_stream, partially_annotated=False):
 # text is partially annotated and all symbols are None or tab), all input is
 # lost
 async def tokenize_stream_async(symbol_stream, partially_annotated=False):
-    """
+    """Tokenize a symbol stream using JUMAN++, in an asynchronous fashion.
 
     While waiting for the result of tokenization is performed asynchronously,
     the token candidates are yielded in a blocking fashion, i.e. every coroutine
     building on this tokenizer has access to all resulting tokens without
     interference of other coroutines.
-    
+
+    :param symbol_stream: The symbol stream to tokenize.
+
+    :param bool partially_annotated: Whether the input is partially annotated.
+
+    :return: An iterable over tuples of candidates, each candidate being one of
+        the possible tokens for its token position in the iterable.  A candidate
+        is a dictionary of the form described in :func:`to_dict`.
+
     """
     symbols = tuple(symbol_stream)
     prefix, i = _empty_affix(symbols, 0, partially_annotated)
@@ -1116,28 +1299,35 @@ async def tokenize_stream_async(symbol_stream, partially_annotated=False):
 
 
 def parse_jumanpp_output(output):
-    # Parse JUMAN++ tokenizer output format
-    # 
-    # The output is one-token-per-line, with space-separated
-    # annotations.  There are twelve annotations for regular tokens and
-    # twelve annotations and an additional '@ ' at the beginning of
-    # lines to mark the beginning of alternatives for a preceding
-    # regular token.
-    # 
-    # Start processing from the end, since there are ambiguities for the
-    # first three annotation types: Spaces are denoted as '\ ', while
-    # backslashes are denoted by '\' only, resulting in conflicting
-    # interpretations for '\ ' as "space", and "backslash" + "end of
-    # annotation", respectively.
-    #
-    # Furthermore, '"' is not escaped or enclosed in single quotation
-    # marks, while the last annotation, if existent, is always enclosed
-    # in double quotation marks.  Thus, manual line splitting is
-    # necessary, and cannot be done via shlex.
-    #
-    # The remaining annotation types are a fixed set of keywords, with odd and
-    # even annotations encoding the same information, once in string form and
-    # once as a numerical ID.
+    """Parse JUMAN++ tokenizer output format.
+    
+    The output is one-token-per-line, with space-separated annotations.  There
+    are twelve annotations for regular tokens and twelve annotations and an
+    additional '@ ' at the beginning of lines to mark the beginning of
+    alternatives for a preceding regular token.
+    
+    Start processing from the end of the line, since there are ambiguities for
+    the first three annotation types: Spaces are denoted as '\ ', while
+    backslashes are denoted by '\' only, resulting in conflicting
+    interpretations for '\ ' as "space", and "backslash" + "end of annotation",
+    respectively.
+    
+    Furthermore, '"' is not escaped or enclosed in single quotation
+    marks, while the last annotation, if existent, is always enclosed
+    in double quotation marks.  Thus, manual line splitting is
+    necessary, and cannot be done via shlex.
+    
+    The remaining annotation types are a fixed set of keywords, with odd and
+    even annotations encoding the same information, once in string form and
+    once as a numerical ID.
+
+    :param str output: The raw output of JUMAN++.
+
+    :return: An iterable over tuples of candidates, each candidate being one of
+        the possible tokens for its token position in the iterable.  A candidate
+        is a dictionary of the form described in :func:`to_dict`.
+
+    """
     output = tuple(line for line in output.split('\n')
                    if line != 'EOS' and line != '')
     assert all(line.endswith(' NIL')
@@ -1179,7 +1369,13 @@ def parse_jumanpp_output(output):
 
 
 def chasen_loader(filename):
-    """Loads a file from the JEITA corpus and yields symbols from it."""
+    """Loads a file from the JEITA corpus and yields symbols from it.
+
+    :param str filename: The filename of the document to load.
+
+    :return: A symbol stream that encodes the text from the loaded document.
+
+    """
     reader = ChasenCorpusReader(os.path.abspath(os.path.dirname(
         os.path.abspath(__file__)) + '/../../data/raw/yokome-jpn-corpus'),
                                 filename, encoding='utf-8')
@@ -1189,6 +1385,15 @@ def chasen_loader(filename):
 
 
 def fullwidth_fold(symbol_stream):
+    """Turn the ASCII space, the Latin letters in ASCII, and the halfwidth forms
+    into their fullwidth counterparts.
+
+    :param symbol_stream: A stream over symbols.
+
+    :return: A symbol stream like the input symbol stream, with halfwidth
+        characters replaced by their fullwidth counterparts.
+
+    """
     for symbol in symbol_stream:
         s = symbol[0]
         if s in _FULLWIDTH_FOLD_DICT:
@@ -1198,6 +1403,18 @@ def fullwidth_fold(symbol_stream):
 
 
 def combining_voice_mark_fold(symbol_stream):
+    """Normalize words with combining voice marks.
+
+    :param symbol_stream: A stream over symbols.
+
+    :return: A symbol stream like the input symbol stream, with combining
+        voice/semi-voice marks combined with their preceding
+        voicable/semi-voicable symbols to form voiced/semi-voiced symbols.
+        Voice/semi-voice marks that do not follow a voicable/semi-voicable
+        symbol are replaced by KATAKANA-HIRAGANA VOICED SOUND MARK (U+309B) /
+        KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK (U+309c).
+
+    """
     last_symbol = None
     for symbol in symbol_stream:
         s = symbol[0]

@@ -15,6 +15,9 @@
 # limitations under the License.
 
 
+"""Script to train the language model."""
+
+
 import sys
 import os
 from datetime import datetime

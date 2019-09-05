@@ -15,6 +15,10 @@
 # limitations under the License.
 
 
+"""Import script to transfer the JEITA Public Morphologically Tagged Corpus (in
+ChaSen format) to an SQLite database."""
+
+
 import sys
 import os
 import click
@@ -37,7 +41,7 @@ from yokome.util.concurrency import MemoryLock
 from yokome.util.progress import ProgressBar
 
 
-def cycle_colors():
+def _cycle_colors():
     foreground = 1
     background = 0
     while True:
@@ -49,10 +53,10 @@ def cycle_colors():
         foreground %= 8
 
 
-COLOR_CYCLE = cycle_colors()
+_COLOR_CYCLE = _cycle_colors()
 
 
-async def store_sentence(conn, f, i, symbol_stream, lemmas, graphics, phonetics, graphic_cs, phonetic_cs, color):
+async def _store_sentence(conn, f, i, symbol_stream, lemmas, graphics, phonetics, graphic_cs, phonetic_cs, color):
     symbol_stream = tuple(fullwidth_fold(ascii_fold(iteration_fold(
         repetition_contraction(combining_voice_mark_fold(symbol_stream))))))
     has_content = is_content_sentence(symbol_stream)
@@ -87,7 +91,7 @@ async def store_sentence(conn, f, i, symbol_stream, lemmas, graphics, phonetics,
     conn.commit()
 
 
-def next_n(generator, n):
+def _next_n(generator, n):
     output = ()
     try:
         for _ in range(n):
@@ -100,33 +104,33 @@ def next_n(generator, n):
 BATCH_SIZE = 64
 
 
-async def store_file(conn, f, lemmas, graphics, phonetics, graphic_cs, phonetic_cs, progress):
+async def _store_file(conn, f, lemmas, graphics, phonetics, graphic_cs, phonetic_cs, progress):
     ok = validate_file(f)
     if not ok:
         progress.print_next((f, ok))
         return
     async with MemoryLock(4, BATCH_SIZE * 2 ** 20):
         
-        color = next(COLOR_CYCLE)
+        color = next(_COLOR_CYCLE)
 
         progress.print_current((f, ok))
         sentences = enumerate(strip(segmenter(chasen_loader(f), True)), start=1)
         while True:
             # Prefetch ``BATCH_SIZE`` sentences
-            batch = next_n(sentences, BATCH_SIZE)
-            await asyncio.gather(*(asyncio.ensure_future(store_sentence(conn, f, i, sentence, lemmas, graphics, phonetics, graphic_cs, phonetic_cs, color)) for i, sentence in batch))
+            batch = _next_n(sentences, BATCH_SIZE)
+            await asyncio.gather(*(asyncio.ensure_future(_store_sentence(conn, f, i, sentence, lemmas, graphics, phonetics, graphic_cs, phonetic_cs, color)) for i, sentence in batch))
             if len(batch) < BATCH_SIZE:
                 break
         progress.print_next(None)
 
 
 
-async def store_corpus(conn, files, lemmas, graphics, phonetics, graphic_cs, phonetic_cs):
+async def _store_corpus(conn, files, lemmas, graphics, phonetics, graphic_cs, phonetic_cs):
     progress = ProgressBar(len(files),
                            prefix=lambda i, element: '        |' if element is None else '        \033[%s\033[0m %s\n        |' % ('32mACCEPT' if element[1] else '31mREJECT', element[0]),
                            suffix=lambda i, element: '| ')
     progress.print_current(None)
-    tasks = [asyncio.ensure_future(store_file(conn, f, lemmas, graphics, phonetics, graphic_cs, phonetic_cs, progress)) for f in files]
+    tasks = [asyncio.ensure_future(_store_file(conn, f, lemmas, graphics, phonetics, graphic_cs, phonetic_cs, progress)) for f in files]
     await asyncio.gather(*tasks)
 
 
@@ -134,6 +138,8 @@ async def store_corpus(conn, files, lemmas, graphics, phonetics, graphic_cs, pho
 @click.argument('corpus_dir',           # The root directory of the corpus
                 type=click.Path(exists=True, file_okay=False, dir_okay=True))
 def main(corpus_dir):
+    """Transfer the JEITA Public Morphologically Tagged Corpus (in ChaSen format) to
+    an SQLite database."""
     start = time.time()
     database_file = _PROJECT_ROOT + '/data/processed/data.db'
     if os.path.exists(database_file):
@@ -182,7 +188,7 @@ def main(corpus_dir):
         c.execute('DELETE FROM statistics WHERE language = "jpn"')
         conn.commit()
         print('    Analyzing documents:')
-        asyncio.get_event_loop().run_until_complete(store_corpus(conn, dev_files(corpus_dir), lemmas, graphics, phonetics, graphic_cs, phonetic_cs))
+        asyncio.get_event_loop().run_until_complete(_store_corpus(conn, dev_files(corpus_dir), lemmas, graphics, phonetics, graphic_cs, phonetic_cs))
         print('    Saving statistics...')
         cumulative_count = Fraction(0, 1)
         for rank, (lemma, count) in enumerate(sorted(lemmas.items(), key=lambda x: x[1], reverse=True), start=1):

@@ -15,8 +15,13 @@
 # limitations under the License.
 
 
+"""Import script to transfer entries from a JMdict XML file to an Elasticsearch
+index."""
+
+
 import sys
 import os
+import click
 import json
 import sqlite3 as sql
 from elasticsearch import Elasticsearch, RequestError
@@ -34,7 +39,9 @@ DICTIONARY_FILE = _PROJECT_ROOT + '/data/processed/data.db'
 RESTRICTIONS_FILE = _PROJECT_ROOT + '/data/crafted/jpn_pos_restrictions.json'
 
 
-if __name__ == '__main__':
+@click.command()
+def main():
+    """Transfer entries from a JMdict XML file to an Elasticsearch index."""
     es = Elasticsearch(['localhost:9200'])
 
     if es.indices.exists(INDEX_NAME):
@@ -78,3 +85,7 @@ if __name__ == '__main__':
                                     'pos': normalized_pos_tags,
                                     'glosses': [gloss
                                                 for _, gloss in sense.glosses]})
+
+
+if __name__ == '__main__':
+    main()

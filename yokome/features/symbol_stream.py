@@ -16,6 +16,38 @@
 # limitations under the License.
 
 
+"""This package deals with symbol streams.
+
+Symbol streams are a data structure to represent text.  In contrast to strings
+however, they are based on python generators and allow to easily manipulate text
+using state machines while always retaining information on how the text looked
+before manipulation.
+
+A symbol stream itself is an iterator over symbols.  A symbol is a tuple that
+contains an integer encoding a Unicode character as its first element.  If a
+manipulator wishes to replace multiple characters with another one, it yields a
+tuple containing an integer encoding the new character in the first position and
+all the symbols that were replaced in the other positions, in the order of their
+appearance in the original symbol stream.  This way, a new symbol's lineage is stored
+and the original symbol stream can be restored at any time using :func:`expand`.
+
+The character code ``None`` encodes the empty string.  Thus, in the case that
+multiple symbols are to be added to the new stream, the special symbol
+``(None,)`` may be added as lineage indicator.  Furthermore, yielding a symbol
+with ``None`` in the first position and old symbols in the other ones
+effectively deletes those symbols.
+
+Because symbol streams are build on top of generators, they allow manipulators
+to be applied in a composite fashion as a pipeline without excessive storage
+requirements: Later parts of a text are requested in upstream manipulators not
+before they are required in downstream ones.
+
+For conversion between symbol streams and strings, see :func:`to_symbol_stream`
+and :func:`to_text`.
+
+"""
+
+
 import re
 from copy import deepcopy
 from numpy.random import RandomState
@@ -112,18 +144,46 @@ from typing import Iterator
 #                                   (0x01fc, 0x01fd))
 
 ASCII_LETTER_RANGES = ((0x0041, 0x005a), (0x0061, 0x007a))
+"""The ranges of ASCII letters."""
 
 
 def to_symbol_stream(text):
+    """Convert a string into a symbol stream.
+
+    :param str text: The string to be converted.
+
+    :return: A stream of symbols contaning exactly the characters from the specified text as symbols
+    
+    .. seealso:: :func:`to_text`
+
+    """
     for c in text:
         yield (ord(c),)
 
 
 def to_text(symbol_stream):
+    """Convert a symbol stream into a string.
+
+    :param symbol_stream: A stream over symbols.
+
+    :return: The string that corresponds to the symbol stream, with all lineage
+        symbols omitted.
+
+    .. seealso:: :func:`to_symbol_stream`
+
+    """
     return ''.join(chr(s) for s, *_ in symbol_stream if s is not None)
 
 
 def expand(symbol_stream):
+    """Restore the original symbol stream from a manipulated one.
+
+    :param symbol_stream: A stream over symbols.
+
+    :return: A stream over the symbols from which the input symbol stream was
+        created.
+
+    """
     for symbol in symbol_stream:
         s, *expansion = symbol
         if expansion:
@@ -134,14 +194,25 @@ def expand(symbol_stream):
 
 
 def in_ranges(char, ranges):
-    """Determines whether the given character is in one of the ranges."""
+    """Determines whether the given character is in one of several ranges.
+
+    :param int char: An integer encoding a Unicode character.
+
+    :param ranges: A sequence of pairs, where the first element of each pair is
+        the start Unicode character code (including) and the second element of
+        each pair is the end Unicode character code (including) of a range.
+
+    """
     return any(start <= char and char <= stop for start, stop in ranges)
 
 
 class BracketingError(Exception):
-    """
+    """An exception indicating an incorrect bracketing structure.
 
-    ``bracketing_structure`` is a symbol stream.
+    May indicate mismatched brackets or an unbalanced bracketing structure.
+
+    :param bracketing_structure: A symbol stream containing the brackets found
+        in an analyzed document.
 
     """
     def __init__(self, bracketing_structure, *args, **kwargs):
@@ -157,6 +228,7 @@ def validate_brackets(symbol_stream, brackets) -> Iterator:
     yielding every symbol in an invalid input.
 
     :param symbol_stream: A stream over symbols.
+
     :param brackets: A dictionary where the keys are the chars for the opening
         brackets and their values are the corresponding closing brackets.
 
@@ -529,6 +601,16 @@ _ASCII_FOLD_TRANSLATOR = {key: value for key, value
                                       ' +', _ASCII_FOLD_TRANSLATIONS.strip())))}
 
 def ascii_fold(symbol_stream):
+    """Turn certain Unicode characters into the sequence that is their closest
+    ASCII character transcription.
+
+    :param symbol_stream: A stream over symbols.
+
+    :return: A symbol stream like the input symbol stream, with characters from
+        most Latin ranges of Unicode replaced by the sequence that is the
+        closest ASCII character transcription.
+
+    """
     for symbol in symbol_stream:
         s = symbol[0]
         if s in _ASCII_FOLD_TRANSLATOR:
@@ -538,7 +620,16 @@ def ascii_fold(symbol_stream):
         else:
             yield symbol
 
+
 def ascii_case_fold(symbol_stream):
+    """Lowercase all symbols in the stream.
+
+    :param symbol_stream: A stream over symbols.
+
+    :return: A symbol stream like the input symbol stream, with all uppercase
+        ASCII letters replaced by their lowercase counterparts.
+
+    """
     for symbol in symbol_stream:
         s = symbol[0]
         yield (s + 0x0020, symbol) if s is not None and 0x0041 <= s and s <= 0x005a else symbol
@@ -558,6 +649,7 @@ def enumerate_alternatives(sentence) -> Iterator:
     """Generate all sentence alternatives in sequence.
 
     :param sentence: A sentence, split into tokens.
+
     :return: An iterable over iterables over tokens, one for each token in the
         original sentence.
     
@@ -569,7 +661,9 @@ def sample_alternatives(sentence, n, seed) -> Iterator:
     """From all sentence alternatives, sample ``n`` instances uniformly.
 
     :param sentence: A sentence, split into tokens.
+
     :param n: The number of sample to generate.
+
     :param seed: Random seed used for the random number generator.  For
         non-seeded behavior, use ``None``.
 

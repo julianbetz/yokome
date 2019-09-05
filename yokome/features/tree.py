@@ -37,6 +37,7 @@ class Tree(list):
                                       % (Tree.__name__,))
         super().__init__()
 
+
     def __setitem__(self, index, value):
         # For a Tree, insert before updating its parent data to ensure that the
         # parent data is not changed in case of a failure
@@ -45,7 +46,15 @@ class Tree(list):
             value.detach()
             value._parent = self
     
+
     def attach(self, value=_TREE_SENTINEL):
+        """Attach a child to this node in the tree.
+
+        :param value: A satellite value to store in the child.
+
+        :return: The newly created child.
+
+        """
         child = (StructureTree()
                  if value is _TREE_SENTINEL
                  else DataTree(value))
@@ -53,7 +62,9 @@ class Tree(list):
         child._parent = self
         return child
 
+
     def detach(self):
+        """Detach this node from its parent."""
         if self._parent is not None:
             found = False
             for i, sibling in enumerate(self._parent):
@@ -66,13 +77,19 @@ class Tree(list):
             del self._parent[i]
             self._parent = None
 
+
     # TODO Use property instead
     def __invert__(self):
+        """Return the parent of this node."""
         return self._parent
 
 
 class DataTree(Tree):
-    """A tree structure with satellite data."""
+    """A tree structure with satellite data.
+
+    :param value: The sattelite data to carry.
+
+    """
 
     def __init__(self, value=None):
         self._data = value
@@ -96,58 +113,58 @@ class StructureTree(Tree):
     pass
 
 
-@deprecated(reason='Superseded by LabeledTree')
-class OrAndTree(DataTree):
-    """A tree that disjunctively gathers AndOrTree children.
+# @deprecated(reason='Superseded by LabeledTree')
+# class OrAndTree(DataTree):
+#     """A tree that disjunctively gathers AndOrTree children.
 
-    Semantically, children of this node are alternatives.  They may only be
-    instances of AndOrTree, i.e. they semantically represent cooccurrences.
+#     Semantically, children of this node are alternatives.  They may only be
+#     instances of AndOrTree, i.e. they semantically represent cooccurrences.
 
-    Nodes of this type may carry satellite data.
+#     Nodes of this type may carry satellite data.
 
-    """
+#     """
 
-    def __setitem__(self, index, value):
-        if index is not None and not isinstance(value, AndOrTree):
-            raise TypeError('Children of %s may only be instances of %s'
-                            % (OrAndTree.__name__, AndOrTree.__name__))
-        super().__setitem__(index, value)
+#     def __setitem__(self, index, value):
+#         if index is not None and not isinstance(value, AndOrTree):
+#             raise TypeError('Children of %s may only be instances of %s'
+#                             % (OrAndTree.__name__, AndOrTree.__name__))
+#         super().__setitem__(index, value)
 
-    def attach(self, value=_TREE_SENTINEL):
-        if value is not _TREE_SENTINEL:
-            raise ValueError('Children of %s may not carry any satellite data'
-                             % (OrAndTree.__name__))
-        child = AndOrTree()
-        super().append(child)
-        child._parent = self
-        return child
+#     def attach(self, value=_TREE_SENTINEL):
+#         if value is not _TREE_SENTINEL:
+#             raise ValueError('Children of %s may not carry any satellite data'
+#                              % (OrAndTree.__name__))
+#         child = AndOrTree()
+#         super().append(child)
+#         child._parent = self
+#         return child
 
 
-@deprecated(reason='Superseded by LabeledTree')
-class AndOrTree(StructureTree):
-    """A tree node that conjunctively gathers disjunctive children.
+# @deprecated(reason='Superseded by LabeledTree')
+# class AndOrTree(StructureTree):
+#     """A tree node that conjunctively gathers disjunctive children.
 
-    Semantically, children of this node represent cooccurrences.  They may only
-    be instances of OrAndTree, i.e. they semantically are alternatives.
+#     Semantically, children of this node represent cooccurrences.  They may only
+#     be instances of OrAndTree, i.e. they semantically are alternatives.
 
-    Nodes of this type do not carry any satellite data.
+#     Nodes of this type do not carry any satellite data.
 
-    """
+#     """
 
-    def __setitem__(self, index, value):
-        if not isinstance(value, OrAndTree):
-            raise TypeError('Children of %s may only be instances of %s'
-                            % (AndOrTree.__name__, OrAndTree.__name__))
-        super().__setitem__(index, value)
+#     def __setitem__(self, index, value):
+#         if not isinstance(value, OrAndTree):
+#             raise TypeError('Children of %s may only be instances of %s'
+#                             % (AndOrTree.__name__, OrAndTree.__name__))
+#         super().__setitem__(index, value)
 
-    def attach(self, value=_TREE_SENTINEL):
-        if value is _TREE_SENTINEL:
-            raise ValueError('Missing value for %s instance'
-                             % (OrAndTree.__name__))
-        child = OrAndTree(value)
-        super().append(child)
-        child._parent = self
-        return child
+#     def attach(self, value=_TREE_SENTINEL):
+#         if value is _TREE_SENTINEL:
+#             raise ValueError('Missing value for %s instance'
+#                              % (OrAndTree.__name__))
+#         child = OrAndTree(value)
+#         super().append(child)
+#         child._parent = self
+#         return child
 
 
 class DataOnlyTree(DataTree):
@@ -158,6 +175,8 @@ class DataOnlyTree(DataTree):
     
     Nodes of this type may carry satellite data.
 
+    :param value: The satellite data to carry.
+
     """
 
     def __setitem__(self, index, value):
@@ -166,7 +185,15 @@ class DataOnlyTree(DataTree):
                             % (DataOnlyTree.__name__, DataOnlyTree.__name__))
         super().__setitem__(index, value)
 
+
     def attach(self, value=_TREE_SENTINEL):
+        """Attach a child to this node in the tree.
+
+        :param value: A satellite value to store in the child.
+
+        :return: The newly created child.
+
+        """
         if value is _TREE_SENTINEL:
             raise ValueError('Missing value for %s instance'
                              % (DataOnlyTree.__name__))
@@ -174,6 +201,7 @@ class DataOnlyTree(DataTree):
         super().append(child)
         child._parent = self
         return child
+
 
     def _from_list(self, array):
         # Do not check via isinstance to prevent creation from a Tree instance
@@ -187,12 +215,29 @@ class DataOnlyTree(DataTree):
             self.attach(None)._from_list(element)
         return self
 
+
     def from_list(array):
+        """Build a tree from a nested array structure.
+
+        :param array: The data to be stored in the tree.  Arrays may be lists or
+            tuples.  The first element of a nested array is the data to be
+            stored in a node, the other elements are passed on to its child
+            nodes.
+
+        :return: The root node of the newly created tree.
+
+        """
         return DataOnlyTree(None)._from_list(array)
 
 
 
 class LabeledTree(Container, Iterable, Sized):
+    """A tree structure with labels.
+
+    :param data: The data to be stored in this tree node.
+
+    """
+    
     def __init__(self, data=None):
         self._parent = None
         self._label = None
@@ -211,7 +256,6 @@ class LabeledTree(Container, Iterable, Sized):
         :raises KeyError: If ``label`` is a ``tuple``
 
         """
-
         # Principle of least astonishment: Prevent misinterpretation of
         # e.g. tree[(a, b)] as tree[(a, b),] instead of tree[a, b]
         if isinstance(label, tuple):
@@ -235,7 +279,6 @@ class LabeledTree(Container, Iterable, Sized):
         :raises KeyError: If ``label`` is ``None``
 
         """
-
         if label is None:
             raise KeyError('The %r key is reserved for satellite data' % None)
 
@@ -250,7 +293,6 @@ class LabeledTree(Container, Iterable, Sized):
         :raises NotImplementedError: If ``data`` is a ``slice`` or ``Ellipsis``
 
         """
-
         if isinstance(data, slice):
             raise NotImplementedError('Slicing is currently not supported')
         if data is Ellipsis:
@@ -268,7 +310,6 @@ class LabeledTree(Container, Iterable, Sized):
         :raises TypeError: If ``node`` is not an instance of ``LabeledTree``
 
         """
-
         if not isinstance(node, LabeledTree):
             raise TypeError('Children of %r may only be instances of %r'
                             % (cls.__name__, LabeledTree.__name__))
@@ -277,12 +318,10 @@ class LabeledTree(Container, Iterable, Sized):
     def __contains__(self, x):
         """Whether the path through this tree is valid.
 
-        ``x`` may be a tuple of labels alternating with data along a path in the
-        tree, or a single label.  Alternatively, ``None`` can be used in place
-        of the last or sole label to asks about the existence of non-``None``
-        satellite data.
-
-        :param x: path specification through the tree
+        :param x: Path specification through the tree. May be a tuple of labels
+            alternating with data along a path in the tree, or a single label.
+            Alternatively, ``None`` can be used in place of the last or sole
+            label to asks about the existence of non-``None`` satellite data.
 
         """
         return self._contains(x)
@@ -315,13 +354,13 @@ class LabeledTree(Container, Iterable, Sized):
     
 
     def __iter__(self):
-        # Return an iterator over the children dictionary's items
+        """Return an iterator over the children dictionary's items."""
         return ((label, list(iter(children)))
                 for label, children in self._children.items())
 
 
     def __len__(self):
-        # Return the number of keys in the children dictionary
+        """Return the number of keys in the children dictionary."""
         return len(self._children)
 
 
@@ -471,7 +510,6 @@ class LabeledTree(Container, Iterable, Sized):
 
     def detach(self):
         """Break connection between this node and its parent."""
-        
         if self._parent is not None:
             # Remove self from parent's children
             del self._parent._children[self._label][
@@ -571,6 +609,15 @@ class LabeledTree(Container, Iterable, Sized):
 
 
     def to_dict(self):
+        """Return a dictionary representation of this tree node.
+
+        :return: A dictionary with an entry ``'data'`` for the satellite data
+            and an entry ``'children'`` that contains a dictionary from this
+            node's labels to a list of children of this node under the
+            respective label.  Each such child is again a dictionary as
+            described herein.
+
+        """
         return {'data': self._data,
                 'children': {label: [child.to_dict() for child in children]
                              for label, children in self._children.items()}}
@@ -578,23 +625,40 @@ class LabeledTree(Container, Iterable, Sized):
 
 
 class InvalidEntryError(Exception):
+    """Exception to be raised on invalid restriction requests.
+
+    :param reason: The exception that caused this error.
+
+    """
+
     def __init__(self, reason, *args, **kwargs):
         self.reason = reason
         super().__init__(*args, **kwargs)
 
         
 class InvalidDataError(Exception):
+    """Exception to be raised on invalid restriction data."""
     pass
 
 
 class MissingDataException(Exception):
+    """Exception to be raised on missing restriction data."""
     pass
 
 
 
-# TODO Document
 class TemplateTree(LabeledTree):
-    """Data is required to be hashable."""
+    """A tree data structure that assigns labels to children based on a restriction template.
+    
+    Data is required to be hashable.
+
+    :param data: The data to be stored in this tree node.
+
+    :param restrictions: A string specifying the location of a JSON file
+        containing the restriction data, a dictionary that encodes the
+        restriction data, or ``None``.
+
+    """
 
     
     DEPTH = '_depth'
@@ -608,7 +672,7 @@ class TemplateTree(LabeledTree):
             with open(restrictions, 'r') as f:
                 restrictions = json.load(f)
         if isinstance(restrictions, dict):
-            self.prepare_restrictions(restrictions)
+            self._prepare_restrictions(restrictions)
         elif restrictions is not None:
             raise TypeError('Could not parse %r' % (restrictions,))
         self._restrictions = restrictions
@@ -688,7 +752,7 @@ class TemplateTree(LabeledTree):
     # TODO Replace asserts with error raising
     # Idempotent
     @classmethod
-    def prepare_restrictions(cls, pos_dict):
+    def _prepare_restrictions(cls, pos_dict):
         assert isinstance(pos_dict, dict)
         root_data = SENTINEL = object()
         for data, restrictions in pos_dict.items():
@@ -816,6 +880,17 @@ class TemplateTree(LabeledTree):
 
 
     def attach(self, data):
+        """Attach a child to this node in the tree.
+
+        Before insertion checks are applied to ensure that the specified data is
+        allowed to be inserted at the intended position according to the
+        restrictions.
+
+        :param data: The data to be stored in the child node.
+
+        :return: The newly created child.
+
+        """
         child = self.__class__(data=data)
         self.__setitem__((data,), child)
         return child
@@ -851,6 +926,36 @@ class TemplateTree(LabeledTree):
 
     @classmethod
     def parse(cls, pos_list, pos_dict):
+        """Parse a linear list of elements, building a hierarchical tree.
+
+        Follow the heuristics implied by the restrictions in ``pos_dict`` so as
+        to create a tree in which the relations between the elements
+        w.r.t. hierarchy, nonconflict and mutual exclusion are made explicit.
+
+        Hierarchy is expressed in the restrictions via parent relationships.
+        Nonconflict and mutual exclusion are expressed using labels.  Children
+        of the same parent with the same label are mutually exclusive, while
+        children with different labels are nonconflicting.
+
+        :param pos_list: A list of elements to be stored.
+
+        :param pos_dict: A dictionary of restrictions of the following form:
+        
+            .. code-block:: python
+
+               {
+                 <element>:
+                   {
+                     'parents': <list of parent elements>,
+                     'label': <label under which to store this element>
+                   },
+                 ...
+               }
+
+            There must be one element with an empty parent list.  This is the
+            root element.
+
+        """
         if not isinstance(pos_dict, dict):
             raise InvalidDataError('Malformed restrictions')
         try:
@@ -871,16 +976,68 @@ class TemplateTree(LabeledTree):
 
 
     def is_valid_data(self, x):
+        """Determine whether the specified element is valid satellite data.
+
+        :param x: The value for which to determine whether it may be stored in
+            the tree.
+
+        :return: ``True`` if ``x`` may be stored in the tree, ``False``
+            otherwise.
+
+        """
         return x in self._restrictions
 
 
     def score(self, token):
+        """Evaluate how much the token specification in ``token`` matches this
+        lexeme specification.
+
+        The base scoring function is as follows:
+
+        .. math::
+
+           \\mathrm{score^\\prime}(x, y) = \\begin{cases}\\frac{2 + \\sum_{l \\in \\mathrm{labels}(x)} \\max_{x^\\prime \\in \\mathrm{children}(x, l), y^\\prime \\in \\mathrm{children}(y)} \\mathrm{score}(x^\\prime, y^\\prime)}{2 + \\frac{\\mathrm{length}(x) + \\mathrm{length}(y)}{2}}, & \\mathrm{data}(x) = \\mathrm{data}(y)\\\\ 0, & \\text{otherwise}\\end{cases}
+
+        This function has the following properties:
+
+        * The score is in the interval :math:`[0, 1]`, with only a complete
+          match scoring 1, and only an empty match scoring 0.  Trees that have
+          their roots at different levels in the hierarchy receive a match score
+          of 0.
+
+        * Data in a child node makes a contribution of at most half of the
+          contribution of the data in its parent node to the overall score.
+
+        * Sibling nodes make a higher contribution to the overall score than
+          child nodes.
+
+        * Additional/missing child nodes that are not in conflict with other
+          child nodes result in a reduced score.
+
+        To increase the expressiveness of the score, it is downscaled along a
+        quarter-circle curve in :math:`[0, 1] \\times [0, 1]`, i.e.:
+
+        .. math::
+
+           \\mathrm{score}(x, y) = 1 - \\sqrt{1 - \\mathrm{score^\\prime}(x, y)^2}
+
+        For equal scores, children that are specified earlier are considered
+        first to be part of the match result.
+
+        Nodes in unrelated parts of the hierarchy do not affect the score.  The
+        same holds for overspecification: Descendant nodes in the token tree
+        that are not found in the lexeme tree are not considered.
+
+        In case of multiple inheritance, the behavior on ``TemplateTree``
+        overrides the behavior on ``DataOnlyTree``.  A resulting
+        ``TemplateTree`` match contains the data from the input, but adheres to
+        this ``TemplateTree``'s restrictions.
+
+        """
         match_score, match_result = self._score(token)
-        # Downscale the score along a quarter-circle curve in [0, 1] x [0, 1]
         return 1 - math.sqrt(1 - match_score ** 2), match_result
 
 
-    # TODO Document
     def _score(self, token):
         """Evaluate how much the token specification in ``token`` matches this
         lexeme specification.
@@ -889,13 +1046,14 @@ class TemplateTree(LabeledTree):
 
         .. math::
 
-           \mathrm{score}(x, y) = \begin{cases}\frac{2 + \sum_{l \in \mathrm{labels}(x)} \max_{x^\prime \in \mathrm{children}(x, l), y^\prime \in \mathrm{children}(y)} \mathrm{score}(x^\prime, y^\prime)}{2 + \frac{\mathrm{length}(x) + \mathrm{length}(y)}{2}}, & \mathrm{data}(x) = \mathrm{data}(y)\\ 0, & \text{otherwise}\end{cases}
+           \\mathrm{score^\\prime}(x, y) = \\begin{cases}\\frac{2 + \\sum_{l \\in \\mathrm{labels}(x)} \\max_{x^\\prime \\in \\mathrm{children}(x, l), y^\\prime \\in \\mathrm{children}(y)} \\mathrm{score}(x^\\prime, y^\\prime)}{2 + \\frac{\\mathrm{length}(x) + \\mathrm{length}(y)}{2}}, & \\mathrm{data}(x) = \\mathrm{data}(y)\\\\ 0, & \\text{otherwise}\\end{cases}
 
         This function has the following properties:
 
-        * The score is in the interval [0, 1], with only a complete match
-          scoring 1, and only an empty match scoring 0.  Trees that have their
-          roots at different levels in the hierarchy receive a match score of 0.
+        * The score is in the interval :math:`[0, 1]`, with only a complete
+          match scoring 1, and only an empty match scoring 0.  Trees that have
+          their roots at different levels in the hierarchy receive a match score
+          of 0.
 
         * Data in a child node makes a contribution of at most half of the
           contribution of the data in its parent node to the overall score.
@@ -919,7 +1077,6 @@ class TemplateTree(LabeledTree):
         this ``TemplateTree``'s restrictions.
 
         """
-
         if (not isinstance(token, TemplateTree)
             and not isinstance(token, DataOnlyTree)):
             raise TypeError('Unable to match object of type %r'
@@ -1010,6 +1167,22 @@ class TemplateTree(LabeledTree):
 
     @classmethod
     def from_dict(cls, structure, restrictions):
+        """Build a tree from nested dictionary structure.
+
+        :param dict structure: The data to be stored in the tree.  The data
+            stored under the entry ``'data'`` is the satellite data to be stored
+            in the root node.  The entry ``'children'`` contains a dictionary
+            from the labels of the root node to lists of children.  Each such
+            child is again a dictionary as described herein and will be created
+            as a child node.
+
+        :param restrictions: A string specifying the location of a JSON file
+            containing the restriction data, a dictionary that encodes the
+            restriction data, or ``None``.
+
+        :return: The root node of the newly created tree.
+
+        """
         if not isinstance(structure, dict):
             raise TypeError('Cannot create %s instance from %r instance'
                             % (cls.__name__, type(structure)))
@@ -1021,29 +1194,44 @@ class TemplateTree(LabeledTree):
 
 # TODO Extend to more general tree types
 # TODO Move to classes
-@deprecated
 def dfs(tree, prefix='', next_sibling=False, shortened=False):
-    if isinstance(tree, OrAndTree):
-        if shortened:
-            print(prefix[:-2] + ('\u2576' if prefix[:-2] == '' else '\u2570' if prefix[-2] == ' ' else '\u251c') + '\u2500\u2500\u2574' + ('\033[36m*' if tree[None] is None else ('\033[33m' + str(tree[None]))) + '\033[0m')
-        else:
-            print(prefix + ('\u251c' if next_sibling else '\u2576' if prefix == '' else '\u2570') + '\u2574' + ('\033[36m*' if tree[None] is None else ('\033[33m' + str(tree[None]))) + '\033[0m')
-        l = len(tree)
-        for i, node in enumerate(tree):
-            dfs(node, prefix + ('\u2502 ' if next_sibling else '  '), i < l - 1)
-            if i < l - 1:
-                print(prefix + ('\u2502' if next_sibling else ' ') + '\033[31m\u2576\033[0m\u2502\033[31m\u254c\u254c\u254c\u254c\u254c\033[0m')
-    elif isinstance(tree, AndOrTree):
-        l = len(tree)
-        if l == 0:
-            print(prefix + ('\u2502' if next_sibling else '\u00b7' if prefix == '' else '\u2575'))
-        elif l == 1:
-            dfs(tree[0], prefix + ('\u2502 ' if next_sibling else '  '), False, True)
-        else:
-            print(prefix + ('\u251c' if next_sibling else '\u2576' if prefix == '' else '\u2570') + '\u2500\u256e')
-            for i, node in enumerate(tree):
-                dfs(node, prefix + ('\u2502 ' if next_sibling else '  '), i < l - 1)
-    elif isinstance(tree, DataOnlyTree):
+    """Printing function for :class:`DataOnlyTree` trees.
+
+    For :class:`LabeledTree` / :class:`TemplateTree`, use their
+    :meth:`LabeledTree.__str__` method instead.
+
+    :param tree: The tree to print.
+
+    :param str prefix: The prefix to be prepended to each line.
+
+    :param bool next_sibling: Whether the current node is not the last child of
+        its parent.
+
+    :param bool shortened: Deprecated. Not used.
+
+    """
+    # if isinstance(tree, OrAndTree):
+    #     if shortened:
+    #         print(prefix[:-2] + ('\u2576' if prefix[:-2] == '' else '\u2570' if prefix[-2] == ' ' else '\u251c') + '\u2500\u2500\u2574' + ('\033[36m*' if tree[None] is None else ('\033[33m' + str(tree[None]))) + '\033[0m')
+    #     else:
+    #         print(prefix + ('\u251c' if next_sibling else '\u2576' if prefix == '' else '\u2570') + '\u2574' + ('\033[36m*' if tree[None] is None else ('\033[33m' + str(tree[None]))) + '\033[0m')
+    #     l = len(tree)
+    #     for i, node in enumerate(tree):
+    #         dfs(node, prefix + ('\u2502 ' if next_sibling else '  '), i < l - 1)
+    #         if i < l - 1:
+    #             print(prefix + ('\u2502' if next_sibling else ' ') + '\033[31m\u2576\033[0m\u2502\033[31m\u254c\u254c\u254c\u254c\u254c\033[0m')
+    # elif isinstance(tree, AndOrTree):
+    #     l = len(tree)
+    #     if l == 0:
+    #         print(prefix + ('\u2502' if next_sibling else '\u00b7' if prefix == '' else '\u2575'))
+    #     elif l == 1:
+    #         dfs(tree[0], prefix + ('\u2502 ' if next_sibling else '  '), False, True)
+    #     else:
+    #         print(prefix + ('\u251c' if next_sibling else '\u2576' if prefix == '' else '\u2570') + '\u2500\u256e')
+    #         for i, node in enumerate(tree):
+    #             dfs(node, prefix + ('\u2502 ' if next_sibling else '  '), i < l - 1)
+    # el
+    if isinstance(tree, DataOnlyTree):
         print(prefix + ('\u251c' if next_sibling else '\u2576' if prefix == '' else '\u2570') + '\u2574' + ('\033[36m*' if tree[None] is None else ('\033[33m' + repr(tree[None]))) + '\033[0m')
         l = len(tree)
         for i, node in enumerate(tree):
@@ -1125,45 +1313,45 @@ def unit_tests():
 
 def output_tests():
     pos_list = ['verb', 'godan', '', 'ra column', '', 'ichidan', '', '', '', 'intr. verb']
-    pos_tree = OrAndTree()
-    pos_tree.attach().attach('expression')\
-            .attach().attach(pos_list[0])\
-            .attach().attach(pos_list[1])\
-            .attach().attach(pos_list[2])\
-            .attach().attach(pos_list[3])\
-            .attach().attach(pos_list[4])
-    pos_tree[0][0][0][0].attach().attach(pos_list[5])\
-                        .attach().attach(pos_list[6])\
-                        .attach().attach(pos_list[7])\
-                        .attach().attach(pos_list[8])
-    pos_tree[0][0][0][0][0].attach(pos_list[9])
-    pos_tree[0][0][0][0][1].attach(pos_list[9])
-    verb_node = pos_tree[0][0][0][0]
-    verb_node.attach()
-    verb_node.attach()
-    noun_node = pos_tree[0][0][0].attach('noun')
-    noun_node.attach().attach('common')
-    noun_node.attach().attach('proper')
-    pos_tree.attach().attach('abbr.')
+    # pos_tree = OrAndTree()
+    # pos_tree.attach().attach('expression')\
+    #         .attach().attach(pos_list[0])\
+    #         .attach().attach(pos_list[1])\
+    #         .attach().attach(pos_list[2])\
+    #         .attach().attach(pos_list[3])\
+    #         .attach().attach(pos_list[4])
+    # pos_tree[0][0][0][0].attach().attach(pos_list[5])\
+    #                     .attach().attach(pos_list[6])\
+    #                     .attach().attach(pos_list[7])\
+    #                     .attach().attach(pos_list[8])
+    # pos_tree[0][0][0][0][0].attach(pos_list[9])
+    # pos_tree[0][0][0][0][1].attach(pos_list[9])
+    # verb_node = pos_tree[0][0][0][0]
+    # verb_node.attach()
+    # verb_node.attach()
+    # noun_node = pos_tree[0][0][0].attach('noun')
+    # noun_node.attach().attach('common')
+    # noun_node.attach().attach('proper')
+    # pos_tree.attach().attach('abbr.')
 
     and_list = DataOnlyTree()
     and_list.attach('verb').attach('godan').attach('').attach('r').attach('')
     and_list[0].attach('intr. verb')
 
-    dfs(pos_tree)
-    print()
-    dfs(pos_tree[0])
-    print()
-    dfs(pos_tree[0][0][0])
-    print()
+    # dfs(pos_tree)
+    # print()
+    # dfs(pos_tree[0])
+    # print()
+    # dfs(pos_tree[0][0][0])
+    # print()
     dfs(and_list)
     print()
-    dfs(OrAndTree())
-    print()
-    dfs(OrAndTree(''))
-    print()
-    dfs(AndOrTree())
-    print()
+    # dfs(OrAndTree())
+    # print()
+    # dfs(OrAndTree(''))
+    # print()
+    # dfs(AndOrTree())
+    # print()
     dfs(DataOnlyTree())
 
 if __name__ == '__main__':

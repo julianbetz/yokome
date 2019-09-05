@@ -20,6 +20,15 @@ import json
 
 
 def list_as_tuple_hook(x):
+    """Transform all list entries in a dictionary into tuples.
+
+    This function can be used to load JSON files with tuples instead of lists.
+
+    :param dict x: A dictionary.
+    
+    :return: The input dictionary, with lists transformed into tuples.
+
+    """
     return {key: tuple(value)
             if isinstance(value, list)
             else value
@@ -66,7 +75,7 @@ def write_quoted(file, row):
     """Write a row of quoted CSV values to a file.
 
     The values in ``row`` are quoted so that their data type can be detected
-    unambiguously (see :py:func:`yokome.util.persistence.quote` for a detailed
+    unambiguously (see :func:`yokome.util.persistence.quote` for a detailed
     explanation).  Furthermore, they are separated by the character ``','``.
     Lines are separated with ``'\\n'``.
 
