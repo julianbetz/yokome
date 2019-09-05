@@ -1,7 +1,7 @@
 version: "2.3"
 services:
   search:
-    image: julianbetz/yokome.search:latest
+    image: julianbetz/yokome.search:1.0
     container_name: search
     environment:
       - cluster.name=docker-cluster
@@ -19,7 +19,7 @@ services:
     networks:
       - yokome_net
   app:
-    image: julianbetz/yokome.app:latest
+    image: julianbetz/yokome.app:1.0
     container_name: app
     environment:
       - ELASTICSEARCH_ADDRESS=inverse:9200
