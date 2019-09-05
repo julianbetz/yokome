@@ -15,6 +15,9 @@
 # limitations under the License.
 
 
+"""Script to optimize language model hyperparameters."""
+
+
 import sys
 import os
 import click
@@ -59,7 +62,7 @@ HYPERPARAM_TRANSFORMS = {'embedding_size': int,
 assert set(HYPERPARAM_SPACE) == set(HYPERPARAM_TRANSFORMS)
 
 
-def transform_hyperparams(hyperparams):
+def _transform_hyperparams(hyperparams):
     return {hyperparam: HYPERPARAM_TRANSFORMS[hyperparam](value)
             for hyperparam, value in hyperparams.items()}
 
@@ -132,7 +135,7 @@ def main(dump_dir, language, max_hyperparam_sets, n_seeds, n_samples, n_splits, 
     trial_index = count(1)
 
     def objective(hyperparams):
-        hyperparams = transform_hyperparams(hyperparams)
+        hyperparams = _transform_hyperparams(hyperparams)
         trial_id = next(trial_index)
         trial_dir = dump_dir + ('/trial_%d' % (trial_id,))
         if verbose:
@@ -197,7 +200,7 @@ def main(dump_dir, language, max_hyperparam_sets, n_seeds, n_samples, n_splits, 
                             trials=trials,
                             rstate=RandomState(_HYPEROPT_SEED),
                             show_progressbar=verbose)
-    best_hyperparams = transform_hyperparams(best_hyperparams)
+    best_hyperparams = _transform_hyperparams(best_hyperparams)
     with open(dump_dir + '/best_hyperparams.json', 'w') as f:
         json.dump(best_hyperparams, f)
     if verbose:

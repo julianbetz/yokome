@@ -60,43 +60,43 @@
     window.yokomeHasRun = true;
 
 
-    // Fades in for factor > 1
-    // Fades out for factor < 1
-    function fade(element, factor, step) {
-        // Asserts 0 < factor != 1 and element.style.opacity > 0
-        var MIN = 0.5,
-            opacity = element.style.opacity,
-            interval = setInterval(function () {
-                opacity *= factor;
-                if (factor > 1 && opacity >= 1) {
-                    clearInterval(interval);
-                    element.style.opacity = 1;
-                } else if (factor < 1 &&　opacity <= MIN) {
-                    clearInterval(interval);
-                    element.style.opacity = MIN;
-                } else {
-                    element.style.opacity = opacity;
-                }
-            }, step);
-    }
+    // // Fades in for factor > 1
+    // // Fades out for factor < 1
+    // function fade(element, factor, step) {
+    //     // Asserts 0 < factor != 1 and element.style.opacity > 0
+    //     var MIN = 0.5,
+    //         opacity = element.style.opacity,
+    //         interval = setInterval(function () {
+    //             opacity *= factor;
+    //             if (factor > 1 && opacity >= 1) {
+    //                 clearInterval(interval);
+    //                 element.style.opacity = 1;
+    //             } else if (factor < 1 &&　opacity <= MIN) {
+    //                 clearInterval(interval);
+    //                 element.style.opacity = MIN;
+    //             } else {
+    //                 element.style.opacity = opacity;
+    //             }
+    //         }, step);
+    // }
 
 
-    function fadeInAndOut(element, factor, step, wait) {
-        // Asserts factor > 1.0
-        var opacity = element.style.opacity,
-            interval = setInterval(function () {
-                opacity *= factor;
-                if (opacity >= 1) {
-                    clearInterval(interval);
-                    element.style.opacity = 1;
-                    setTimeout(function () {
-                        fade(element, 1.0 / factor, step);
-                    }, wait);
-                } else {
-                    element.style.opacity = opacity;
-                }
-            }, step);
-    }
+    // function fadeInAndOut(element, factor, step, wait) {
+    //     // Asserts factor > 1.0
+    //     var opacity = element.style.opacity,
+    //         interval = setInterval(function () {
+    //             opacity *= factor;
+    //             if (opacity >= 1) {
+    //                 clearInterval(interval);
+    //                 element.style.opacity = 1;
+    //                 setTimeout(function () {
+    //                     fade(element, 1.0 / factor, step);
+    //                 }, wait);
+    //             } else {
+    //                 element.style.opacity = opacity;
+    //             }
+    //         }, step);
+    // }
 
 
     function moveBox(event) {

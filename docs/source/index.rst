@@ -13,6 +13,7 @@ Yokome
 
    python/yokome
    webextension
+   future_work
 
 Yokome is a web-based reading support system.  Hovering over a webpage you are
 currently viewing, it looks up the words you read, giving you an idea which of
@@ -28,6 +29,8 @@ packaged as a Firefox WebExtension.
 
 Learn how to use Yokome below or read the developer documentation for the
 :doc:`backend <python/yokome>` or the :doc:`WebExtension <webextension>`.
+
+To see what can be improved, take a look at the :doc:`future work section <future_work>`.
 
 
 Requirements

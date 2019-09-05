@@ -101,7 +101,9 @@ html_theme_options = {
     'navbar_pagenav': False,
     'navbar_links': [
         ('Python Modules', 'py-modindex.html', True),
-        ('Index', 'genindex.html', True)        
+        ('WebExtension', 'webextension.html', True),
+        ('Index', 'genindex.html', True),
+        ('Future Work', 'future_work.html', True)
     ],
     'source_link_position': None,
     'bootstrap_version': '3',

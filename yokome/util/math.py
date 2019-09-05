@@ -19,7 +19,13 @@
 def prod(iterable, start=1):
     """Multiplies ``start`` and the items of an ``iterable``.
 
-    The items are processed from left to right. ``start`` defaults to ``1``.
+    :param iterable: An iterable over elements on which multiplication may be
+        applied.  They are processed from left to right.
+
+    :param start: An element on which multiplication may be applied, defaults to
+        ``1``.
+
+    :return: The result of multiplication.
 
     """
     for i in iterable:

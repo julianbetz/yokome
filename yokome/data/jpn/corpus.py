@@ -15,6 +15,39 @@
 # limitations under the License.
 
 
+"""Provides methods to access the Japanese corpus.
+
+The corpus used is the JEITA Public Morphologically Tagged Corpus (in ChaSen
+format).  All data is split into the following data sets:
+
+* Reserve (rsv) set: Not for direct use in this project, but for testing if
+  the model creation process might have overfit on every other set.
+
+* Test (tst) set: For a final estimation of the quality of the best model
+  built in this project.
+
+* Development (dev) set: All data that goes into training a model *in this
+  project*.
+
+  * Validation (vld) set: In a k-fold cross-validation process, the set on
+    which to determine the quality of the model trained on an evaluation
+    and a training set.
+
+  * Evaluation (evl) set: In a k-fold cross-validation process, the set
+    with which to determine the quality of the model during training,
+    espc. to allow for early stopping.
+
+  * Training (trn) set: In a k-fold cross-validation process, the set on
+    which to train the model.
+
+The JEITA Aozora and Genpaku corpora are split independently, as they contain
+different language content: The documents in the Aozora corpus were originally
+written in Japanese, while the documents in the Genpaku corpus stem from sources
+in other languages.
+
+"""
+
+
 import os
 from numpy.random import RandomState
 from sklearn.model_selection import train_test_split
@@ -30,40 +63,13 @@ from ...util.collections import shuffle
 from ...util.math import prod
 
 
-# All data is split into the following data sets:
-# 
-#   * Reserve (rsv) set: Not for direct use in this project, but for testing if
-#     the model creation process might have overfit on every other set
-# 
-#   * Test (tst) set: For a final estimation of the quality of the best model
-#     built in this project
-#
-#   * Development (dev) set: All data that goes into training a model in this
-#     project
-# 
-#       * Validation (vld) set: In a k-fold cross-validation process, the set on
-#         which to determine the quality of the model trained on an evaluation
-#         and a training set
-#
-#       * Evaluation (evl) set: In a k-fold cross-validation process, the set
-#         with which to determine the quality of the model during training,
-#         espc. to allow for early stopping
-#
-#       * Training (trn) set: In a k-fold cross-validation process, the set on
-#         which to train the model
-#
-# The JEITA Aozora and Genpaku corpora are split independently, as they contain
-# different language content: The documents in the Aozora corpus were originally
-# written in Japanese, while the documents in the Genpaku corpus stem from
-# sources in other languages.
-
-
 _SPLIT_SEED = 775607720
 _SPLIT_R = RandomState(_SPLIT_SEED)
 _SHUFFLE_SEED = 116957683
 _JPN_RANGES = WORD_RANGES + SUPPLEMENTAL_RANGES
 DATABASE = os.path.abspath(os.path.dirname(os.path.abspath(__file__))
                            + '/../../../data/processed/data.db')
+"""The database file location."""
 _CORPUS_DIR = None
 _RSV_FILES, _TST_FILES, _DEV_FILES = None, None, None
 _sentence_ids = None
@@ -145,6 +151,20 @@ def dev_files(corpus_dir):
 
 
 def load_dev_sentence_ids(n_samples=None):
+    """Load the identifiers of sentences from the development files of the Japanese
+    corpus.
+
+    The order of identifiers is randomized (independently of the number of
+    samples requested and consistently in between calls requesting the same
+    number of samples).
+
+    :param int n_samples: The number of sample identifiers to load.  If
+        ``None``, load all identifiers.
+
+    :return: A tuple of sentence identifiers of the form ``(<file name>,
+        <sentence number>)``.
+
+    """
     global _sentence_ids
     if _sentence_ids is None:
         with sql.connect(DATABASE) as conn:
@@ -178,7 +198,19 @@ def load_dev_sentence_ids(n_samples=None):
                                        n_samples=n_samples))
 
 
+# XXX Make public
 def _lookup_tokenizer(sentence):
+    """Tokenize the specified sentence.
+
+    The manner of tokenization is a simple lookup in the database table of
+    precomputed tokenized sentences.
+
+    :param sentence: A pair of the form ``(<file name>, <sentence number>)``.
+
+    :return: A tuple of tokens (See
+        :meth:`...language._lang.Language.tokenize`).
+
+    """
     file, sequence_id = sentence
     # We have to establish a new connection to the database for every
     # sentence, as tensorflow works in multithreaded mode and the connection
@@ -190,7 +222,17 @@ def _lookup_tokenizer(sentence):
 #     return ''.join(token['lemma']['graphic'] for token in tokens)
 
 
+# XXX Make public
 def _lemma_extractor(tokens):
+    """Turn an iterable of tokens into language model input.
+
+    :param tokens: An iterable of tokens (see :meth:`tokenize` for the token
+        representation).
+
+    :return: An iterable of token identifiers of the form ``(<graphic lemma
+    variant>, <phonetic lemma variant>)``.
+
+    """
     return ((token['lemma']['graphic'], token['lemma']['phonetic'])
             for token in tokens)
 
@@ -212,6 +254,14 @@ def _lemma_extractor(tokens):
 
 # XXX Couln't this be done without else clauses after for?
 def validate_file(f):
+    """Determine whether the file has high data quality.
+
+    Filter out documents with archaic writing styles, excess foreign content or
+    improper bracketing structures.
+
+    :return: ``True`` if the file passes all tests, ``False`` otherwise.
+
+    """
     try:
         # Filter out files with archaic writing styles
         for j, (s, *_) in enumerate(validate_brackets(repetition_contraction(chasen_loader(f)), BRACKET_DICT), start=1):

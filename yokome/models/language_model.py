@@ -42,6 +42,12 @@ from ..util.progress import print_progress
 
 
 class SaverHook(SessionRunHook):
+    """A helper class that allows to save the model to one directory during training
+    and to provide the best model from a different directory for production
+    mode.
+
+    """
+
     def __init__(self, model_dir):
         self._model_dir = model_dir
 
@@ -54,6 +60,39 @@ class SaverHook(SessionRunHook):
 
 
 class LanguageModel:
+    """A neural language model that estimates the probability of a sentence.
+    
+    :param str model_dir: Where to store all relevant model data.  If
+        ``None``, a generic location based on the current date and time will
+        be used.
+
+    :param dict params: The model parameters.
+
+    :param int seed: The seed to use for the underlying Tensorflow graph.
+
+    :param str warm_start_from: A directory containing model parameter
+        values for initialization.
+
+    :param bool production_mode: Whether to use the production or the
+        training model.
+
+    :param int save_summary_steps: The periodicity at which to save
+        summaries.
+
+    :param int keep_checkpoint_max: The maximum number of recent checkpoint
+        files to keep.
+
+    :param yokome.language.Language language: The language of the language model.
+
+    :param vocabulary: A mapping from input units to integer values, or a
+        sequence of input units.  This is used to encode the incoming data
+        numerically.  If ``None``, a pickled mapping is expected to be found
+        in the model directory, named ``encoder.pickle``.  Every input unit
+        that is not found in this vocabulary is considered to be an
+        out-of-vocabulary unit.
+    
+    """
+
     def __init__(self, model_dir=None, params=None, seed=None, warm_start_from=None, production_mode=False, *, save_summary_steps=100, keep_checkpoint_max=5, language=None, vocabulary=None):
         if not isinstance(language, Language):
             raise TypeError(type(language).__name__)
@@ -198,7 +237,6 @@ class LanguageModel:
 
 
     def _provide_features(self, sentences, sample_size):
-        """"""
         for sentence in sentences:
             sentence = list(self._language.tokenize(sentence))
             if sample_size > 0:
@@ -253,6 +291,36 @@ class LanguageModel:
 
 
     def train(self, trn_set, evl_set, max_epochs=1, batch_size=1, max_generalization_loss=None, shuffle=False, random_state=None, verbose=False):
+        """Train the model.
+
+        :param trn_set: A sequence of sentences, a training set.  Each
+            sentence will be tokenized using the language object provided at
+            language model creation.
+
+        :param trn_set: A sequence of sentences, an evaluation set.  Each
+            sentence will be tokenized using the language object provided at
+            language model creation.
+
+        :param int max_epochs: The maximum number of epochs to train for.  The
+            actual number of epochs may be less if the training process stops
+            early.
+
+        :param int batch_size: The number of sentences to estimate the
+            probability for in parallel.
+
+        :param float max_generalization_loss: The maximum generalization loss at
+            which the training process is still continued.
+
+        :param bool shuffle: Whether to shuffle the samples for each epoch.
+
+        :param random_state: The random state used for shuffling.  May be a
+            :class:`numpy.RandomState` instance, an ``int`` seed, or ``None``.
+            If ``None``, an unseeded pseudo-random number generator will be
+            used.
+
+        :param bool verbose: Whether to show progress indicators.
+
+        """
         if verbose:
             print('Training language model:')
         current_model_dir = os.path.abspath(self._ESTIMATOR.model_dir
@@ -323,6 +391,21 @@ class LanguageModel:
 
 
     def validate(self, vld_set, batch_size=1):
+        """Evaluate the model performance on a validation set.
+
+        :param vld_set: A sequence of sentences, a validation set.  Each
+            sentence will be tokenized using the language object provided at
+            language model creation.
+
+        :param int batch_size: The number of sentences to estimate the
+            probability for in parallel.
+
+        :return: A dictionary containing the metrics evaluated on the validation
+            set.  Contains an entry ``'loss'`` for the loss and an entry
+            ``'global_step'`` for the global step for which this validation was
+            performed.
+
+        """
         return self._ESTIMATOR.evaluate(input_fn=lambda:
                                         self._input_fn(vld_set,
                                                        batch_size),
@@ -330,6 +413,32 @@ class LanguageModel:
 
 
     def estimate_probability(self, sentences, batch_size, sample_size=0):
+        """Estimate the probability of the specified sentences.
+
+        :param sentences: A sequence of sentences.  Each sentence will be
+            tokenized using the language object provided at language model
+            creation.
+
+        :param int batch_size: The number of sentences to estimate the
+            probability for in parallel.
+
+        :param int sample_size: The number of sentence alternatives to sample.
+            If this is greater than zero, for every list of token candidates
+            after tokenization, one token candidate is chosen for each sample.
+            If it is ``0``, all sentence alternatives (i.e. all combinations of
+            token candidates) are enumerated and used for probability
+            estimation.
+
+        :return: An iterable over one dictionary per sentence, each of the form
+        
+            .. code-block:: python
+    
+               {
+                 'log2_word_probs': <word log-probabilities per alternative>,
+                 'log2_sentence_probs': <sentence log-probability per alternative>
+               }
+
+        """
         aggregation = []
         i = 0
         for prediction in self._ESTIMATOR.predict(
@@ -351,8 +460,10 @@ class LanguageModel:
 
 
     def training_dir(self):
+        """Get the directory where the model for training is stored."""
         return os.path.abspath(self._ESTIMATOR.model_dir + '/../training')
 
 
     def production_dir(self):
+        """Get the directory where the model for production is stored."""
         return os.path.abspath(self._ESTIMATOR.model_dir + '/../best_model')

@@ -16,8 +16,9 @@
 # limitations under the License.
 
 
-# TODO Use in package, not as module
-"""Transfer entries from a JMdict XML file to an SQLite database."""
+"""Import script to transfer entries from a JMdict XML file to an SQLite
+database."""
+
 
 import sys
 import os
@@ -276,7 +277,7 @@ GLOSS_TYPES = {
 
 # TODO Check whether the katakana middle dot itself is referenced from another
 # entry; add corresponding asserts
-def parse_reference(reference):
+def _parse_reference(reference):
     parts = reference.split('・')
     if len(parts) == 3:
         result = (parts[0], parts[1], int(parts[2]))
@@ -302,6 +303,7 @@ def parse_reference(reference):
 @click.argument('jmdict_file',  # The location of the XML file containing JMdict
                 type=click.Path(exists=True, file_okay=True, dir_okay=False))
 def main(jmdict_file):
+    """Transfer entries from a JMdict XML file to an SQLite database."""
     resource_dir = _PROJECT_ROOT + '/data/processed'
     Path(resource_dir).mkdir(exist_ok=True)
     database_file = resource_dir + '/data.db'
@@ -513,7 +515,7 @@ def main(jmdict_file):
                                   [(entry_id, j, stag.text) for stag in
                                    sense.findall('stagk') + sense.findall('stagr')])
                     c.executemany('INSERT INTO related VALUES ("jpn", ?, ?, ?, ?, ?, ?)',
-                                  [(entry_id, j, rel, *parse_reference(ref))
+                                  [(entry_id, j, rel, *_parse_reference(ref))
                                    for rel, ref in
                                    [('cross-reference', x.text)
                                     for x in sense.findall('xref')]

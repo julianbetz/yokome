@@ -30,6 +30,25 @@ _KFOLD_SEED = 341099899
 
 
 def kfold(language, n_samples=None, n_splits=5, evl_size=0.25):
+    """Create splits of corpus sentences to be used in cross-validation.
+
+    The sentences are loaded using the languages ``load`` method.  The splits
+    are performed randomly, and differently for different numbers of samples.
+
+    :param yokome.language.Language language: The language to train on.
+
+    :param int n_samples: The number of sample sentences to load.
+
+    :param int n_splits: The number ``k`` of folds.
+
+    :param float evl_size: The portion of evaluation samples w.r.t. the
+        non-validation part of all samples.
+
+    :return: An iterable over triples of tuples over sentences.  Each triple
+        consists of the training, evaluation and validation splits,
+        respectively.
+
+    """
     sentences = language.load(n_samples)
     # Split differently for different lengths
     r = RandomState(_KFOLD_SEED + len(sentences))
@@ -47,6 +66,52 @@ def cross_validate(seed_dir, language,
                    n_samples, n_splits, evl_size, max_epochs, batch_size,
                    max_generalization_loss, min_coverage, hyperparams,
                    seed=None, verbose=False, dashboard_port=6006):
+    """Perform cross-validation on the
+
+    The process is designed to be able to continue with minimal additional
+    effort after a crash.  It can therefore be stopped and taken up again later.
+
+    Tensorboard is served during each training run.
+
+    :param str seed_dir: Where to store model data for this seed.  If
+        cross-validation is performed for multiple seeds, multiple seed
+        directories are needed.
+
+    :param yokome.language.Language language: The language to train on.
+
+    :param int n_samples: The number of sample sentences to load.
+
+    :param int n_splits: The number ``k`` of folds.
+
+    :param float evl_size: The portion of evaluation samples w.r.t. the
+        non-validation part of all samples.
+
+    :param int max_epochs: The maximum number of epochs to train for.  The
+        actual number of epochs may be less if the training process stops early.
+
+    :param int batch_size: The number of sentences to estimate the probability
+        for in parallel.
+
+    :param float max_generalization_loss: The maximum generalization loss at
+        which the training process is still continued.
+
+    :param min_coverage: The portion of the corpus that has to be covered by the
+        minimal vocabulary of the most frequent words that is used to encode
+        incoming data.
+
+    :param hyperparams: The model parameters used in this pass of
+        cross-validation.
+
+    :param int seed: The seed used for the pseudo-random number generator that
+        generates the seeds for the models to be trained.
+
+    :param bool verbose: Whether to print progress indiation.
+
+    :param int dashboard_port: On which port to serve Tensorboard.
+    
+    :return: The average loss over all folds.
+
+    """
     total_loss = 0
     r = RandomState(seed)
     for i, (trn, evl, vld) in enumerate(kfold(language, n_samples, n_splits, evl_size),
