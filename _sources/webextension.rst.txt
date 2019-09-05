@@ -5,7 +5,7 @@ Yokome Firefox WebExtension (JavaScript)
 
    Initialize/reset page action to activate Yokome.
 
-   :param tab: The tab on which to initialize Yokome
+   :param tab: The tab on which to initialize Yokome.
 
 
 .. js:function:: background.toggleYokome(tab)
