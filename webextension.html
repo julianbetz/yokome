@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Yokome Firefox WebExtension &#8212; Yokome 1.0 documentation</title>
+    <title>Yokome Firefox WebExtension (JavaScript) &#8212; Yokome 1.0 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -11,9 +11,11 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="yokome.util.persistence" href="python/yokome/util/persistence.html" />
+    <link rel="next" title="Where to go from here" href="future_work.html" />
+    <link rel="prev" title="yokome.util.progress" href="python/yokome/util/progress.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -43,7 +45,9 @@
           <ul class="nav navbar-nav">
             
                 <li><a href="py-modindex.html">Python Modules</a></li>
+                <li><a href="#">WebExtension</a></li>
                 <li><a href="genindex.html">Index</a></li>
+                <li><a href="future_work.html">Future Work</a></li>
             
             
               <li class="dropdown globaltoc-container">
@@ -56,7 +60,8 @@
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="python/yokome.html"><code class="docutils literal notranslate"><span class="pre">yokome</span></code></a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Yokome Firefox WebExtension</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Yokome Firefox WebExtension (JavaScript)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="future_work.html">Where to go from here</a></li>
 </ul>
 </ul>
 </li>
@@ -66,7 +71,11 @@
               
                 
   <li>
-    <a href="python/yokome/util/persistence.html" title="Previous Chapter: yokome.util.persistence"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; yokome.util.p...</span>
+    <a href="python/yokome/util/progress.html" title="Previous Chapter: yokome.util.progress"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; yokome.util.progress</span>
+    </a>
+  </li>
+  <li>
+    <a href="future_work.html" title="Next Chapter: Where to go from here"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Where to go from here &raquo;</span>
     </a>
   </li>
               
@@ -94,15 +103,329 @@
   <div class="row">
       <div class="col-md-3">
         <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
-<li><a class="reference internal" href="#">Yokome Firefox WebExtension</a></li>
+<li><a class="reference internal" href="#">Yokome Firefox WebExtension (JavaScript)</a></li>
 </ul>
 
         </div>
       </div>
     <div class="body col-md-9 content" role="main">
       
-  <div class="section" id="yokome-firefox-webextension">
-<h1>Yokome Firefox WebExtension<a class="headerlink" href="#yokome-firefox-webextension" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="yokome-firefox-webextension-javascript">
+<h1>Yokome Firefox WebExtension (JavaScript)<a class="headerlink" href="#yokome-firefox-webextension-javascript" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="background.initializePageAction">
+<code class="sig-prename descclassname">background.</code><code class="sig-name descname">initializePageAction</code><span class="sig-paren">(</span><em class="sig-param">tab</em><span class="sig-paren">)</span><a class="headerlink" href="#background.initializePageAction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize/reset page action to activate Yokome.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tab</strong> – The tab on which to initialize Yokome</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="background.toggleYokome">
+<code class="sig-prename descclassname">background.</code><code class="sig-name descname">toggleYokome</code><span class="sig-paren">(</span><em class="sig-param">tab</em><span class="sig-paren">)</span><a class="headerlink" href="#background.toggleYokome" title="Permalink to this definition">¶</a></dt>
+<dd><p>Activate or deactivate Yokome, depending on the current state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tab</strong> – The tab on which to toggle Yokome.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="content..anyContains">
+<code class="sig-prename descclassname">content..</code><code class="sig-name descname">anyContains</code><span class="sig-paren">(</span><em class="sig-param">rectangles</em>, <em class="sig-param">point</em><span class="sig-paren">)</span><a class="headerlink" href="#content..anyContains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether any rectangle in <code class="docutils literal notranslate"><span class="pre">rectangles</span></code> contains <code class="docutils literal notranslate"><span class="pre">point</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rectangles</strong> – A sequence of rectangles, each expressed by its four
+attributes <code class="docutils literal notranslate"><span class="pre">left</span></code>, <code class="docutils literal notranslate"><span class="pre">right</span></code>, <code class="docutils literal notranslate"><span class="pre">top</span></code> and <code class="docutils literal notranslate"><span class="pre">bottom</span></code>.</p></li>
+<li><p><strong>point</strong> – A pair of two values, the first in horizontal direction and the
+second in vertical direction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if any rectangle contains the point, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="content..contains">
+<code class="sig-prename descclassname">content..</code><code class="sig-name descname">contains</code><span class="sig-paren">(</span><em class="sig-param">rectangle</em>, <em class="sig-param">point</em><span class="sig-paren">)</span><a class="headerlink" href="#content..contains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether <code class="docutils literal notranslate"><span class="pre">rectangle</span></code> contains <code class="docutils literal notranslate"><span class="pre">point</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rectangle</strong> – A rectangle, expressed by its four attributes <code class="docutils literal notranslate"><span class="pre">left</span></code>,
+<code class="docutils literal notranslate"><span class="pre">right</span></code>, <code class="docutils literal notranslate"><span class="pre">top</span></code> and <code class="docutils literal notranslate"><span class="pre">bottom</span></code>.</p></li>
+<li><p><strong>point</strong> – A pair of two values, the first in horizontal direction and the
+second in vertical direction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the rectangle contains the point, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="content..createArrowNode">
+<code class="sig-prename descclassname">content..</code><code class="sig-name descname">createArrowNode</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">top</em>, <em class="sig-param">left</em><span class="sig-paren">)</span><a class="headerlink" href="#content..createArrowNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an arrow node on the info box.</p>
+<p>Arrow nodes allow users to move the info box into a corner of their choice.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parent</strong> – The parent node for which to create an arrow node as a child.</p></li>
+<li><p><strong>top</strong> – Whether the arrow points to the top.</p></li>
+<li><p><strong>left</strong> – Whether the arrow points to the left.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="content..createInfoBox">
+<code class="sig-prename descclassname">content..</code><code class="sig-name descname">createInfoBox</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#content..createInfoBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the info box (i.e. the main Yokome interface); place it on the page.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="content..disambiguateTargetToken">
+<code class="sig-prename descclassname">content..</code><code class="sig-name descname">disambiguateTargetToken</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="headerlink" href="#content..disambiguateTargetToken" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initiate disambiguation on a token.</p>
+<p>Find the token (a text node) under the mouse pointer and start a timeout for
+disambiguation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event</strong> – The event that determines which token to disambiguate.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="content..getCursorPosition">
+<code class="sig-prename descclassname">content..</code><code class="sig-name descname">getCursorPosition</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="headerlink" href="#content..getCursorPosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the mouse position described by the event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event</strong> – A mouse event.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A pair of two values, the first in horizontal direction and the
+second in vertical direction, describing the x and y coordinates of the
+mouse position during the event.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="content..getHighestZIndex">
+<code class="sig-prename descclassname">content..</code><code class="sig-name descname">getHighestZIndex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#content..getHighestZIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine the highest z-dimension index of any element on the page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The highest z-index.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="content..getIndex">
+<code class="sig-prename descclassname">content..</code><code class="sig-name descname">getIndex</code><span class="sig-paren">(</span><em class="sig-param">node</em><span class="sig-paren">)</span><a class="headerlink" href="#content..getIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the index of <code class="docutils literal notranslate"><span class="pre">node</span></code> (the number of siblings that precede it).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node</strong> – The node to determine the index for.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The number of siblings that precede <code class="docutils literal notranslate"><span class="pre">node</span></code>, or <code class="docutils literal notranslate"><span class="pre">-1</span></code> if <code class="docutils literal notranslate"><span class="pre">node</span>
+<span class="pre">===</span> <span class="pre">null</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="content..initialize">
+<code class="sig-prename descclassname">content..</code><code class="sig-name descname">initialize</code><span class="sig-paren">(</span><em class="sig-param">nodeFilter</em><span class="sig-paren">)</span><a class="headerlink" href="#content..initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the page for tokenization and disambiguation tasks.</p>
+<p>Arm every relevant element with <code class="docutils literal notranslate"><span class="pre">onmouseenter</span></code> events.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nodeFilter</strong> – A node filter to detect relevant elements.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="content..initiateTabSwitching">
+<code class="sig-prename descclassname">content..</code><code class="sig-name descname">initiateTabSwitching</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="headerlink" href="#content..initiateTabSwitching" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display the content of a tab that is a parent element of the target of
+<code class="docutils literal notranslate"><span class="pre">event</span></code> or that target itself.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event</strong> – An <code class="docutils literal notranslate"><span class="pre">onclick</span></code> event that targets a tab of the info box or a
+child thereof.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="content..maybeRefreshTabs">
+<code class="sig-prename descclassname">content..</code><code class="sig-name descname">maybeRefreshTabs</code><span class="sig-paren">(</span><em class="sig-param">node</em><span class="sig-paren">)</span><a class="headerlink" href="#content..maybeRefreshTabs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disambiguate the text in <code class="docutils literal notranslate"><span class="pre">node</span></code> based on its surrounding text if the
+disambiguation timeout was last started on this node.</p>
+<p>Request disambiguation at the server.</p>
+<p>Intended to be called by a timeout event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event</strong> – The original event that lauched the timeout.</p></li>
+<li><p><strong>node</strong> – A text node, inserted by a tokenization process.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="content..maybeTokenize">
+<code class="sig-prename descclassname">content..</code><code class="sig-name descname">maybeTokenize</code><span class="sig-paren">(</span><em class="sig-param">event</em>, <em class="sig-param">node</em><span class="sig-paren">)</span><a class="headerlink" href="#content..maybeTokenize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tokenize the text in <code class="docutils literal notranslate"><span class="pre">node</span></code> if the tokenization timeout was last started on
+this node.</p>
+<p>Request tokenization at the server.</p>
+<p>Intended to be called by a timeout event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event</strong> – The original event that lauched the timeout.</p></li>
+<li><p><strong>node</strong> – A text node.  A child node of <code class="docutils literal notranslate"><span class="pre">event.target</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="content..movebox">
+<code class="sig-prename descclassname">content..</code><code class="sig-name descname">movebox</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="headerlink" href="#content..movebox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move the box into the corner indicated by the arrow node that is the target
+of <code class="docutils literal notranslate"><span class="pre">event</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event</strong> – An <code class="docutils literal notranslate"><span class="pre">onlick</span></code> event.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="content..post">
+<code class="sig-prename descclassname">content..</code><code class="sig-name descname">post</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">data</em>, <em class="sig-param">node</em>, <em class="sig-param">callback</em>, <em class="sig-param">args</em><span class="sig-paren">)</span><a class="headerlink" href="#content..post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an HTTP POST request.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> – The url to make the request to.</p></li>
+<li><p><strong>data</strong> – The data to send.</p></li>
+<li><p><strong>node</strong> – A node that is the first argument to <code class="docutils literal notranslate"><span class="pre">callback</span></code>.</p></li>
+<li><p><strong>callback</strong> – A function to be called after a successful response.
+<code class="docutils literal notranslate"><span class="pre">callback</span></code> is called with <code class="docutils literal notranslate"><span class="pre">node</span></code>, the JSON-parsed response text, and
+<code class="docutils literal notranslate"><span class="pre">args</span></code>.</p></li>
+<li><p><strong>args</strong> – Additional arguments to be passed to <code class="docutils literal notranslate"><span class="pre">callback</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="content..refreshTabs">
+<code class="sig-prename descclassname">content..</code><code class="sig-name descname">refreshTabs</code><span class="sig-paren">(</span><em class="sig-param">node</em>, <em class="sig-param">lexemes</em>, <em class="sig-param">args</em><span class="sig-paren">)</span><a class="headerlink" href="#content..refreshTabs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the info box to reflect information on the disambiguate node <code class="docutils literal notranslate"><span class="pre">node</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node</strong> – A text node, inserted by a tokenization process.</p></li>
+<li><p><strong>lexemes</strong> – A response after word-sense disambiguation, a parsed JSON
+document.</p></li>
+<li><p><strong>args</strong> – Not used.  For compatibility with <code class="xref js js-func docutils literal notranslate"><span class="pre">post()</span></code> only.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="content..removeInfoBox">
+<code class="sig-prename descclassname">content..</code><code class="sig-name descname">removeInfoBox</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#content..removeInfoBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the info box (i.e. the main Yokome interface) from the page.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="content..resetDisambiguationTimeoutStart">
+<code class="sig-prename descclassname">content..</code><code class="sig-name descname">resetDisambiguationTimeoutStart</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#content..resetDisambiguationTimeoutStart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the timeout start time for disambiguation.</p>
+<p>There is one such time for each page.  This helps detecting which element
+triggered a disambiguation request last.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="content..resetTokenizerTimeoutStart">
+<code class="sig-prename descclassname">content..</code><code class="sig-name descname">resetTokenizerTimeoutStart</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#content..resetTokenizerTimeoutStart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the timeout start time for tokenization.</p>
+<p>There is one such time for each page.  This helps detecting which element
+triggered a tokenization request last.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="content..switchToTab">
+<code class="sig-prename descclassname">content..</code><code class="sig-name descname">switchToTab</code><span class="sig-paren">(</span><em class="sig-param">node</em><span class="sig-paren">)</span><a class="headerlink" href="#content..switchToTab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display the content of the tab that is associated with <code class="docutils literal notranslate"><span class="pre">node</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node</strong> – A tab of the info box.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="content..tokenize">
+<code class="sig-prename descclassname">content..</code><code class="sig-name descname">tokenize</code><span class="sig-paren">(</span><em class="sig-param">node</em>, <em class="sig-param">response</em>, <em class="sig-param">args</em><span class="sig-paren">)</span><a class="headerlink" href="#content..tokenize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace the text of <code class="docutils literal notranslate"><span class="pre">node</span></code> with the text received from the tokenizer.</p>
+<p>Initiate disambiguation on the part of the text that is in the area of the
+mouse event that launched the tokenization request.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node</strong> – The text node whose text to replace.</p></li>
+<li><p><strong>response</strong> – The response from the tokenizer, parsed JSON document.</p></li>
+<li><p><strong>args</strong> – A list of the form <code class="docutils literal notranslate"><span class="pre">[event,</span> <span class="pre">head,</span> <span class="pre">tail]</span></code>, where <code class="docutils literal notranslate"><span class="pre">event</span></code> is
+the original event that launched the tokenization action, and <code class="docutils literal notranslate"><span class="pre">head</span></code>
+and <code class="docutils literal notranslate"><span class="pre">tail</span></code> are the leading and trailing whitespaces from the original
+text, respectively.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 

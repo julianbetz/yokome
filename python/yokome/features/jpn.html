@@ -11,6 +11,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="yokome.features.symbol_stream" href="symbol_stream.html" />
@@ -44,7 +45,9 @@
           <ul class="nav navbar-nav">
             
                 <li><a href="../../../py-modindex.html">Python Modules</a></li>
+                <li><a href="../../../webextension.html">WebExtension</a></li>
                 <li><a href="../../../genindex.html">Index</a></li>
+                <li><a href="../../../future_work.html">Future Work</a></li>
             
             
               <li class="dropdown globaltoc-container">
@@ -57,7 +60,8 @@
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../yokome.html"><code class="docutils literal notranslate"><span class="pre">yokome</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension (JavaScript)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../future_work.html">Where to go from here</a></li>
 </ul>
 </ul>
 </li>
@@ -108,22 +112,102 @@
       
   <div class="section" id="module-yokome.features.jpn">
 <span id="yokome-features-jpn"></span><h1><code class="docutils literal notranslate"><span class="pre">yokome.features.jpn</span></code><a class="headerlink" href="#module-yokome.features.jpn" title="Permalink to this headline">¶</a></h1>
+<p>This package makes extensive use of symbol streams.  To understand how this
+data structure is defined, see <a class="reference internal" href="symbol_stream.html#module-yokome.features.symbol_stream" title="yokome.features.symbol_stream"><code class="xref py py-mod docutils literal notranslate"><span class="pre">symbol_stream</span></code></a>.</p>
 <dl class="function">
 <dt id="yokome.features.jpn.chasen_loader">
 <code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">chasen_loader</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.chasen_loader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads a file from the JEITA corpus and yields symbols from it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – The filename of the document to load.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A symbol stream that encodes the text from the loaded document.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.combining_voice_mark_fold">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">combining_voice_mark_fold</code><span class="sig-paren">(</span><em class="sig-param">symbol_stream</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.combining_voice_mark_fold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalize words with combining voice marks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>symbol_stream</strong> – A stream over symbols.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A symbol stream like the input symbol stream, with combining
+voice/semi-voice marks combined with their preceding
+voicable/semi-voicable symbols to form voiced/semi-voiced symbols.
+Voice/semi-voice marks that do not follow a voicable/semi-voicable
+symbol are replaced by KATAKANA-HIRAGANA VOICED SOUND MARK (U+309B) /
+KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK (U+309c).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.content_sentences">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">content_sentences</code><span class="sig-paren">(</span><em class="sig-param">symbol_streams</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.content_sentences" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter out non-content symbol streams.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>symbol_streams</strong> – An iterable over symbol streams.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An iterable over all symbol streams that contain content symbols.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.fullwidth_fold">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">fullwidth_fold</code><span class="sig-paren">(</span><em class="sig-param">symbol_stream</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.fullwidth_fold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn the ASCII space, the Latin letters in ASCII, and the halfwidth forms
+into their fullwidth counterparts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>symbol_stream</strong> – A stream over symbols.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A symbol stream like the input symbol stream, with halfwidth
+characters replaced by their fullwidth counterparts.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="yokome.features.jpn.hiragana_to_katakana">
-<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">hiragana_to_katakana</code><span class="sig-paren">(</span><em class="sig-param">phrase</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.hiragana_to_katakana" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">hiragana_to_katakana</code><span class="sig-paren">(</span><em class="sig-param">phrase: str</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#yokome.features.jpn.hiragana_to_katakana" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert hiragana to katakana.</p>
 <p>Do not handle the use of prolonged sound marks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>phrase</strong> (<em>str</em>) – The phrase in which to replace all hiragana characters by
+katakana characters.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.is_content_sentence">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">is_content_sentence</code><span class="sig-paren">(</span><em class="sig-param">symbol_stream</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.is_content_sentence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detect whether the symbol stream contains content symbols.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>symbol_stream</strong> – A stream over symbols.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the symbol stream contains content symbols, else
+<code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="yokome.features.jpn.is_reading">
-<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">is_reading</code><span class="sig-paren">(</span><em class="sig-param">phrase</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#yokome.features.jpn.is_reading" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">is_reading</code><span class="sig-paren">(</span><em class="sig-param">phrase: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#yokome.features.jpn.is_reading" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determine whether the specified phrase is a reading representation.</p>
 <p>Reading representations contain only characters from the hiragana, hiragana
 phonetic extensions, katakana and katakana phonetic extensions unicode
@@ -138,8 +222,41 @@ punctuation.</p>
 <dd class="field-odd"><p><strong>phrase</strong> (<em>str</em>) – The phrase to test.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True if the specified phrase is a reading representation, False
-otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the specified phrase is a reading representation,
+<code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.iteration_fold">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">iteration_fold</code><span class="sig-paren">(</span><em class="sig-param">symbol_stream</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.iteration_fold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalize words with iteration marks.</p>
+<p>Replace each kana/kanji iteration mark with the characters it stands for.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>symbol_stream</strong> – A stream over symbols.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A symbol stream like the input symbol stream, with iteration
+characters replaced by the characters that they stand for.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.longest_common_prefix_len">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">longest_common_prefix_len</code><span class="sig-paren">(</span><em class="sig-param">a</em>, <em class="sig-param">b</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.longest_common_prefix_len" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine the length of the longest common prefix of two strings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>str</em>) – The first string.</p></li>
+<li><p><strong>b</strong> (<em>str</em>) – The second string.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The length of the longest common prefix of both strings.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -152,10 +269,60 @@ otherwise.</p>
 field separator) in JUMAN++ output.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>splits</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – section for word token (graphic), word token
-(phonetic), and lemma, split on ‘ ‘ from a joint string
-representation with ‘ ‘ as separator.  The input may contain more
-than three elements.</p>
+<dd class="field-odd"><p><strong>splits</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – The sections for word token (graphic), word token
+(phonetic), and lemma, split on ‘ ‘ from a joint string representation
+with ‘ ‘ as separator.  The input may contain more than three elements.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A triple consisting of the graphic word token, the phonetic word
+token, and the lemma.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.parse_jumanpp_output">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">parse_jumanpp_output</code><span class="sig-paren">(</span><em class="sig-param">output</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.parse_jumanpp_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse JUMAN++ tokenizer output format.</p>
+<p>The output is one-token-per-line, with space-separated annotations.  There
+are twelve annotations for regular tokens and twelve annotations and an
+additional ‘&#64; ‘ at the beginning of lines to mark the beginning of
+alternatives for a preceding regular token.</p>
+<p>Start processing from the end of the line, since there are ambiguities for
+the first three annotation types: Spaces are denoted as ‘’, while
+backslashes are denoted by ‘’ only, resulting in conflicting
+interpretations for ‘’ as “space”, and “backslash” + “end of annotation”,
+respectively.</p>
+<p>Furthermore, ‘”’ is not escaped or enclosed in single quotation
+marks, while the last annotation, if existent, is always enclosed
+in double quotation marks.  Thus, manual line splitting is
+necessary, and cannot be done via shlex.</p>
+<p>The remaining annotation types are a fixed set of keywords, with odd and
+even annotations encoding the same information, once in string form and
+once as a numerical ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>output</strong> (<em>str</em>) – The raw output of JUMAN++.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An iterable over tuples of candidates, each candidate being one of
+the possible tokens for its token position in the iterable.  A candidate
+is a dictionary of the form described in <a class="reference internal" href="#yokome.features.jpn.to_dict" title="yokome.features.jpn.to_dict"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_dict()</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.repetition_contraction">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">repetition_contraction</code><span class="sig-paren">(</span><em class="sig-param">symbol_stream</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.repetition_contraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contract representations of repetition symbols in the input stream.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>symbol_stream</strong> – A stream over symbols.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A symbol stream like the input symbol stream, with repetition
+symbols contracted to one symbol only.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -165,30 +332,231 @@ than three elements.</p>
 <code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">segmenter</code><span class="sig-paren">(</span><em class="sig-param">symbol_stream</em>, <em class="sig-param">whitespace_marks_end_of_paragraph=False</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.segmenter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Accept a stream of symbols and yield symbol streams for each sentence.</p>
 <p>This function works most reliably with balanced bracketing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>symbol_stream</strong> – A stream over symbols.</p></li>
+<li><p><strong>whitespace_marks_end_of_paragraph</strong> (<em>bool</em>) – Whether whitespace marks the
+end of a paragraph in the symbol stream.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An iterable over symbol streams, each corresponding to a sentence.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.semivoice">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">semivoice</code><span class="sig-paren">(</span><em class="sig-param">char: int</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#yokome.features.jpn.semivoice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the semi-voiced version of <code class="docutils literal notranslate"><span class="pre">char</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>char</strong> (<em>int</em>) – An unvoiced Unicode character to semi-voice.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The Unicode character that is the semi-voiced version of <code class="docutils literal notranslate"><span class="pre">char</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.stream_tokenizer">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">stream_tokenizer</code><span class="sig-paren">(</span><em class="sig-param">symbol_stream</em>, <em class="sig-param">partially_annotated=False</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.stream_tokenizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tokenize a symbol stream using JUMAN++, in a synchronous fashion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>symbol_stream</strong> – The symbol stream to tokenize.</p></li>
+<li><p><strong>partially_annotated</strong> (<em>bool</em>) – Whether the input is partially annotated.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An iterable over tuples of candidates, each candidate being one of
+the possible tokens for its token position in the iterable.  A candidate
+is a dictionary of the form described in <a class="reference internal" href="#yokome.features.jpn.to_dict" title="yokome.features.jpn.to_dict"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_dict()</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.strip">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">strip</code><span class="sig-paren">(</span><em class="sig-param">symbol_streams</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.strip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove leading and trailing whitespace from a symbol stream.</p>
+<p>The definition of whitespace is language-dependent and refers to Japanese
+conventions here.</p>
+<p>As is generally the case with symbol streams, all removed whitespace can be
+restored using <a class="reference internal" href="symbol_stream.html#yokome.features.symbol_stream.expand" title="yokome.features.symbol_stream.expand"><code class="xref py py-func docutils literal notranslate"><span class="pre">symbol_stream.expand()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>symbol_stream</strong> – A stream over symbols.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A symbol stream like the input symbol stream, with whitespace
+replaced by <code class="docutils literal notranslate"><span class="pre">None</span></code>-symbols.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="yokome.features.jpn.to_dict">
 <code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">to_dict</code><span class="sig-paren">(</span><em class="sig-param">token</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Turn an array of JUMAN++-style token annotations into a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>token</strong> – An array version of a line of JUMAN++ output.  It either has
+twelve elements and is the first candidate for a token, or it has
+thirteen elements and is a later candidate for a token.  In the latter
+case the first element is <code class="docutils literal notranslate"><span class="pre">'&#64;'</span></code>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>A dictionary describing the token candidate corresponding to the
+input.  It has the following form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s1">&#39;surface_form&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;graphic&#39;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="s1">&#39;phonetic&#39;</span><span class="p">:</span> <span class="o">...</span><span class="p">},</span>
+  <span class="s1">&#39;base_form&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;graphic&#39;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="s1">&#39;phonetic&#39;</span><span class="p">:</span> <span class="o">...</span><span class="p">},</span>
+  <span class="s1">&#39;lemma&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;graphic&#39;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="s1">&#39;phonetic&#39;</span><span class="p">:</span> <span class="o">...</span><span class="p">},</span>
+  <span class="s1">&#39;pos&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">list</span> <span class="n">of</span> <span class="n">POS</span> <span class="n">tags</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="s1">&#39;inflection&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">list</span> <span class="n">of</span> <span class="n">POS</span><span class="o">/</span><span class="n">inflection</span> <span class="n">tags</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The surface form is the inflected form as it was found in the text,
+along with its reading in katakana.  The base form is the uninflected
+form.  For both graphic representation and reading, it may be different
+from the lemma for different graphic variants of the same lexeme.  The
+lemma is the canonical form for both graphic reprepresentation and
+reading, intended to be unique for all variants of a lexeme.</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.to_morae">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">to_morae</code><span class="sig-paren">(</span><em class="sig-param">symbol_stream</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.to_morae" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group morae in a symbol stream.</p>
+<p>A mora is a subunit of a syllable that may consist of multiple characters.
+For Japanese, it is the logical unit of counting sounds of speech.  A
+Japanese syllable typically consists of one mora or two morae where the
+second mora prolongs the first.  A Japanese mora consists of a regular kana
+letter or a kana letter and an ensuing glide sound, e.g. “ち”, “ゆ” or “ちゅ
+” (but not “ちゅう”).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>symbol_stream</strong> – A stream over symbols.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of morae, each consisting of its symbols.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="yokome.features.jpn.tokenize_async">
 <code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">tokenize_async</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">partially_annotated=False</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.tokenize_async" title="Permalink to this definition">¶</a></dt>
-<dd><p>While waiting for the result of tokenization is performed asynchronously,
+<dd><p>Tokenize a text using JUMAN++, in an asynchronous fashion.</p>
+<p>While waiting for the result of tokenization is performed asynchronously,
 the token candidates are yielded in a blocking fashion, i.e. every coroutine
 building on this tokenizer has access to all resulting tokens without
 interference of other coroutines.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>str</em>) – The text to tokenize.</p></li>
+<li><p><strong>partially_annotated</strong> (<em>bool</em>) – Whether the input is partially annotated.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An iterable over tuples of candidates, each candidate being one of
+the possible tokens for its token position in the iterable.  A candidate
+is a dictionary of the form described in <a class="reference internal" href="#yokome.features.jpn.to_dict" title="yokome.features.jpn.to_dict"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_dict()</span></code></a>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="yokome.features.jpn.tokenize_stream_async">
 <code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">tokenize_stream_async</code><span class="sig-paren">(</span><em class="sig-param">symbol_stream</em>, <em class="sig-param">partially_annotated=False</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.tokenize_stream_async" title="Permalink to this definition">¶</a></dt>
-<dd><p>While waiting for the result of tokenization is performed asynchronously,
+<dd><p>Tokenize a symbol stream using JUMAN++, in an asynchronous fashion.</p>
+<p>While waiting for the result of tokenization is performed asynchronously,
 the token candidates are yielded in a blocking fashion, i.e. every coroutine
 building on this tokenizer has access to all resulting tokens without
 interference of other coroutines.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>symbol_stream</strong> – The symbol stream to tokenize.</p></li>
+<li><p><strong>partially_annotated</strong> (<em>bool</em>) – Whether the input is partially annotated.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An iterable over tuples of candidates, each candidate being one of
+the possible tokens for its token position in the iterable.  A candidate
+is a dictionary of the form described in <a class="reference internal" href="#yokome.features.jpn.to_dict" title="yokome.features.jpn.to_dict"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_dict()</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.tokenizer">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">tokenizer</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">partially_annotated=False</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.jpn.tokenizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tokenize a text using JUMAN++, in a synchronous fashion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>str</em>) – The text to tokenize.</p></li>
+<li><p><strong>partially_annotated</strong> (<em>bool</em>) – Whether the input is partially annotated.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An iterable over tuples of candidates, each candidate being one of
+the possible tokens for its token position in the iterable.  A candidate
+is a dictionary of the form described in <a class="reference internal" href="#yokome.features.jpn.to_dict" title="yokome.features.jpn.to_dict"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_dict()</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.unsemivoice">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">unsemivoice</code><span class="sig-paren">(</span><em class="sig-param">char: int</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#yokome.features.jpn.unsemivoice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the unvoiced version of <code class="docutils literal notranslate"><span class="pre">char</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>char</strong> (<em>int</em>) – A semi-voiced Unicode character to unvoice.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The Unicode character that is the unvoiced version of <code class="docutils literal notranslate"><span class="pre">char</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.unvoice">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">unvoice</code><span class="sig-paren">(</span><em class="sig-param">char: int</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#yokome.features.jpn.unvoice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the unvoiced version of <code class="docutils literal notranslate"><span class="pre">char</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>char</strong> (<em>int</em>) – A voiced Unicode character to unvoice.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The Unicode character that is the unvoiced version of <code class="docutils literal notranslate"><span class="pre">char</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.jpn.voice">
+<code class="sig-prename descclassname">yokome.features.jpn.</code><code class="sig-name descname">voice</code><span class="sig-paren">(</span><em class="sig-param">char: int</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#yokome.features.jpn.voice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the voiced version of <code class="docutils literal notranslate"><span class="pre">char</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>char</strong> (<em>int</em>) – An unvoiced Unicode character to voice.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The Unicode character that is the voiced version of <code class="docutils literal notranslate"><span class="pre">char</span></code>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

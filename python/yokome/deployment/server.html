@@ -11,6 +11,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="yokome.features" href="../features.html" />
@@ -44,7 +45,9 @@
           <ul class="nav navbar-nav">
             
                 <li><a href="../../../py-modindex.html">Python Modules</a></li>
+                <li><a href="../../../webextension.html">WebExtension</a></li>
                 <li><a href="../../../genindex.html">Index</a></li>
+                <li><a href="../../../future_work.html">Future Work</a></li>
             
             
               <li class="dropdown globaltoc-container">
@@ -57,7 +60,8 @@
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../yokome.html"><code class="docutils literal notranslate"><span class="pre">yokome</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension (JavaScript)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../future_work.html">Where to go from here</a></li>
 </ul>
 </ul>
 </li>
@@ -111,18 +115,14 @@
 <dl class="exception">
 <dt id="yokome.deployment.server.BadRequestError">
 <em class="property">exception </em><code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">BadRequestError</code><a class="headerlink" href="#yokome.deployment.server.BadRequestError" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>HTTP <code class="docutils literal notranslate"><span class="pre">Bad</span> <span class="pre">Request</span> <span class="pre">Error</span></code>.</p>
+</dd></dl>
 
 <dl class="data">
 <dt id="yokome.deployment.server.ENGLISH">
 <code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">ENGLISH</code><em class="property"> = 'eng'</em><a class="headerlink" href="#yokome.deployment.server.ENGLISH" title="Permalink to this definition">¶</a></dt>
 <dd><p>str: ISO 639-3 language code for English.</p>
 </dd></dl>
-
-<dl class="exception">
-<dt id="yokome.deployment.server.EmptyBodyException">
-<em class="property">exception </em><code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">EmptyBodyException</code><a class="headerlink" href="#yokome.deployment.server.EmptyBodyException" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="data">
 <dt id="yokome.deployment.server.JAPANESE">
@@ -147,7 +147,8 @@ start (including) and end (including) characters.</p>
 <dl class="exception">
 <dt id="yokome.deployment.server.NotFoundError">
 <em class="property">exception </em><code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">NotFoundError</code><a class="headerlink" href="#yokome.deployment.server.NotFoundError" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>HTTP <code class="docutils literal notranslate"><span class="pre">Not</span> <span class="pre">Found</span> <span class="pre">Error</span></code>.</p>
+</dd></dl>
 
 <dl class="data">
 <dt id="yokome.deployment.server.PORT">
@@ -170,12 +171,14 @@ start (including) and end (including) characters.</p>
 <dl class="exception">
 <dt id="yokome.deployment.server.UnprocessableEntityError">
 <em class="property">exception </em><code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">UnprocessableEntityError</code><a class="headerlink" href="#yokome.deployment.server.UnprocessableEntityError" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>HTTP <code class="docutils literal notranslate"><span class="pre">Unprocessable</span> <span class="pre">Entity</span> <span class="pre">Error</span></code>.</p>
+</dd></dl>
 
 <dl class="exception">
 <dt id="yokome.deployment.server.UnsupportedMediaTypeError">
 <em class="property">exception </em><code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">UnsupportedMediaTypeError</code><a class="headerlink" href="#yokome.deployment.server.UnsupportedMediaTypeError" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>HTTP <code class="docutils literal notranslate"><span class="pre">Unsupported</span> <span class="pre">Media</span> <span class="pre">Type</span> <span class="pre">Error</span></code>.</p>
+</dd></dl>
 
 <dl class="data">
 <dt id="yokome.deployment.server.WSD_SERVANT">
@@ -190,9 +193,149 @@ start (including) and end (including) characters.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="yokome.deployment.server.api_disambiguate">
+<code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">api_disambiguate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yokome.deployment.server.api_disambiguate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Respond to an HTTP POST request at the disambiguation endpoint.</p>
+<p>The expected data has the following form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s1">&#39;language&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">ISO</span> <span class="mi">639</span><span class="o">-</span><span class="mi">3</span> <span class="n">language</span> <span class="n">code</span> <span class="ow">or</span> <span class="n">null</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="s1">&#39;tokens&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">A</span> <span class="n">sentence</span><span class="p">,</span> <span class="n">split</span> <span class="n">into</span> <span class="n">its</span> <span class="n">tokens</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="s1">&#39;i&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">position</span> <span class="n">of</span> <span class="n">the</span> <span class="n">token</span> <span class="n">of</span> <span class="n">interest</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An HTTP response.  If the request was successful, the data is a
+JSON of the dictionary returned by <a class="reference internal" href="#yokome.deployment.server.disambiguate" title="yokome.deployment.server.disambiguate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">disambiguate()</span></code></a>.  Otherwise,
+send an error message, see <a class="reference internal" href="#yokome.deployment.server.handle_error" title="yokome.deployment.server.handle_error"><code class="xref py py-meth docutils literal notranslate"><span class="pre">handle_error()</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.deployment.server.api_tokenize">
+<code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">api_tokenize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yokome.deployment.server.api_tokenize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Respond to an HTTP POST request at the tokenizer endpoint.</p>
+<p>The expected data has the following form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s1">&#39;language&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">ISO</span> <span class="mi">639</span><span class="o">-</span><span class="mi">3</span> <span class="n">language</span> <span class="n">code</span> <span class="ow">or</span> <span class="n">null</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">the</span> <span class="n">text</span> <span class="n">to</span> <span class="n">tokenize</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An HTTP response.  If the request was successful, the data is a
+JSON dictionary that has an entry <code class="docutils literal notranslate"><span class="pre">'language'</span></code> for the
+provided/detected language and may have an entry <code class="docutils literal notranslate"><span class="pre">'sentences'</span></code> for the
+tokenized sentences.  Otherwise, send an error message, see
+<a class="reference internal" href="#yokome.deployment.server.handle_error" title="yokome.deployment.server.handle_error"><code class="xref py py-meth docutils literal notranslate"><span class="pre">handle_error()</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.deployment.server.api_tokenizer_inform">
+<code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">api_tokenizer_inform</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yokome.deployment.server.api_tokenizer_inform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Respond to an HTTP OPTIONS request at the tokenizer endpoint.</p>
+<p>Allow the POST method from all origins.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.deployment.server.api_wsd_inform">
+<code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">api_wsd_inform</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yokome.deployment.server.api_wsd_inform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Respond to an HTTP OPTIONS request at the disambiguation endpoint.</p>
+<p>Allow the POST method from all origins.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.deployment.server.detect_language">
+<code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">detect_language</code><span class="sig-paren">(</span><em class="sig-param">text</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.deployment.server.detect_language" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detect the language in which the text was written.</p>
+<p>Currently only support Japanese.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – The text to detect a language in.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An ISO 639-3 language code, if a language was detected, <code class="docutils literal notranslate"><span class="pre">None</span></code>
+otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="yokome.deployment.server.disambiguate">
 <code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">disambiguate</code><span class="sig-paren">(</span><em class="sig-param">tokens</em>, <em class="sig-param">i</em>, <em class="sig-param">language</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.deployment.server.disambiguate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disambiguate the token at index <code class="docutils literal notranslate"><span class="pre">i</span></code> for the specified language.</p>
+<p>Currently only support Japanese.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tokens</strong> – A sentence, split into its tokens.</p></li>
+<li><p><strong>i</strong> (<em>int</em>) – The position of the token of interest in <code class="docutils literal notranslate"><span class="pre">tokens</span></code>.</p></li>
+<li><p><strong>language</strong> (<em>str</em>) – ISO 639-3 language code of the language of the tokens.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>A dictionary containing an entry <code class="docutils literal notranslate"><span class="pre">'language'</span></code> for the language
+and an entry <code class="docutils literal notranslate"><span class="pre">'lexemes'</span></code> for the lexemes of the token at index <code class="docutils literal notranslate"><span class="pre">i</span></code>.</p>
+<p>The entry <code class="docutils literal notranslate"><span class="pre">'lexemes'</span></code> is list of data on lexemes, ranked by their
+overall suitability to describe the meaning of the token at <code class="docutils literal notranslate"><span class="pre">i</span></code>, with
+their connotations in turn associated with their suitability.  Each
+element is a dictionary of the following form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s1">&#39;entry_id&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">ID</span> <span class="n">of</span> <span class="n">the</span> <span class="n">lexeme</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">dictionary</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="s1">&#39;headwords&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">list</span> <span class="n">of</span> <span class="n">lemmas</span> <span class="k">for</span> <span class="n">the</span> <span class="n">lexeme</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="s1">&#39;discriminator&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">int</span> <span class="k">for</span> <span class="n">lexemes</span> <span class="k">with</span> <span class="n">the</span> <span class="n">same</span> <span class="n">main</span> <span class="n">headword</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="s1">&#39;roles&#39;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s1">&#39;poss&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">POS</span> <span class="n">tag</span> <span class="nb">list</span> <span class="k">for</span> <span class="n">the</span> <span class="n">role</span><span class="o">&gt;</span><span class="p">,</span>
+      <span class="s1">&#39;connotations&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s1">&#39;sense_id&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">the</span> <span class="n">ID</span> <span class="n">of</span> <span class="n">the</span> <span class="n">connotation</span> <span class="n">within</span> <span class="n">the</span> <span class="n">lexeme</span><span class="o">&gt;</span><span class="p">,</span>
+          <span class="s1">&#39;glosses&#39;</span><span class="p">:</span> <span class="p">((</span><span class="o">&lt;</span><span class="n">gloss_type</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">gloss</span><span class="o">&gt;</span><span class="p">),</span> <span class="o">...</span><span class="p">),</span>
+          <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">connotation</span> <span class="n">score</span><span class="o">&gt;</span>
+        <span class="p">},</span>
+        <span class="o">...</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="o">...</span>
+  <span class="p">],</span>
+  <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">overall</span> <span class="n">lexeme</span> <span class="n">score</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – If the requested language is not supported.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.deployment.server.handle_error">
+<code class="sig-prename descclassname">yokome.deployment.server.</code><code class="sig-name descname">handle_error</code><span class="sig-paren">(</span><em class="sig-param">error</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.deployment.server.handle_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Catch errors for HTTP requests and provide apt responses.</p>
+<p>Handle the following errors:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Bad</span> <span class="pre">Request</span> <span class="pre">Error</span></code> (400)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Not</span> <span class="pre">Found</span> <span class="pre">Error</span></code> (404)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Unsupported</span> <span class="pre">Media</span> <span class="pre">Type</span> <span class="pre">Error</span></code> (415)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Unprocessable</span> <span class="pre">Entity</span> <span class="pre">Error</span></code> (422) (also while catching
+<code class="docutils literal notranslate"><span class="pre">TypeError</span></code>/<code class="docutils literal notranslate"><span class="pre">ValueError</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Not</span> <span class="pre">Implemented</span> <span class="pre">Error</span></code> (501)</p></li>
+</ul>
+<p>All remaining errors results in an <code class="docutils literal notranslate"><span class="pre">Internal</span> <span class="pre">Server</span> <span class="pre">Error</span></code> (500).</p>
+<p>The data in the response is an error message.  In case of the debug mode, a
+traceback is appended.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An HTTP response with the respective error.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">

@@ -11,6 +11,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="yokome.features.dictionary" href="dictionary.html" />
@@ -44,7 +45,9 @@
           <ul class="nav navbar-nav">
             
                 <li><a href="../../../py-modindex.html">Python Modules</a></li>
+                <li><a href="../../../webextension.html">WebExtension</a></li>
                 <li><a href="../../../genindex.html">Index</a></li>
+                <li><a href="../../../future_work.html">Future Work</a></li>
             
             
               <li class="dropdown globaltoc-container">
@@ -57,7 +60,8 @@
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../yokome.html"><code class="docutils literal notranslate"><span class="pre">yokome</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension (JavaScript)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../future_work.html">Where to go from here</a></li>
 </ul>
 </ul>
 </li>
@@ -111,22 +115,89 @@
 <dl class="function">
 <dt id="yokome.features.corpus.generate_graphic_character_vocabulary">
 <code class="sig-prename descclassname">yokome.features.corpus.</code><code class="sig-name descname">generate_graphic_character_vocabulary</code><span class="sig-paren">(</span><em class="sig-param">conn</em>, <em class="sig-param">min_coverage</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.corpus.generate_graphic_character_vocabulary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a vocabulary of characters from graphic representations of lemmas
-that covers at least the specified portion of the corpus.</p>
+<dd><p>Generate a vocabulary of characters from graphic representations of
+lemmas with the specified minimal corpus coverage.</p>
+<p>This is the smallest vocabulary of the most frequent characters so that
+these characters together cover at least a portion of <code class="docutils literal notranslate"><span class="pre">min_coverage</span></code> of
+the corpus.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conn</strong> – Database connection for statistics.</p></li>
+<li><p><strong>min_coverage</strong> (<em>float</em>) – The minimal coverage.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary from characters from graphic representations of lemmas
+to their frequency rank.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="yokome.features.corpus.generate_lemma_vocabulary">
 <code class="sig-prename descclassname">yokome.features.corpus.</code><code class="sig-name descname">generate_lemma_vocabulary</code><span class="sig-paren">(</span><em class="sig-param">conn</em>, <em class="sig-param">min_coverage</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.corpus.generate_lemma_vocabulary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a vocabulary that covers at least the specified portion of the
-corpus.</p>
+<dd><p>Generate a vocabulary of lemmas with the specified minimal corpus
+coverage.</p>
+<p>This is the smallest vocabulary of the most frequent words so that these
+words together cover at least a portion of <code class="docutils literal notranslate"><span class="pre">min_coverage</span></code> of the corpus.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conn</strong> – Database connection for statistics.</p></li>
+<li><p><strong>min_coverage</strong> (<em>float</em>) – The minimal coverage.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary from lemmas to their frequency rank.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="yokome.features.corpus.generate_phonetic_character_vocabulary">
 <code class="sig-prename descclassname">yokome.features.corpus.</code><code class="sig-name descname">generate_phonetic_character_vocabulary</code><span class="sig-paren">(</span><em class="sig-param">conn</em>, <em class="sig-param">min_coverage</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.corpus.generate_phonetic_character_vocabulary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a vocabulary of characters from phonetic representations of lemmas
-that covers at least the specified portion of the corpus.</p>
+<dd><p>Generate a vocabulary of characters from phonetic representations of
+lemmas with the specified minimal corpus coverage.</p>
+<p>This is the smallest vocabulary of the most frequent characters so that
+these characters together cover at least a portion of <code class="docutils literal notranslate"><span class="pre">min_coverage</span></code> of
+the corpus.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conn</strong> – Database connection for statistics.</p></li>
+<li><p><strong>min_coverage</strong> (<em>float</em>) – The minimal coverage.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary from characters from phonetic representations of lemmas
+to their frequency rank.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.corpus.generate_vocabulary_from">
+<code class="sig-prename descclassname">yokome.features.corpus.</code><code class="sig-name descname">generate_vocabulary_from</code><span class="sig-paren">(</span><em class="sig-param">language</em>, <em class="sig-param">sentences</em>, <em class="sig-param">min_coverage</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.corpus.generate_vocabulary_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a vocabulary with the specified minimal sentence coverage.</p>
+<p>This is the smallest vocabulary of the most frequent tokens so that these
+tokens together cover at least a portion of <code class="docutils literal notranslate"><span class="pre">min_coverage</span></code> of the
+sentences.  The tokens are determined by the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> method of the
+language.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>language</strong> (<em>yokome.language.Language</em>) – The language of interest.</p></li>
+<li><p><strong>sentences</strong> – A sequence of sentences, in a form that each sentence can
+be tokenized using the <code class="docutils literal notranslate"><span class="pre">tokenize</span></code> method of the language.</p></li>
+<li><p><strong>min_coverage</strong> (<em>float</em>) – The minimal coverage.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary from tokens to their frequency rank w.r.t. the
+sentences.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -147,6 +218,27 @@ of interest.</p>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The portion of tokens in the background corpus that are instances 
 of types that are at least as frequent as the type of interest.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.corpus.load_sentence">
+<code class="sig-prename descclassname">yokome.features.corpus.</code><code class="sig-name descname">load_sentence</code><span class="sig-paren">(</span><em class="sig-param">DATABASE</em>, <em class="sig-param">language</em>, <em class="sig-param">file</em>, <em class="sig-param">sequence_id</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.corpus.load_sentence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a sentence from the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>DATABASE</strong> (<em>str</em>) – The database file.</p></li>
+<li><p><strong>language</strong> (<em>str</em>) – ISO 639-3 language code of the language of interest.</p></li>
+<li><p><strong>file</strong> (<em>str</em>) – ID of the corpus document from which the sentence stems.</p></li>
+<li><p><strong>sequence_id</strong> (<em>int</em>) – The number of the sentence in the document,
+1-indexed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A string if the sentence only contains stop-character content
+(espc. whitespace); a tokenized sentence otherwise.</p>
 </dd>
 </dl>
 </dd></dl>

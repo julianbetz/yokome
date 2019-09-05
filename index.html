@@ -11,6 +11,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="yokome" href="python/yokome.html" />
@@ -43,7 +44,9 @@
           <ul class="nav navbar-nav">
             
                 <li><a href="py-modindex.html">Python Modules</a></li>
+                <li><a href="webextension.html">WebExtension</a></li>
                 <li><a href="genindex.html">Index</a></li>
+                <li><a href="future_work.html">Future Work</a></li>
             
             
               <li class="dropdown globaltoc-container">
@@ -56,7 +59,8 @@
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="python/yokome.html"><code class="docutils literal notranslate"><span class="pre">yokome</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="webextension.html">Yokome Firefox WebExtension</a></li>
+<li class="toctree-l1"><a class="reference internal" href="webextension.html">Yokome Firefox WebExtension (JavaScript)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="future_work.html">Where to go from here</a></li>
 </ul>
 </ul>
 </li>
@@ -123,6 +127,7 @@ Hamburg.  It consists of two parts: A backend written in python and a frontend
 packaged as a Firefox WebExtension.</p>
 <p>Learn how to use Yokome below or read the developer documentation for the
 <a class="reference internal" href="python/yokome.html"><span class="doc">backend</span></a> or the <a class="reference internal" href="webextension.html"><span class="doc">WebExtension</span></a>.</p>
+<p>To see what can be improved, take a look at the <a class="reference internal" href="future_work.html"><span class="doc">future work section</span></a>.</p>
 <div class="section" id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
 <p>The startup procedure below has been tested on Ubuntu 18.04.3 LTS.  The
@@ -150,9 +155,11 @@ docker-compose up
 <p>This will start the service on port 5003 on localhost.  The plugin will expect
 that the service runs on this port.</p>
 <p>The web extension is known to work with Firefox Developer Edition 70.0b1
-(64-bit).  You can get this version from
-<a class="reference external" href="https://download-installer.cdn.mozilla.net/pub/devedition/releases/70.0b1/">https://download-installer.cdn.mozilla.net/pub/devedition/releases/70.0b1/</a>.
-Extract the archive, open the resulting directory and start Firefox.</p>
+(64-bit).  To get this version, select the directory of your operating system
+and then <code class="docutils literal notranslate"><span class="pre">en-US</span></code> at
+<a class="reference external" href="https://github.com/julianbetz/yokome-browser/tree/master">https://github.com/julianbetz/yokome-browser/tree/master</a>.
+Download the installation files and extract/run them to have the proper Firefox
+version on your system.  Then start it.</p>
 <p>The extension is unsigned, so you have to give Firefox permission to run it.
 There are two ways to do so:</p>
 <ul class="simple">
@@ -183,8 +190,9 @@ you downloaded).</p></li>
 </div>
 <div class="section" id="how-to-use-yokome">
 <h2>How to Use Yokome<a class="headerlink" href="#how-to-use-yokome" title="Permalink to this headline">¶</a></h2>
-<p>Open a page of your choice with target-language content.  Yokome works on both
-HTTP and HTTPS web pages.</p>
+<p>Open a page of your choice with target-language content (e.g. the <a class="reference external" href="https://ja.wikipedia.org/wiki/%E3%83%A1%E3%82%A4%E3%83%B3%E3%83%9A%E3%83%BC%E3%82%B8">Japanese
+Wikipedia main page</a>).
+Yokome works on both HTTP and HTTPS web pages.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/address_bar.png"><img alt="symbol in address bar" src="_images/address_bar.png" style="width: 119.0px; height: 39.0px;" /></a>
 </div>

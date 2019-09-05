@@ -11,6 +11,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="yokome.util.persistence" href="persistence.html" />
@@ -44,7 +45,9 @@
           <ul class="nav navbar-nav">
             
                 <li><a href="../../../py-modindex.html">Python Modules</a></li>
+                <li><a href="../../../webextension.html">WebExtension</a></li>
                 <li><a href="../../../genindex.html">Index</a></li>
+                <li><a href="../../../future_work.html">Future Work</a></li>
             
             
               <li class="dropdown globaltoc-container">
@@ -57,7 +60,8 @@
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../yokome.html"><code class="docutils literal notranslate"><span class="pre">yokome</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension (JavaScript)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../future_work.html">Where to go from here</a></li>
 </ul>
 </ul>
 </li>
@@ -112,7 +116,19 @@
 <dt id="yokome.util.math.prod">
 <code class="sig-prename descclassname">yokome.util.math.</code><code class="sig-name descname">prod</code><span class="sig-paren">(</span><em class="sig-param">iterable</em>, <em class="sig-param">start=1</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.util.math.prod" title="Permalink to this definition">¶</a></dt>
 <dd><p>Multiplies <code class="docutils literal notranslate"><span class="pre">start</span></code> and the items of an <code class="docutils literal notranslate"><span class="pre">iterable</span></code>.</p>
-<p>The items are processed from left to right. <code class="docutils literal notranslate"><span class="pre">start</span></code> defaults to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iterable</strong> – An iterable over elements on which multiplication may be
+applied.  They are processed from left to right.</p></li>
+<li><p><strong>start</strong> – An element on which multiplication may be applied, defaults to
+<code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The result of multiplication.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

@@ -11,10 +11,11 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="yokome.util" href="../util.html" />
-    <link rel="prev" title="yokome.models" href="../models.html" />
+    <link rel="prev" title="yokome.models.train" href="train.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -44,7 +45,9 @@
           <ul class="nav navbar-nav">
             
                 <li><a href="../../../py-modindex.html">Python Modules</a></li>
+                <li><a href="../../../webextension.html">WebExtension</a></li>
                 <li><a href="../../../genindex.html">Index</a></li>
+                <li><a href="../../../future_work.html">Future Work</a></li>
             
             
               <li class="dropdown globaltoc-container">
@@ -57,7 +60,8 @@
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../yokome.html"><code class="docutils literal notranslate"><span class="pre">yokome</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension (JavaScript)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../future_work.html">Where to go from here</a></li>
 </ul>
 </ul>
 </li>
@@ -67,7 +71,7 @@
               
                 
   <li>
-    <a href="../models.html" title="Previous Chapter: yokome.models"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; yokome.models</span>
+    <a href="train.html" title="Previous Chapter: yokome.models.train"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; yokome.models.train</span>
     </a>
   </li>
   <li>
@@ -287,7 +291,7 @@ the token at <code class="docutils literal notranslate"><span class="pre">i</spa
 of this token, restricted to those tokens that are headwords of
 <code class="docutils literal notranslate"><span class="pre">lexeme</span></code>.</p></li>
 <li><p><strong>conn</strong> – The database connection for the dictionary and statistics.</p></li>
-<li><p><strong>lexeme</strong> (<em>yokome.features.dictionary.Lexeme</em>) – An entry in the dictionary that
+<li><p><strong>lexeme</strong> (<a class="reference internal" href="../features/dictionary.html#yokome.features.dictionary.Lexeme" title="yokome.features.dictionary.Lexeme"><em>yokome.features.dictionary.Lexeme</em></a>) – An entry in the dictionary that
 possibly describes the meaning of the token at <code class="docutils literal notranslate"><span class="pre">i</span></code>.</p></li>
 <li><p><strong>TOTAL_LEMMAS</strong> – The total number of lemmas (i.e. of tokens) in the corpus.</p></li>
 </ul>

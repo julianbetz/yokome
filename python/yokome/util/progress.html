@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>yokome.util.progress &#8212; Yokome 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Yokome Firefox WebExtension (JavaScript)" href="../../../webextension.html" />
+    <link rel="prev" title="yokome.util.persistence" href="persistence.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          Yokome</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../py-modindex.html">Python Modules</a></li>
+                <li><a href="../../../webextension.html">WebExtension</a></li>
+                <li><a href="../../../genindex.html">Index</a></li>
+                <li><a href="../../../future_work.html">Future Work</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../yokome.html"><code class="docutils literal notranslate"><span class="pre">yokome</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension (JavaScript)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../future_work.html">Where to go from here</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="persistence.html" title="Previous Chapter: yokome.util.persistence"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; yokome.util.p...</span>
+    </a>
+  </li>
+  <li>
+    <a href="../../../webextension.html" title="Next Chapter: Yokome Firefox WebExtension (JavaScript)"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Yokome Firefo... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">yokome.util.progress</span></code></a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <div class="section" id="module-yokome.util.progress">
+<span id="yokome-util-progress"></span><h1><code class="docutils literal notranslate"><span class="pre">yokome.util.progress</span></code><a class="headerlink" href="#module-yokome.util.progress" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="yokome.util.progress.ProgressBar">
+<em class="property">class </em><code class="sig-prename descclassname">yokome.util.progress.</code><code class="sig-name descname">ProgressBar</code><span class="sig-paren">(</span><em class="sig-param">iterable_len</em>, <em class="sig-param">*</em>, <em class="sig-param">bar_size=20</em>, <em class="sig-param">prefix=&lt;function ProgressBar.&lt;lambda&gt;&gt;</em>, <em class="sig-param">suffix=&lt;function ProgressBar.&lt;lambda&gt;&gt;</em>, <em class="sig-param">delimiter='r'</em>, <em class="sig-param">end='n'</em>, <em class="sig-param">file=&lt;_io.TextIOWrapper name='&lt;stdout&gt;' mode='w' encoding='UTF-8'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.util.progress.ProgressBar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A progress bar.</p>
+<p>Progress visualization can be done more than once for the same step by
+calling <a class="reference internal" href="#yokome.util.progress.ProgressBar.print_current" title="yokome.util.progress.ProgressBar.print_current"><code class="xref py py-meth docutils literal notranslate"><span class="pre">print_current()</span></code></a>.  The next step is visualized by calling
+<a class="reference internal" href="#yokome.util.progress.ProgressBar.print_next" title="yokome.util.progress.ProgressBar.print_next"><code class="xref py py-meth docutils literal notranslate"><span class="pre">print_next()</span></code></a>.</p>
+<p>If the process is not completed, the delimiter is not written before the
+next step, so additional information can be written to the same line as the
+progress bar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iterable_len</strong> (<em>int</em>) – A number indicating the progress state of the
+completed process.</p></li>
+<li><p><strong>bar_size</strong> – The width of the progress bar visualization, in numbers of
+characters.</p></li>
+<li><p><strong>prefix</strong> – A function that is called to construct the string prefix
+before the actual progress bar.  Called with <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">element</span></code> as
+arguments.</p></li>
+<li><p><strong>suffix</strong> – A function that is called to construct the string suffix
+after the actual progress bar.  Called with <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">element</span></code> as
+arguments.</p></li>
+<li><p><strong>delimiter</strong> (<em>str</em>) – The string to print after a line if the process was
+not completed.</p></li>
+<li><p><strong>end</strong> (<em>str</em>) – The string to print after a line if the process was
+completed.</p></li>
+<li><p><strong>file</strong> – The stream to which to print the line.  Print to <code class="docutils literal notranslate"><span class="pre">sys.stdout</span></code>
+by default.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="yokome.util.progress.ProgressBar.print_current">
+<code class="sig-name descname">print_current</code><span class="sig-paren">(</span><em class="sig-param">element=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.util.progress.ProgressBar.print_current" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the progress bar at the current state of the process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>element</strong> – The element that corresponds to the state of the current
+process step.  This is used in calls to the prefix and suffix
+functions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="yokome.util.progress.ProgressBar.print_next">
+<code class="sig-name descname">print_next</code><span class="sig-paren">(</span><em class="sig-param">element=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.util.progress.ProgressBar.print_next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Advance the process and print the progress bar at the new state of
+the process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>element</strong> – The element that corresponds to the state of the next
+process step.  This is used in calls to the prefix and suffix
+functions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.util.progress.print_bar">
+<code class="sig-prename descclassname">yokome.util.progress.</code><code class="sig-name descname">print_bar</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">element</em>, <em class="sig-param">iterable_len</em>, <em class="sig-param">*</em>, <em class="sig-param">bar_size</em>, <em class="sig-param">prefix=&lt;function &lt;lambda&gt;&gt;</em>, <em class="sig-param">suffix=&lt;function &lt;lambda&gt;&gt;</em>, <em class="sig-param">delimiter='\r'</em>, <em class="sig-param">end='\n'</em>, <em class="sig-param">file=&lt;_io.TextIOWrapper name='&lt;stdout&gt;' mode='w' encoding='UTF-8'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.util.progress.print_bar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print a progress bar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>i</strong> – A numeral between zero and <code class="docutils literal notranslate"><span class="pre">iterable_len</span></code> that indicates the
+state of progress.  Espc. the index of an element in an iterable.</p></li>
+<li><p><strong>element</strong> – The element in an iterable that corresponds to the progress
+state <code class="docutils literal notranslate"><span class="pre">i</span></code>.</p></li>
+<li><p><strong>iterable_len</strong> – A numeral indicating the progress state of the
+completed process.  Espc. the length of the iterable that contains
+<code class="docutils literal notranslate"><span class="pre">element</span></code>.</p></li>
+<li><p><strong>bar_size</strong> – The width of the progress bar visualization, in numbers of
+characters.</p></li>
+<li><p><strong>prefix</strong> – A function that is called to construct the string prefix
+before the actual progress bar.  Called with <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">element</span></code> as
+arguments.</p></li>
+<li><p><strong>suffix</strong> – A function that is called to construct the string suffix
+after the actual progress bar.  Called with <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">element</span></code> as
+arguments.</p></li>
+<li><p><strong>delimiter</strong> (<em>str</em>) – The string to print after a line if the process was
+not completed.</p></li>
+<li><p><strong>end</strong> (<em>str</em>) – The string to print after a line if the process was
+completed.</p></li>
+<li><p><strong>file</strong> – The stream to which to print the line.  Print to <code class="docutils literal notranslate"><span class="pre">sys.stdout</span></code>
+by default.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.util.progress.print_progress">
+<code class="sig-prename descclassname">yokome.util.progress.</code><code class="sig-name descname">print_progress</code><span class="sig-paren">(</span><em class="sig-param">iterable</em>, <em class="sig-param">iterable_len=None</em>, <em class="sig-param">*</em>, <em class="sig-param">bar_size=20</em>, <em class="sig-param">prefix=&lt;function &lt;lambda&gt;&gt;</em>, <em class="sig-param">suffix=&lt;function &lt;lambda&gt;&gt;</em>, <em class="sig-param">delimiter='\r'</em>, <em class="sig-param">end='\n'</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.util.progress.print_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Yield elements from an iterable, printing a progress bar before every step.</p>
+<p>For an iterable with <code class="docutils literal notranslate"><span class="pre">n</span></code> elements, <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">+</span> <span class="pre">1</span></code> steps are printed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iterable</strong> – The iterable to yield elements from.</p></li>
+<li><p><strong>iterable_len</strong> (<em>int</em>) – The length of <code class="docutils literal notranslate"><span class="pre">iterable</span></code>.  If <code class="docutils literal notranslate"><span class="pre">None</span></code>,
+dynamically determine the iterable length.</p></li>
+<li><p><strong>bar_size</strong> – The width of the progress bar visualization, in numbers of
+characters.</p></li>
+<li><p><strong>prefix</strong> – A function that is called to construct the string prefix
+before the actual progress bar.  Called with <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">element</span></code> as
+arguments while the process is not completed.  Afterwards, called once
+with the length of the iterable and <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>suffix</strong> – A function that is called to construct the string suffix
+after the actual progress bar.  Called with <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">element</span></code> as
+arguments while the process is not completed.  Afterwards, called once
+with the length of the iterable and <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>delimiter</strong> (<em>str</em>) – The string to print after a line if the process was
+not completed.</p></li>
+<li><p><strong>end</strong> (<em>str</em>) – The string to print after a line if the process was
+completed.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, Julian Betz.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

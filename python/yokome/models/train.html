@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>yokome.util.concurrency &#8212; Yokome 1.0 documentation</title>
+    <title>yokome.models.train &#8212; Yokome 1.0 documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -14,8 +14,8 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="yokome.util.math" href="math.html" />
-    <link rel="prev" title="yokome.util.collections" href="collections.html" />
+    <link rel="next" title="yokome.models.wsd" href="wsd.html" />
+    <link rel="prev" title="yokome.models.language_model" href="language_model.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -60,7 +60,7 @@
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../yokome.html"><code class="docutils literal notranslate"><span class="pre">yokome</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension (JavaScript)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../future_work.html">Where to go from here</a></li>
 </ul>
 </ul>
@@ -71,11 +71,11 @@
               
                 
   <li>
-    <a href="collections.html" title="Previous Chapter: yokome.util.collections"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; yokome.util.c...</span>
+    <a href="language_model.html" title="Previous Chapter: yokome.models.language_model"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; yokome.models...</span>
     </a>
   </li>
   <li>
-    <a href="math.html" title="Next Chapter: yokome.util.math"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">yokome.util.math &raquo;</span>
+    <a href="wsd.html" title="Next Chapter: yokome.models.wsd"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">yokome.models.wsd &raquo;</span>
     </a>
   </li>
               
@@ -103,32 +103,16 @@
   <div class="row">
       <div class="col-md-3">
         <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
-<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">yokome.util.concurrency</span></code></a></li>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">yokome.models.train</span></code></a></li>
 </ul>
 
         </div>
       </div>
     <div class="body col-md-9 content" role="main">
       
-  <div class="section" id="module-yokome.util.concurrency">
-<span id="yokome-util-concurrency"></span><h1><code class="docutils literal notranslate"><span class="pre">yokome.util.concurrency</span></code><a class="headerlink" href="#module-yokome.util.concurrency" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="yokome.util.concurrency.MemoryLock">
-<em class="property">class </em><code class="sig-prename descclassname">yokome.util.concurrency.</code><code class="sig-name descname">MemoryLock</code><span class="sig-paren">(</span><em class="sig-param">sleep</em>, <em class="sig-param">request</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.util.concurrency.MemoryLock" title="Permalink to this definition">¶</a></dt>
-<dd><p>Context manager for memory reservation.</p>
-<p>This does not lock the physical memory, but is only intended as a means of
-communication for multiple asynchronous tasks that jointly require more
-memory than the system is expected to be able to provide.</p>
-<p>Locking is solely based on the total size of the system memory and the
-<strong>explicitly</strong> requested memory size on entering the context manager.</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="yokome.util.concurrency.SubprocessLock">
-<em class="property">class </em><code class="sig-prename descclassname">yokome.util.concurrency.</code><code class="sig-name descname">SubprocessLock</code><span class="sig-paren">(</span><em class="sig-param">sleep</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.util.concurrency.SubprocessLock" title="Permalink to this definition">¶</a></dt>
-<dd><p>Context manager limiting the number of parallel processes.</p>
-</dd></dl>
-
+  <div class="section" id="module-yokome.models.train">
+<span id="yokome-models-train"></span><h1><code class="docutils literal notranslate"><span class="pre">yokome.models.train</span></code><a class="headerlink" href="#module-yokome.models.train" title="Permalink to this headline">¶</a></h1>
+<p>Script to train the language model.</p>
 </div>
 
 

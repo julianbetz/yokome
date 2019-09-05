@@ -11,6 +11,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="yokome.features.tree" href="tree.html" />
@@ -44,7 +45,9 @@
           <ul class="nav navbar-nav">
             
                 <li><a href="../../../py-modindex.html">Python Modules</a></li>
+                <li><a href="../../../webextension.html">WebExtension</a></li>
                 <li><a href="../../../genindex.html">Index</a></li>
+                <li><a href="../../../future_work.html">Future Work</a></li>
             
             
               <li class="dropdown globaltoc-container">
@@ -57,7 +60,8 @@
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../yokome.html"><code class="docutils literal notranslate"><span class="pre">yokome</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension (JavaScript)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../future_work.html">Where to go from here</a></li>
 </ul>
 </ul>
 </li>
@@ -108,10 +112,78 @@
       
   <div class="section" id="module-yokome.features.symbol_stream">
 <span id="yokome-features-symbol-stream"></span><h1><code class="docutils literal notranslate"><span class="pre">yokome.features.symbol_stream</span></code><a class="headerlink" href="#module-yokome.features.symbol_stream" title="Permalink to this headline">¶</a></h1>
+<p>This package deals with symbol streams.</p>
+<p>Symbol streams are a data structure to represent text.  In contrast to strings
+however, they are based on python generators and allow to easily manipulate text
+using state machines while always retaining information on how the text looked
+before manipulation.</p>
+<p>A symbol stream itself is an iterator over symbols.  A symbol is a tuple that
+contains an integer encoding a Unicode character as its first element.  If a
+manipulator wishes to replace multiple characters with another one, it yields a
+tuple containing an integer encoding the new character in the first position and
+all the symbols that were replaced in the other positions, in the order of their
+appearance in the original symbol stream.  This way, a new symbol’s lineage is stored
+and the original symbol stream can be restored at any time using <a class="reference internal" href="#yokome.features.symbol_stream.expand" title="yokome.features.symbol_stream.expand"><code class="xref py py-func docutils literal notranslate"><span class="pre">expand()</span></code></a>.</p>
+<p>The character code <code class="docutils literal notranslate"><span class="pre">None</span></code> encodes the empty string.  Thus, in the case that
+multiple symbols are to be added to the new stream, the special symbol
+<code class="docutils literal notranslate"><span class="pre">(None,)</span></code> may be added as lineage indicator.  Furthermore, yielding a symbol
+with <code class="docutils literal notranslate"><span class="pre">None</span></code> in the first position and old symbols in the other ones
+effectively deletes those symbols.</p>
+<p>Because symbol streams are build on top of generators, they allow manipulators
+to be applied in a composite fashion as a pipeline without excessive storage
+requirements: Later parts of a text are requested in upstream manipulators not
+before they are required in downstream ones.</p>
+<p>For conversion between symbol streams and strings, see <a class="reference internal" href="#yokome.features.symbol_stream.to_symbol_stream" title="yokome.features.symbol_stream.to_symbol_stream"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_symbol_stream()</span></code></a>
+and <a class="reference internal" href="#yokome.features.symbol_stream.to_text" title="yokome.features.symbol_stream.to_text"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_text()</span></code></a>.</p>
+<dl class="data">
+<dt id="yokome.features.symbol_stream.ASCII_LETTER_RANGES">
+<code class="sig-prename descclassname">yokome.features.symbol_stream.</code><code class="sig-name descname">ASCII_LETTER_RANGES</code><em class="property"> = ((65, 90), (97, 122))</em><a class="headerlink" href="#yokome.features.symbol_stream.ASCII_LETTER_RANGES" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ranges of ASCII letters.</p>
+</dd></dl>
+
 <dl class="exception">
 <dt id="yokome.features.symbol_stream.BracketingError">
 <em class="property">exception </em><code class="sig-prename descclassname">yokome.features.symbol_stream.</code><code class="sig-name descname">BracketingError</code><span class="sig-paren">(</span><em class="sig-param">bracketing_structure</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.symbol_stream.BracketingError" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="docutils literal notranslate"><span class="pre">bracketing_structure</span></code> is a symbol stream.</p>
+<dd><p>An exception indicating an incorrect bracketing structure.</p>
+<p>May indicate mismatched brackets or an unbalanced bracketing structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bracketing_structure</strong> – A symbol stream containing the brackets found
+in an analyzed document.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.symbol_stream.ascii_case_fold">
+<code class="sig-prename descclassname">yokome.features.symbol_stream.</code><code class="sig-name descname">ascii_case_fold</code><span class="sig-paren">(</span><em class="sig-param">symbol_stream</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.symbol_stream.ascii_case_fold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lowercase all symbols in the stream.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>symbol_stream</strong> – A stream over symbols.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A symbol stream like the input symbol stream, with all uppercase
+ASCII letters replaced by their lowercase counterparts.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.symbol_stream.ascii_fold">
+<code class="sig-prename descclassname">yokome.features.symbol_stream.</code><code class="sig-name descname">ascii_fold</code><span class="sig-paren">(</span><em class="sig-param">symbol_stream</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.symbol_stream.ascii_fold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn certain Unicode characters into the sequence that is their closest
+ASCII character transcription.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>symbol_stream</strong> – A stream over symbols.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A symbol stream like the input symbol stream, with characters from
+most Latin ranges of Unicode replaced by the sequence that is the
+closest ASCII character transcription.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -130,9 +202,34 @@ original sentence.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="yokome.features.symbol_stream.expand">
+<code class="sig-prename descclassname">yokome.features.symbol_stream.</code><code class="sig-name descname">expand</code><span class="sig-paren">(</span><em class="sig-param">symbol_stream</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.symbol_stream.expand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restore the original symbol stream from a manipulated one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>symbol_stream</strong> – A stream over symbols.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A stream over the symbols from which the input symbol stream was
+created.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="yokome.features.symbol_stream.in_ranges">
 <code class="sig-prename descclassname">yokome.features.symbol_stream.</code><code class="sig-name descname">in_ranges</code><span class="sig-paren">(</span><em class="sig-param">char</em>, <em class="sig-param">ranges</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.symbol_stream.in_ranges" title="Permalink to this definition">¶</a></dt>
-<dd><p>Determines whether the given character is in one of the ranges.</p>
+<dd><p>Determines whether the given character is in one of several ranges.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>char</strong> (<em>int</em>) – An integer encoding a Unicode character.</p></li>
+<li><p><strong>ranges</strong> – A sequence of pairs, where the first element of each pair is
+the start Unicode character code (including) and the second element of
+each pair is the end Unicode character code (including) of a range.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -158,6 +255,43 @@ original sentence.</p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.symbol_stream.to_symbol_stream">
+<code class="sig-prename descclassname">yokome.features.symbol_stream.</code><code class="sig-name descname">to_symbol_stream</code><span class="sig-paren">(</span><em class="sig-param">text</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.symbol_stream.to_symbol_stream" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a string into a symbol stream.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – The string to be converted.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A stream of symbols contaning exactly the characters from the specified text as symbols</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#yokome.features.symbol_stream.to_text" title="yokome.features.symbol_stream.to_text"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_text()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.symbol_stream.to_text">
+<code class="sig-prename descclassname">yokome.features.symbol_stream.</code><code class="sig-name descname">to_text</code><span class="sig-paren">(</span><em class="sig-param">symbol_stream</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.symbol_stream.to_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a symbol stream into a string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>symbol_stream</strong> – A stream over symbols.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The string that corresponds to the symbol stream, with all lineage
+symbols omitted.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#yokome.features.symbol_stream.to_symbol_stream" title="yokome.features.symbol_stream.to_symbol_stream"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_symbol_stream()</span></code></a></p>
+</div>
 </dd></dl>
 
 <dl class="function">

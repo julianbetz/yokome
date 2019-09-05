@@ -11,6 +11,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="yokome.language" href="../language.html" />
@@ -44,7 +45,9 @@
           <ul class="nav navbar-nav">
             
                 <li><a href="../../../py-modindex.html">Python Modules</a></li>
+                <li><a href="../../../webextension.html">WebExtension</a></li>
                 <li><a href="../../../genindex.html">Index</a></li>
+                <li><a href="../../../future_work.html">Future Work</a></li>
             
             
               <li class="dropdown globaltoc-container">
@@ -57,7 +60,8 @@
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../yokome.html"><code class="docutils literal notranslate"><span class="pre">yokome</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension (JavaScript)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../future_work.html">Where to go from here</a></li>
 </ul>
 </ul>
 </li>
@@ -109,51 +113,114 @@
   <div class="section" id="module-yokome.features.tree">
 <span id="yokome-features-tree"></span><h1><code class="docutils literal notranslate"><span class="pre">yokome.features.tree</span></code><a class="headerlink" href="#module-yokome.features.tree" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="yokome.features.tree.AndOrTree">
-<em class="property">class </em><code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">AndOrTree</code><a class="headerlink" href="#yokome.features.tree.AndOrTree" title="Permalink to this definition">¶</a></dt>
-<dd><p>A tree node that conjunctively gathers disjunctive children.</p>
-<p>Semantically, children of this node represent cooccurrences.  They may only
-be instances of OrAndTree, i.e. they semantically are alternatives.</p>
-<p>Nodes of this type do not carry any satellite data.</p>
-</dd></dl>
-
-<dl class="class">
 <dt id="yokome.features.tree.DataOnlyTree">
 <em class="property">class </em><code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">DataOnlyTree</code><span class="sig-paren">(</span><em class="sig-param">value=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.DataOnlyTree" title="Permalink to this definition">¶</a></dt>
 <dd><p>A tree node that conjunctively gathers conjunctive children.</p>
 <p>Semantically, children of this node represent cooccurrences.  They may only
 be other instances of DataOnlyTree.</p>
 <p>Nodes of this type may carry satellite data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> – The satellite data to carry.</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="yokome.features.tree.DataOnlyTree.attach">
+<code class="sig-name descname">attach</code><span class="sig-paren">(</span><em class="sig-param">value=&lt;object object&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.DataOnlyTree.attach" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attach a child to this node in the tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> – A satellite value to store in the child.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The newly created child.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="yokome.features.tree.DataOnlyTree.from_list">
+<code class="sig-name descname">from_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.DataOnlyTree.from_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a tree from a nested array structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>array</strong> – The data to be stored in the tree.  Arrays may be lists or
+tuples.  The first element of a nested array is the data to be
+stored in a node, the other elements are passed on to its child
+nodes.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The root node of the newly created tree.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="yokome.features.tree.DataTree">
 <em class="property">class </em><code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">DataTree</code><span class="sig-paren">(</span><em class="sig-param">value=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.DataTree" title="Permalink to this definition">¶</a></dt>
 <dd><p>A tree structure with satellite data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> – The sattelite data to carry.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="exception">
 <dt id="yokome.features.tree.InvalidDataError">
 <em class="property">exception </em><code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">InvalidDataError</code><a class="headerlink" href="#yokome.features.tree.InvalidDataError" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Exception to be raised on invalid restriction data.</p>
+</dd></dl>
 
 <dl class="exception">
 <dt id="yokome.features.tree.InvalidEntryError">
 <em class="property">exception </em><code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">InvalidEntryError</code><span class="sig-paren">(</span><em class="sig-param">reason</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.InvalidEntryError" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Exception to be raised on invalid restriction requests.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>reason</strong> – The exception that caused this error.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="yokome.features.tree.LabeledTree">
+<em class="property">class </em><code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">LabeledTree</code><span class="sig-paren">(</span><em class="sig-param">data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.LabeledTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>A tree structure with labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> – The data to be stored in this tree node.</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="yokome.features.tree.LabeledTree.detach">
+<code class="sig-name descname">detach</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.LabeledTree.detach" title="Permalink to this definition">¶</a></dt>
+<dd><p>Break connection between this node and its parent.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yokome.features.tree.LabeledTree.to_dict">
+<code class="sig-name descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.LabeledTree.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionary representation of this tree node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A dictionary with an entry <code class="docutils literal notranslate"><span class="pre">'data'</span></code> for the satellite data
+and an entry <code class="docutils literal notranslate"><span class="pre">'children'</span></code> that contains a dictionary from this
+node’s labels to a list of children of this node under the
+respective label.  Each such child is again a dictionary as
+described herein.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
 
 <dl class="exception">
 <dt id="yokome.features.tree.MissingDataException">
 <em class="property">exception </em><code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">MissingDataException</code><a class="headerlink" href="#yokome.features.tree.MissingDataException" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="class">
-<dt id="yokome.features.tree.OrAndTree">
-<em class="property">class </em><code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">OrAndTree</code><span class="sig-paren">(</span><em class="sig-param">value=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.OrAndTree" title="Permalink to this definition">¶</a></dt>
-<dd><p>A tree that disjunctively gathers AndOrTree children.</p>
-<p>Semantically, children of this node are alternatives.  They may only be
-instances of AndOrTree, i.e. they semantically represent cooccurrences.</p>
-<p>Nodes of this type may carry satellite data.</p>
+<dd><p>Exception to be raised on missing restriction data.</p>
 </dd></dl>
 
 <dl class="class">
@@ -165,13 +232,190 @@ instances of AndOrTree, i.e. they semantically represent cooccurrences.</p>
 <dl class="class">
 <dt id="yokome.features.tree.TemplateTree">
 <em class="property">class </em><code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">TemplateTree</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">restrictions=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.TemplateTree" title="Permalink to this definition">¶</a></dt>
-<dd><p>Data is required to be hashable.</p>
+<dd><p>A tree data structure that assigns labels to children based on a restriction template.</p>
+<p>Data is required to be hashable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – The data to be stored in this tree node.</p></li>
+<li><p><strong>restrictions</strong> – A string specifying the location of a JSON file
+containing the restriction data, a dictionary that encodes the
+restriction data, or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="yokome.features.tree.TemplateTree.attach">
+<code class="sig-name descname">attach</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.TemplateTree.attach" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attach a child to this node in the tree.</p>
+<p>Before insertion checks are applied to ensure that the specified data is
+allowed to be inserted at the intended position according to the
+restrictions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> – The data to be stored in the child node.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The newly created child.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="yokome.features.tree.TemplateTree.from_dict">
+<em class="property">classmethod </em><code class="sig-name descname">from_dict</code><span class="sig-paren">(</span><em class="sig-param">structure</em>, <em class="sig-param">restrictions</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.TemplateTree.from_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a tree from nested dictionary structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>structure</strong> (<em>dict</em>) – The data to be stored in the tree.  The data
+stored under the entry <code class="docutils literal notranslate"><span class="pre">'data'</span></code> is the satellite data to be stored
+in the root node.  The entry <code class="docutils literal notranslate"><span class="pre">'children'</span></code> contains a dictionary
+from the labels of the root node to lists of children.  Each such
+child is again a dictionary as described herein and will be created
+as a child node.</p></li>
+<li><p><strong>restrictions</strong> – A string specifying the location of a JSON file
+containing the restriction data, a dictionary that encodes the
+restriction data, or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The root node of the newly created tree.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="yokome.features.tree.TemplateTree.is_valid_data">
+<code class="sig-name descname">is_valid_data</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.TemplateTree.is_valid_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether the specified element is valid satellite data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> – The value for which to determine whether it may be stored in
+the tree.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if <code class="docutils literal notranslate"><span class="pre">x</span></code> may be stored in the tree, <code class="docutils literal notranslate"><span class="pre">False</span></code>
+otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="yokome.features.tree.TemplateTree.parse">
+<em class="property">classmethod </em><code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param">pos_list</em>, <em class="sig-param">pos_dict</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.TemplateTree.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a linear list of elements, building a hierarchical tree.</p>
+<p>Follow the heuristics implied by the restrictions in <code class="docutils literal notranslate"><span class="pre">pos_dict</span></code> so as
+to create a tree in which the relations between the elements
+w.r.t. hierarchy, nonconflict and mutual exclusion are made explicit.</p>
+<p>Hierarchy is expressed in the restrictions via parent relationships.
+Nonconflict and mutual exclusion are expressed using labels.  Children
+of the same parent with the same label are mutually exclusive, while
+children with different labels are nonconflicting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos_list</strong> – A list of elements to be stored.</p></li>
+<li><p><strong>pos_dict</strong> – <p>A dictionary of restrictions of the following form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="o">&lt;</span><span class="n">element</span><span class="o">&gt;</span><span class="p">:</span>
+    <span class="p">{</span>
+      <span class="s1">&#39;parents&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">list</span> <span class="n">of</span> <span class="n">parent</span> <span class="n">elements</span><span class="o">&gt;</span><span class="p">,</span>
+      <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">label</span> <span class="n">under</span> <span class="n">which</span> <span class="n">to</span> <span class="n">store</span> <span class="n">this</span> <span class="n">element</span><span class="o">&gt;</span>
+    <span class="p">},</span>
+  <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>There must be one element with an empty parent list.  This is the
+root element.</p>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="yokome.features.tree.TemplateTree.score">
+<code class="sig-name descname">score</code><span class="sig-paren">(</span><em class="sig-param">token</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.TemplateTree.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate how much the token specification in <code class="docutils literal notranslate"><span class="pre">token</span></code> matches this
+lexeme specification.</p>
+<p>The base scoring function is as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathrm{score^\prime}(x, y) = \begin{cases}\frac{2 + \sum_{l \in \mathrm{labels}(x)} \max_{x^\prime \in \mathrm{children}(x, l), y^\prime \in \mathrm{children}(y)} \mathrm{score}(x^\prime, y^\prime)}{2 + \frac{\mathrm{length}(x) + \mathrm{length}(y)}{2}}, &amp; \mathrm{data}(x) = \mathrm{data}(y)\\ 0, &amp; \text{otherwise}\end{cases}\end{split}\]</div>
+<p>This function has the following properties:</p>
+<ul class="simple">
+<li><p>The score is in the interval <span class="math notranslate nohighlight">\([0, 1]\)</span>, with only a complete
+match scoring 1, and only an empty match scoring 0.  Trees that have
+their roots at different levels in the hierarchy receive a match score
+of 0.</p></li>
+<li><p>Data in a child node makes a contribution of at most half of the
+contribution of the data in its parent node to the overall score.</p></li>
+<li><p>Sibling nodes make a higher contribution to the overall score than
+child nodes.</p></li>
+<li><p>Additional/missing child nodes that are not in conflict with other
+child nodes result in a reduced score.</p></li>
+</ul>
+<p>To increase the expressiveness of the score, it is downscaled along a
+quarter-circle curve in <span class="math notranslate nohighlight">\([0, 1] \times [0, 1]\)</span>, i.e.:</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{score}(x, y) = 1 - \sqrt{1 - \mathrm{score^\prime}(x, y)^2}\]</div>
+<p>For equal scores, children that are specified earlier are considered
+first to be part of the match result.</p>
+<p>Nodes in unrelated parts of the hierarchy do not affect the score.  The
+same holds for overspecification: Descendant nodes in the token tree
+that are not found in the lexeme tree are not considered.</p>
+<p>In case of multiple inheritance, the behavior on <code class="docutils literal notranslate"><span class="pre">TemplateTree</span></code>
+overrides the behavior on <code class="docutils literal notranslate"><span class="pre">DataOnlyTree</span></code>.  A resulting
+<code class="docutils literal notranslate"><span class="pre">TemplateTree</span></code> match contains the data from the input, but adheres to
+this <code class="docutils literal notranslate"><span class="pre">TemplateTree</span></code>’s restrictions.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="yokome.features.tree.Tree">
 <em class="property">class </em><code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">Tree</code><a class="headerlink" href="#yokome.features.tree.Tree" title="Permalink to this definition">¶</a></dt>
 <dd><p>A generic tree data structure.</p>
+<dl class="method">
+<dt id="yokome.features.tree.Tree.attach">
+<code class="sig-name descname">attach</code><span class="sig-paren">(</span><em class="sig-param">value=&lt;object object&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.Tree.attach" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attach a child to this node in the tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> – A satellite value to store in the child.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The newly created child.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="yokome.features.tree.Tree.detach">
+<code class="sig-name descname">detach</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.Tree.detach" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detach this node from its parent.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.tree.dfs">
+<code class="sig-prename descclassname">yokome.features.tree.</code><code class="sig-name descname">dfs</code><span class="sig-paren">(</span><em class="sig-param">tree</em>, <em class="sig-param">prefix=''</em>, <em class="sig-param">next_sibling=False</em>, <em class="sig-param">shortened=False</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.tree.dfs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Printing function for <a class="reference internal" href="#yokome.features.tree.DataOnlyTree" title="yokome.features.tree.DataOnlyTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataOnlyTree</span></code></a> trees.</p>
+<p>For <a class="reference internal" href="#yokome.features.tree.LabeledTree" title="yokome.features.tree.LabeledTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">LabeledTree</span></code></a> / <a class="reference internal" href="#yokome.features.tree.TemplateTree" title="yokome.features.tree.TemplateTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">TemplateTree</span></code></a>, use their
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">LabeledTree.__str__()</span></code> method instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tree</strong> – The tree to print.</p></li>
+<li><p><strong>prefix</strong> (<em>str</em>) – The prefix to be prepended to each line.</p></li>
+<li><p><strong>next_sibling</strong> (<em>bool</em>) – Whether the current node is not the last child of
+its parent.</p></li>
+<li><p><strong>shortened</strong> (<em>bool</em>) – Deprecated. Not used.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

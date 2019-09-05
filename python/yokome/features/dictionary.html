@@ -11,6 +11,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="yokome.features.jpn" href="jpn.html" />
@@ -44,7 +45,9 @@
           <ul class="nav navbar-nav">
             
                 <li><a href="../../../py-modindex.html">Python Modules</a></li>
+                <li><a href="../../../webextension.html">WebExtension</a></li>
                 <li><a href="../../../genindex.html">Index</a></li>
+                <li><a href="../../../future_work.html">Future Work</a></li>
             
             
               <li class="dropdown globaltoc-container">
@@ -57,7 +60,8 @@
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../yokome.html"><code class="docutils literal notranslate"><span class="pre">yokome</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension (JavaScript)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../future_work.html">Where to go from here</a></li>
 </ul>
 </ul>
 </li>
@@ -113,6 +117,166 @@
 <code class="sig-prename descclassname">yokome.features.dictionary.</code><code class="sig-name descname">GLOSS_SEPARATOR</code><em class="property"> = '▪'</em><a class="headerlink" href="#yokome.features.dictionary.GLOSS_SEPARATOR" title="Permalink to this definition">¶</a></dt>
 <dd><p>A character that separates different glosses for the same sense.</p>
 <p>Asserted not to occur in the text of any gloss.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="yokome.features.dictionary.Lexeme">
+<em class="property">class </em><code class="sig-prename descclassname">yokome.features.dictionary.</code><code class="sig-name descname">Lexeme</code><span class="sig-paren">(</span><em class="sig-param">conn</em>, <em class="sig-param">language_code</em>, <em class="sig-param">entry_id</em>, <em class="sig-param">restrictions</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.dictionary.Lexeme" title="Permalink to this definition">¶</a></dt>
+<dd><p>A lexeme (i.e. an entry) in the dictionary.</p>
+<p>An entry in this context means a base meaning that may be denoted by either
+element of a set of highly similar pairs of graphic and phonetic variants.
+The base meaning may be further refined to one of several connotations of
+this lexeme, see <a class="reference internal" href="#yokome.features.dictionary.Sense" title="yokome.features.dictionary.Sense"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sense</span></code></a>.</p>
+<p>The same lexeme may appear in different grammatical positions, and different
+connotations of the same lexeme might be restricted to multiple, different
+grammatical usages, see <a class="reference internal" href="#yokome.features.dictionary.Role" title="yokome.features.dictionary.Role"><code class="xref py py-class docutils literal notranslate"><span class="pre">Role</span></code></a>.</p>
+<p>Furthermore, there might be restrictions as to which graphic and phonetic
+variants may appear together, as well as which of those variants may appear
+with which connotations.</p>
+<p>On construction, all relevant data is loaded from the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conn</strong> – The database connection for the dictionary.</p></li>
+<li><p><strong>language_code</strong> (<em>str</em>) – ISO 639-3 language code of the language of
+interest.</p></li>
+<li><p><strong>entry_id</strong> (<em>int</em>) – The ID of the dictionary entry.</p></li>
+<li><p><strong>restrictions</strong> (<em>dict</em>) – A dictionary describing the restrictions imposed
+on the possible structural ways in which the POS tags may interrelate.
+Necessary in order to provide POS tag trees.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="yokome.features.dictionary.Lexeme.lookup">
+<em class="property">static </em><code class="sig-name descname">lookup</code><span class="sig-paren">(</span><em class="sig-param">conn</em>, <em class="sig-param">language_code</em>, <em class="sig-param">graphic</em>, <em class="sig-param">phonetic</em>, <em class="sig-param">restrictions</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.dictionary.Lexeme.lookup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look up all lexemes that may be represented by the specified
+combination of a graphic and a phonetic variant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>language_code</strong> (<em>str</em>) – ISO 639-3 language code of the language of
+interest.</p></li>
+<li><p><strong>graphic</strong> (<em>str</em>) – The graphic variant.</p></li>
+<li><p><strong>phonetic</strong> (<em>str</em>) – The phonetic variant.</p></li>
+<li><p><strong>restrictions</strong> (<em>dict</em>) – A dictionary describing the restrictions
+imposed on the possible structural ways in which the POS tags may
+interrelate.  Necessary in order to provide POS tag trees.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A tuple of lexemes that contain the specified combination of a
+graphic variant and a phonetic variant in their list of headwords.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="yokome.features.dictionary.Role">
+<em class="property">class </em><code class="sig-prename descclassname">yokome.features.dictionary.</code><code class="sig-name descname">Role</code><span class="sig-paren">(</span><em class="sig-param">conn</em>, <em class="sig-param">language_code</em>, <em class="sig-param">entry_id</em>, <em class="sig-param">pos_list_id</em>, <em class="sig-param">sense_ids</em>, <em class="sig-param">restrictions</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.dictionary.Role" title="Permalink to this definition">¶</a></dt>
+<dd><p>A role in the dictionary.</p>
+<p>A role in this context means a collection of connotations of a lexeme that
+have the same grammatical functions in text.</p>
+<p>In addition to the connotations, a role has a part-of-speech (POS) list.
+POS tags in this list may have mutually hierarchical, nonconflicting, and
+even exclusive relations.</p>
+<p>A dictionary entry may contain multiple roles <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code> with the same
+POS lists if the entry’s connotations are sorted by frequency of use, and a
+third role <code class="docutils literal notranslate"><span class="pre">C</span></code> with a different POS list has connotations with a lower
+frequency than those of <code class="docutils literal notranslate"><span class="pre">A</span></code> and with a higher frequency than those of
+<code class="docutils literal notranslate"><span class="pre">B</span></code>.</p>
+<p>On construction, all relevant data is loaded from the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conn</strong> – The database connection for the dictionary.</p></li>
+<li><p><strong>language_code</strong> (<em>str</em>) – ISO 639-3 language code of the language of
+interest.</p></li>
+<li><p><strong>entry_id</strong> (<em>int</em>) – The ID of the dictionary entry to which this role
+belongs.</p></li>
+<li><p><strong>pos_list_id</strong> (<em>int</em>) – The ID of the list of POS tags for this role.</p></li>
+<li><p><strong>sense_id</strong> – An iterable of integer IDs of the connotations of this
+role.</p></li>
+<li><p><strong>restrictions</strong> (<em>dict</em>) – A dictionary describing the restrictions imposed
+on the possible structural ways in which the POS tags may interrelate.
+Necessary in order to provide POS tag trees.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="yokome.features.dictionary.Role.normalized_pos_tags">
+<code class="sig-name descname">normalized_pos_tags</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.dictionary.Role.normalized_pos_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translate the list of POS tags as used in the dictionary to a list of
+POS tags in the representation used internally.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The list of POS tags associated with this role, in their
+internal representation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="yokome.features.dictionary.Role.pos_tree">
+<code class="sig-name descname">pos_tree</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; yokome.features.tree.TemplateTree<a class="headerlink" href="#yokome.features.dictionary.Role.pos_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>From the POS tags of this role, build a tree structure.</p>
+<p>The restrictions of this role are used on tree creation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A template tree that represents the list of POS tags associated
+with this role in a hierarchical fashion.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="yokome.features.dictionary.Sense">
+<em class="property">class </em><code class="sig-prename descclassname">yokome.features.dictionary.</code><code class="sig-name descname">Sense</code><span class="sig-paren">(</span><em class="sig-param">conn</em>, <em class="sig-param">language_code</em>, <em class="sig-param">entry_id</em>, <em class="sig-param">sense_id</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.dictionary.Sense" title="Permalink to this definition">¶</a></dt>
+<dd><p>A connotation in the dictionary.</p>
+<p>A connotation in this context means an abstract word meaning that is limited
+to a specific lexeme.  Multiple lexemes may appear in text conveying the
+same meaning, and multiple meanings may be denoted by the same lexeme, but
+each combination of lexeme and sense is a unique connotation.</p>
+<p>A connotation may be described by multiple glosses, each of which can be a
+direct translation, a description or similar.</p>
+<p>On construction, all relevant data is loaded from the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conn</strong> – The database connection for the dictionary.</p></li>
+<li><p><strong>language_code</strong> (<em>str</em>) – ISO 639-3 language code of the language of
+interest.</p></li>
+<li><p><strong>entry_id</strong> (<em>int</em>) – The ID of the dictionary entry to which this
+connotation belongs.</p></li>
+<li><p><strong>sense_id</strong> (<em>int</em>) – The ID of this connotation w.r.t. the entry with ID
+<code class="docutils literal notranslate"><span class="pre">entry_id</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.features.dictionary.circled_number">
+<code class="sig-prename descclassname">yokome.features.dictionary.</code><code class="sig-name descname">circled_number</code><span class="sig-paren">(</span><em class="sig-param">number</em>, <em class="sig-param">bold_circle=True</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.features.dictionary.circled_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide a Unicode representation of the specified number.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>number</strong> (<em>int</em>) – The positive number to convert to a string.</p></li>
+<li><p><strong>bold_circle</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, return a white number on a black
+circle; return a black number on a white circle otherwise.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A string that is the specified number enclosed in a circle.  For
+integers that have no such representation in Unicode, return the number
+enclosed in parentheses.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

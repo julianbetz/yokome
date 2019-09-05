@@ -1,0 +1,5 @@
+``yokome.data.jpn.corpus_to_search``
+====================================
+
+.. automodule:: yokome.data.jpn.corpus_to_search
+   :members:

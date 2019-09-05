@@ -12,6 +12,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
 <meta charset='utf-8'>
@@ -43,7 +44,9 @@
           <ul class="nav navbar-nav">
             
                 <li><a href="py-modindex.html">Python Modules</a></li>
+                <li><a href="webextension.html">WebExtension</a></li>
                 <li><a href="#">Index</a></li>
+                <li><a href="future_work.html">Future Work</a></li>
             
             
               <li class="dropdown globaltoc-container">
@@ -56,7 +59,8 @@
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="python/yokome.html"><code class="docutils literal notranslate"><span class="pre">yokome</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="webextension.html">Yokome Firefox WebExtension</a></li>
+<li class="toctree-l1"><a class="reference internal" href="webextension.html">Yokome Firefox WebExtension (JavaScript)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="future_work.html">Where to go from here</a></li>
 </ul>
 </ul>
 </li>
@@ -103,6 +107,7 @@
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
@@ -111,7 +116,6 @@
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
- | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
@@ -126,19 +130,47 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python/yokome/features/tree.html#yokome.features.tree.AndOrTree">AndOrTree (class in yokome.features.tree)</a>
+      <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.api_disambiguate">api_disambiguate() (in module yokome.deployment.server)</a>
 </li>
+      <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.api_tokenize">api_tokenize() (in module yokome.deployment.server)</a>
+</li>
+      <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.api_tokenizer_inform">api_tokenizer_inform() (in module yokome.deployment.server)</a>
+</li>
+      <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.api_wsd_inform">api_wsd_inform() (in module yokome.deployment.server)</a>
+</li>
+      <li><a href="python/yokome/features/symbol_stream.html#yokome.features.symbol_stream.ascii_case_fold">ascii_case_fold() (in module yokome.features.symbol_stream)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/features/symbol_stream.html#yokome.features.symbol_stream.ascii_fold">ascii_fold() (in module yokome.features.symbol_stream)</a>
+</li>
+      <li><a href="python/yokome/features/symbol_stream.html#yokome.features.symbol_stream.ASCII_LETTER_RANGES">ASCII_LETTER_RANGES (in module yokome.features.symbol_stream)</a>
+</li>
+      <li><a href="python/yokome/features/tree.html#yokome.features.tree.DataOnlyTree.attach">attach() (yokome.features.tree.DataOnlyTree method)</a>
+
+      <ul>
+        <li><a href="python/yokome/features/tree.html#yokome.features.tree.TemplateTree.attach">(yokome.features.tree.TemplateTree method)</a>
+</li>
+        <li><a href="python/yokome/features/tree.html#yokome.features.tree.Tree.attach">(yokome.features.tree.Tree method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.BadRequestError">BadRequestError</a>
+      <li><a href="webextension.html#background.initializePageAction">background.initializePageAction() (background method)</a>
+</li>
+      <li><a href="webextension.html#background.toggleYokome">background.toggleYokome() (background method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.BadRequestError">BadRequestError</a>
+</li>
       <li><a href="python/yokome/features/symbol_stream.html#yokome.features.symbol_stream.BracketingError">BracketingError</a>
+</li>
+      <li><a href="python/yokome/language.html#yokome.language._lang.Language.by_code">by_code() (yokome.language._lang.Language static method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -148,37 +180,129 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.chasen_loader">chasen_loader() (in module yokome.features.jpn)</a>
 </li>
+      <li><a href="python/yokome/features/dictionary.html#yokome.features.dictionary.circled_number">circled_number() (in module yokome.features.dictionary)</a>
+</li>
+      <li><a href="python/yokome/language.html#yokome.language._lang.Language.code">code() (yokome.language._lang.Language property)</a>
+</li>
+      <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.combining_voice_mark_fold">combining_voice_mark_fold() (in module yokome.features.jpn)</a>
+</li>
+      <li><a href="webextension.html#content..anyContains">content..anyContains() (content. method)</a>
+</li>
+      <li><a href="webextension.html#content..contains">content..contains() (content. method)</a>
+</li>
+      <li><a href="webextension.html#content..createArrowNode">content..createArrowNode() (content. method)</a>
+</li>
+      <li><a href="webextension.html#content..createInfoBox">content..createInfoBox() (content. method)</a>
+</li>
+      <li><a href="webextension.html#content..disambiguateTargetToken">content..disambiguateTargetToken() (content. method)</a>
+</li>
+      <li><a href="webextension.html#content..getCursorPosition">content..getCursorPosition() (content. method)</a>
+</li>
+      <li><a href="webextension.html#content..getHighestZIndex">content..getHighestZIndex() (content. method)</a>
+</li>
+      <li><a href="webextension.html#content..getIndex">content..getIndex() (content. method)</a>
+</li>
+      <li><a href="webextension.html#content..initialize">content..initialize() (content. method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="webextension.html#content..initiateTabSwitching">content..initiateTabSwitching() (content. method)</a>
+</li>
+      <li><a href="webextension.html#content..maybeRefreshTabs">content..maybeRefreshTabs() (content. method)</a>
+</li>
+      <li><a href="webextension.html#content..maybeTokenize">content..maybeTokenize() (content. method)</a>
+</li>
+      <li><a href="webextension.html#content..movebox">content..movebox() (content. method)</a>
+</li>
+      <li><a href="webextension.html#content..post">content..post() (content. method)</a>
+</li>
+      <li><a href="webextension.html#content..refreshTabs">content..refreshTabs() (content. method)</a>
+</li>
+      <li><a href="webextension.html#content..removeInfoBox">content..removeInfoBox() (content. method)</a>
+</li>
+      <li><a href="webextension.html#content..resetDisambiguationTimeoutStart">content..resetDisambiguationTimeoutStart() (content. method)</a>
+</li>
+      <li><a href="webextension.html#content..resetTokenizerTimeoutStart">content..resetTokenizerTimeoutStart() (content. method)</a>
+</li>
+      <li><a href="webextension.html#content..switchToTab">content..switchToTab() (content. method)</a>
+</li>
+      <li><a href="webextension.html#content..tokenize">content..tokenize() (content. method)</a>
+</li>
+      <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.content_sentences">content_sentences() (in module yokome.features.jpn)</a>
+</li>
+      <li><a href="python/yokome/models/cross_validation.html#yokome.models.cross_validation.cross_validate">cross_validate() (in module yokome.models.cross_validation)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/data/jpn/corpus.html#yokome.data.jpn.corpus.DATABASE">DATABASE (in module yokome.data.jpn.corpus)</a>
+</li>
       <li><a href="python/yokome/features/tree.html#yokome.features.tree.DataOnlyTree">DataOnlyTree (class in yokome.features.tree)</a>
 </li>
       <li><a href="python/yokome/features/tree.html#yokome.features.tree.DataTree">DataTree (class in yokome.features.tree)</a>
 </li>
+      <li><a href="python/yokome/features/tree.html#yokome.features.tree.LabeledTree.detach">detach() (yokome.features.tree.LabeledTree method)</a>
+
+      <ul>
+        <li><a href="python/yokome/features/tree.html#yokome.features.tree.Tree.detach">(yokome.features.tree.Tree method)</a>
+</li>
+      </ul></li>
+      <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.detect_language">detect_language() (in module yokome.deployment.server)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/data/jpn/corpus.html#yokome.data.jpn.corpus.dev_files">dev_files() (in module yokome.data.jpn.corpus)</a>
+</li>
+      <li><a href="python/yokome/features/tree.html#yokome.features.tree.dfs">dfs() (in module yokome.features.tree)</a>
+</li>
+      <li><a href="python/yokome/data/jpn/dictionary_to_rdbms.html#yokome.data.jpn.dictionary_to_rdbms.DIALECT">DIALECT (in module yokome.data.jpn.dictionary_to_rdbms)</a>
+</li>
       <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.disambiguate">disambiguate() (in module yokome.deployment.server)</a>
 
       <ul>
         <li><a href="python/yokome/models/wsd.html#yokome.models.wsd.disambiguate">(in module yokome.models.wsd)</a>
 </li>
       </ul></li>
+      <li><a href="python/yokome/data/jpn/dictionary_to_rdbms.html#yokome.data.jpn.dictionary_to_rdbms.DOMAINS">DOMAINS (in module yokome.data.jpn.dictionary_to_rdbms)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.EmptyBodyException">EmptyBodyException</a>
+      <li><a href="python/yokome/models/language_model.html#yokome.models.language_model.SaverHook.end">end() (yokome.models.language_model.SaverHook method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.ENGLISH">ENGLISH (in module yokome.deployment.server)</a>
 </li>
       <li><a href="python/yokome/features/symbol_stream.html#yokome.features.symbol_stream.enumerate_alternatives">enumerate_alternatives() (in module yokome.features.symbol_stream)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/models/language_model.html#yokome.models.language_model.LanguageModel.estimate_probability">estimate_probability() (yokome.models.language_model.LanguageModel method)</a>
+</li>
+      <li><a href="python/yokome/features/symbol_stream.html#yokome.features.symbol_stream.expand">expand() (in module yokome.features.symbol_stream)</a>
+</li>
+      <li><a href="python/yokome/language.html#yokome.language._lang.Language.extract">extract() (yokome.language._lang.Language property)</a>
+</li>
+      <li><a href="python/yokome/language.html#yokome.language._lang.Language.extract_parallel">extract_parallel() (yokome.language._lang.Language property)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/features/tree.html#yokome.features.tree.TemplateTree.from_dict">from_dict() (yokome.features.tree.TemplateTree class method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/features/tree.html#yokome.features.tree.DataOnlyTree.from_list">from_list() (yokome.features.tree.DataOnlyTree method)</a>
+</li>
+      <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.fullwidth_fold">fullwidth_fold() (in module yokome.features.jpn)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -190,11 +314,15 @@
 </li>
       <li><a href="python/yokome/features/corpus.html#yokome.features.corpus.generate_lemma_vocabulary">generate_lemma_vocabulary() (in module yokome.features.corpus)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/yokome/features/corpus.html#yokome.features.corpus.generate_phonetic_character_vocabulary">generate_phonetic_character_vocabulary() (in module yokome.features.corpus)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/features/corpus.html#yokome.features.corpus.generate_vocabulary_from">generate_vocabulary_from() (in module yokome.features.corpus)</a>
+</li>
       <li><a href="python/yokome/features/dictionary.html#yokome.features.dictionary.GLOSS_SEPARATOR">GLOSS_SEPARATOR (in module yokome.features.dictionary)</a>
+</li>
+      <li><a href="python/yokome/data/jpn/dictionary_to_rdbms.html#yokome.data.jpn.dictionary_to_rdbms.GLOSS_TYPES">GLOSS_TYPES (in module yokome.data.jpn.dictionary_to_rdbms)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -202,10 +330,12 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python/yokome/models/wsd.html#yokome.models.wsd.has_statistics">has_statistics() (in module yokome.models.wsd)</a>
+      <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.handle_error">handle_error() (in module yokome.deployment.server)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/models/wsd.html#yokome.models.wsd.has_statistics">has_statistics() (in module yokome.models.wsd)</a>
+</li>
       <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.hiragana_to_katakana">hiragana_to_katakana() (in module yokome.features.jpn)</a>
 </li>
   </ul></td>
@@ -218,11 +348,17 @@
 </li>
       <li><a href="python/yokome/features/tree.html#yokome.features.tree.InvalidDataError">InvalidDataError</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/yokome/features/tree.html#yokome.features.tree.InvalidEntryError">InvalidEntryError</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.is_content_sentence">is_content_sentence() (in module yokome.features.jpn)</a>
+</li>
       <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.is_reading">is_reading() (in module yokome.features.jpn)</a>
+</li>
+      <li><a href="python/yokome/features/tree.html#yokome.features.tree.TemplateTree.is_valid_data">is_valid_data() (yokome.features.tree.TemplateTree method)</a>
+</li>
+      <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.iteration_fold">iteration_fold() (in module yokome.features.jpn)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -231,6 +367,12 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.JAPANESE">JAPANESE (in module yokome.deployment.server)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/language.html#yokome.language._jpn.JPN">JPN (in module yokome.language._jpn)</a>
+</li>
+      <li><a href="python/yokome/language.html#yokome.language._jpn.JPN_UNSEEN">JPN_UNSEEN (in module yokome.language._jpn)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -244,17 +386,39 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.KANA_RATIO">KANA_RATIO (in module yokome.deployment.server)</a>
 </li>
+      <li><a href="python/yokome/models/cross_validation.html#yokome.models.cross_validation.kfold">kfold() (in module yokome.models.cross_validation)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/features/tree.html#yokome.features.tree.LabeledTree">LabeledTree (class in yokome.features.tree)</a>
+</li>
+      <li><a href="python/yokome/language.html#yokome.language._lang.Language">Language (class in yokome.language._lang)</a>
+</li>
+      <li><a href="python/yokome/models/language_model.html#yokome.models.language_model.LanguageModel">LanguageModel (class in yokome.models.language_model)</a>
+</li>
       <li><a href="python/yokome/features/corpus.html#yokome.features.corpus.lemma_coverage">lemma_coverage() (in module yokome.features.corpus)</a>
+</li>
+      <li><a href="python/yokome/features/dictionary.html#yokome.features.dictionary.Lexeme">Lexeme (class in yokome.features.dictionary)</a>
+</li>
+      <li><a href="python/yokome/models/wsd.html#yokome.models.wsd.lexeme_lemma_count">lexeme_lemma_count() (in module yokome.models.wsd)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python/yokome/models/wsd.html#yokome.models.wsd.lexeme_lemma_count">lexeme_lemma_count() (in module yokome.models.wsd)</a>
+      <li><a href="python/yokome/util/persistence.html#yokome.util.persistence.list_as_tuple_hook">list_as_tuple_hook() (in module yokome.util.persistence)</a>
+</li>
+      <li><a href="python/yokome/language.html#yokome.language._lang.Language.load">load() (yokome.language._lang.Language property)</a>
+</li>
+      <li><a href="python/yokome/data/jpn/corpus.html#yokome.data.jpn.corpus.load_dev_sentence_ids">load_dev_sentence_ids() (in module yokome.data.jpn.corpus)</a>
+</li>
+      <li><a href="python/yokome/features/corpus.html#yokome.features.corpus.load_sentence">load_sentence() (in module yokome.features.corpus)</a>
+</li>
+      <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.longest_common_prefix_len">longest_common_prefix_len() (in module yokome.features.jpn)</a>
+</li>
+      <li><a href="python/yokome/features/dictionary.html#yokome.features.dictionary.Lexeme.lookup">lookup() (yokome.features.dictionary.Lexeme static method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -280,15 +444,9 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.NotFoundError">NotFoundError</a>
+      <li><a href="python/yokome/features/dictionary.html#yokome.features.dictionary.Role.normalized_pos_tags">normalized_pos_tags() (yokome.features.dictionary.Role method)</a>
 </li>
-  </ul></td>
-</tr></table>
-
-<h2 id="O">O</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python/yokome/features/tree.html#yokome.features.tree.OrAndTree">OrAndTree (class in yokome.features.tree)</a>
+      <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.NotFoundError">NotFoundError</a>
 </li>
   </ul></td>
 </tr></table>
@@ -296,11 +454,31 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/features/tree.html#yokome.features.tree.TemplateTree.parse">parse() (yokome.features.tree.TemplateTree class method)</a>
+</li>
+      <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.parse_jumanpp_output">parse_jumanpp_output() (in module yokome.features.jpn)</a>
+</li>
       <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.PORT">PORT (in module yokome.deployment.server)</a>
+</li>
+      <li><a href="python/yokome/data/jpn/dictionary_to_rdbms.html#yokome.data.jpn.dictionary_to_rdbms.POS">POS (in module yokome.data.jpn.dictionary_to_rdbms)</a>
+</li>
+      <li><a href="python/yokome/features/dictionary.html#yokome.features.dictionary.Role.pos_tree">pos_tree() (yokome.features.dictionary.Role method)</a>
+</li>
+      <li><a href="python/yokome/util/progress.html#yokome.util.progress.print_bar">print_bar() (in module yokome.util.progress)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/util/progress.html#yokome.util.progress.ProgressBar.print_current">print_current() (yokome.util.progress.ProgressBar method)</a>
+</li>
+      <li><a href="python/yokome/util/progress.html#yokome.util.progress.ProgressBar.print_next">print_next() (yokome.util.progress.ProgressBar method)</a>
+</li>
+      <li><a href="python/yokome/util/progress.html#yokome.util.progress.print_progress">print_progress() (in module yokome.util.progress)</a>
+</li>
       <li><a href="python/yokome/util/math.html#yokome.util.math.prod">prod() (in module yokome.util.math)</a>
+</li>
+      <li><a href="python/yokome/models/language_model.html#yokome.models.language_model.LanguageModel.production_dir">production_dir() (yokome.models.language_model.LanguageModel method)</a>
+</li>
+      <li><a href="python/yokome/util/progress.html#yokome.util.progress.ProgressBar">ProgressBar (class in yokome.util.progress)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -316,7 +494,15 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.repetition_contraction">repetition_contraction() (in module yokome.features.jpn)</a>
+</li>
       <li><a href="python/yokome/models/wsd.html#yokome.models.wsd.retrieve_substitute_lexemes">retrieve_substitute_lexemes() (in module yokome.models.wsd)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/features/dictionary.html#yokome.features.dictionary.Role">Role (class in yokome.features.dictionary)</a>
+</li>
+      <li><a href="python/yokome/data/jpn/corpus.html#yokome.data.jpn.corpus.rsv_files">rsv_files() (in module yokome.data.jpn.corpus)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -326,13 +512,27 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/yokome/features/symbol_stream.html#yokome.features.symbol_stream.sample_alternatives">sample_alternatives() (in module yokome.features.symbol_stream)</a>
 </li>
+      <li><a href="python/yokome/models/language_model.html#yokome.models.language_model.SaverHook">SaverHook (class in yokome.models.language_model)</a>
+</li>
+      <li><a href="python/yokome/features/tree.html#yokome.features.tree.TemplateTree.score">score() (yokome.features.tree.TemplateTree method)</a>
+</li>
       <li><a href="python/yokome/models/wsd.html#yokome.models.wsd.score_connotation">score_connotation() (in module yokome.models.wsd)</a>
 </li>
       <li><a href="python/yokome/models/wsd.html#yokome.models.wsd.score_lexeme">score_lexeme() (in module yokome.models.wsd)</a>
 </li>
+      <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.segmenter">segmenter() (in module yokome.features.jpn)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.segmenter">segmenter() (in module yokome.features.jpn)</a>
+      <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.semivoice">semivoice() (in module yokome.features.jpn)</a>
+</li>
+      <li><a href="python/yokome/features/dictionary.html#yokome.features.dictionary.Sense">Sense (class in yokome.features.dictionary)</a>
+</li>
+      <li><a href="python/yokome/util/collections.html#yokome.util.collections.shuffle">shuffle() (in module yokome.util.collections)</a>
+</li>
+      <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.stream_tokenizer">stream_tokenizer() (in module yokome.features.jpn)</a>
+</li>
+      <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.strip">strip() (in module yokome.features.jpn)</a>
 </li>
       <li><a href="python/yokome/features/tree.html#yokome.features.tree.StructureTree">StructureTree (class in yokome.features.tree)</a>
 </li>
@@ -347,22 +547,44 @@
       <li><a href="python/yokome/features/tree.html#yokome.features.tree.TemplateTree">TemplateTree (class in yokome.features.tree)</a>
 </li>
       <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.to_dict">to_dict() (in module yokome.features.jpn)</a>
+
+      <ul>
+        <li><a href="python/yokome/features/tree.html#yokome.features.tree.LabeledTree.to_dict">(yokome.features.tree.LabeledTree method)</a>
+</li>
+      </ul></li>
+      <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.to_morae">to_morae() (in module yokome.features.jpn)</a>
+</li>
+      <li><a href="python/yokome/features/symbol_stream.html#yokome.features.symbol_stream.to_symbol_stream">to_symbol_stream() (in module yokome.features.symbol_stream)</a>
+</li>
+      <li><a href="python/yokome/features/symbol_stream.html#yokome.features.symbol_stream.to_text">to_text() (in module yokome.features.symbol_stream)</a>
 </li>
       <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.TOKEN_SERVANT">TOKEN_SERVANT (in module yokome.deployment.server)</a>
 </li>
       <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.TOKEN_SERVICE">TOKEN_SERVICE (in module yokome.deployment.server)</a>
 </li>
+      <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.tokenize">tokenize() (in module yokome.deployment.server)</a>
+
+      <ul>
+        <li><a href="python/yokome/language.html#yokome.language._lang.Language.tokenize">(yokome.language._lang.Language property)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.tokenize">tokenize() (in module yokome.deployment.server)</a>
-</li>
       <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.tokenize_async">tokenize_async() (in module yokome.features.jpn)</a>
 </li>
       <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.tokenize_stream_async">tokenize_stream_async() (in module yokome.features.jpn)</a>
 </li>
+      <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.tokenizer">tokenizer() (in module yokome.features.jpn)</a>
+</li>
       <li><a href="python/yokome/models/wsd.html#yokome.models.wsd.total_lemmas">total_lemmas() (in module yokome.models.wsd)</a>
 </li>
+      <li><a href="python/yokome/models/language_model.html#yokome.models.language_model.LanguageModel.train">train() (yokome.models.language_model.LanguageModel method)</a>
+</li>
+      <li><a href="python/yokome/models/language_model.html#yokome.models.language_model.LanguageModel.training_dir">training_dir() (yokome.models.language_model.LanguageModel method)</a>
+</li>
       <li><a href="python/yokome/features/tree.html#yokome.features.tree.Tree">Tree (class in yokome.features.tree)</a>
+</li>
+      <li><a href="python/yokome/data/jpn/corpus.html#yokome.data.jpn.corpus.tst_files">tst_files() (in module yokome.data.jpn.corpus)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -370,11 +592,19 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/data/jpn/dictionary_to_rdbms.html#yokome.data.jpn.dictionary_to_rdbms.UK">UK (in module yokome.data.jpn.dictionary_to_rdbms)</a>
+</li>
       <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.UnprocessableEntityError">UnprocessableEntityError</a>
+</li>
+      <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.unsemivoice">unsemivoice() (in module yokome.features.jpn)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/yokome/deployment/server.html#yokome.deployment.server.UnsupportedMediaTypeError">UnsupportedMediaTypeError</a>
+</li>
+      <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.unvoice">unvoice() (in module yokome.features.jpn)</a>
+</li>
+      <li><a href="python/yokome/data/jpn/dictionary_to_rdbms.html#yokome.data.jpn.dictionary_to_rdbms.USAGE">USAGE (in module yokome.data.jpn.dictionary_to_rdbms)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -382,7 +612,15 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/models/language_model.html#yokome.models.language_model.LanguageModel.validate">validate() (yokome.models.language_model.LanguageModel method)</a>
+</li>
       <li><a href="python/yokome/features/symbol_stream.html#yokome.features.symbol_stream.validate_brackets">validate_brackets() (in module yokome.features.symbol_stream)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/data/jpn/corpus.html#yokome.data.jpn.corpus.validate_file">validate_file() (in module yokome.data.jpn.corpus)</a>
+</li>
+      <li><a href="python/yokome/features/jpn.html#yokome.features.jpn.voice">voice() (in module yokome.features.jpn)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -391,6 +629,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/yokome/util/persistence.html#yokome.util.persistence.write_quoted">write_quoted() (in module yokome.util.persistence)</a>
+</li>
+      <li><a href="python/yokome/data/jpn/dictionary_to_rdbms.html#yokome.data.jpn.dictionary_to_rdbms.WRITING">WRITING (in module yokome.data.jpn.dictionary_to_rdbms)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -404,6 +644,14 @@
 <h2 id="Y">Y</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/data/jpn/corpus.html#module-yokome.data.jpn.corpus">yokome.data.jpn.corpus (module)</a>
+</li>
+      <li><a href="python/yokome/data/jpn/corpus_to_rdbms.html#module-yokome.data.jpn.corpus_to_rdbms">yokome.data.jpn.corpus_to_rdbms (module)</a>
+</li>
+      <li><a href="python/yokome/data/jpn/dictionary_to_rdbms.html#module-yokome.data.jpn.dictionary_to_rdbms">yokome.data.jpn.dictionary_to_rdbms (module)</a>
+</li>
+      <li><a href="python/yokome/data/jpn/dictionary_to_search.html#module-yokome.data.jpn.dictionary_to_search">yokome.data.jpn.dictionary_to_search (module)</a>
+</li>
       <li><a href="python/yokome/deployment/server.html#module-yokome.deployment.server">yokome.deployment.server (module)</a>
 </li>
       <li><a href="python/yokome/features/corpus.html#module-yokome.features.corpus">yokome.features.corpus (module)</a>
@@ -414,17 +662,33 @@
 </li>
       <li><a href="python/yokome/features/symbol_stream.html#module-yokome.features.symbol_stream">yokome.features.symbol_stream (module)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/yokome/features/tree.html#module-yokome.features.tree">yokome.features.tree (module)</a>
 </li>
+      <li><a href="python/yokome/language.html#module-yokome.language._jpn">yokome.language._jpn (module)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/yokome/language.html#module-yokome.language._lang">yokome.language._lang (module)</a>
+</li>
+      <li><a href="python/yokome/models/cross_validation.html#module-yokome.models.cross_validation">yokome.models.cross_validation (module)</a>
+</li>
+      <li><a href="python/yokome/models/hyperoptimization.html#module-yokome.models.hyperoptimization">yokome.models.hyperoptimization (module)</a>
+</li>
+      <li><a href="python/yokome/models/language_model.html#module-yokome.models.language_model">yokome.models.language_model (module)</a>
+</li>
+      <li><a href="python/yokome/models/train.html#module-yokome.models.train">yokome.models.train (module)</a>
+</li>
       <li><a href="python/yokome/models/wsd.html#module-yokome.models.wsd">yokome.models.wsd (module)</a>
+</li>
+      <li><a href="python/yokome/util/collections.html#module-yokome.util.collections">yokome.util.collections (module)</a>
 </li>
       <li><a href="python/yokome/util/concurrency.html#module-yokome.util.concurrency">yokome.util.concurrency (module)</a>
 </li>
       <li><a href="python/yokome/util/math.html#module-yokome.util.math">yokome.util.math (module)</a>
 </li>
       <li><a href="python/yokome/util/persistence.html#module-yokome.util.persistence">yokome.util.persistence (module)</a>
+</li>
+      <li><a href="python/yokome/util/progress.html#module-yokome.util.progress">yokome.util.progress (module)</a>
 </li>
   </ul></td>
 </tr></table>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>yokome.data.jpn.dictionary_to_rdbms &#8212; Yokome 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="yokome.data.jpn.dictionary_to_search" href="dictionary_to_search.html" />
+    <link rel="prev" title="yokome.data.jpn.corpus" href="corpus.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../../index.html">
+          Yokome</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../../py-modindex.html">Python Modules</a></li>
+                <li><a href="../../../../webextension.html">WebExtension</a></li>
+                <li><a href="../../../../genindex.html">Index</a></li>
+                <li><a href="../../../../future_work.html">Future Work</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../yokome.html"><code class="docutils literal notranslate"><span class="pre">yokome</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../webextension.html">Yokome Firefox WebExtension (JavaScript)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../future_work.html">Where to go from here</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="corpus.html" title="Previous Chapter: yokome.data.jpn.corpus"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; yokome.data.j...</span>
+    </a>
+  </li>
+  <li>
+    <a href="dictionary_to_search.html" title="Next Chapter: yokome.data.jpn.dictionary_to_search"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">yokome.data.j... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">yokome.data.jpn.dictionary_to_rdbms</span></code></a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <div class="section" id="module-yokome.data.jpn.dictionary_to_rdbms">
+<span id="yokome-data-jpn-dictionary-to-rdbms"></span><h1><code class="docutils literal notranslate"><span class="pre">yokome.data.jpn.dictionary_to_rdbms</span></code><a class="headerlink" href="#module-yokome.data.jpn.dictionary_to_rdbms" title="Permalink to this headline">¶</a></h1>
+<p>Import script to transfer entries from a JMdict XML file to an SQLite
+database.</p>
+<dl class="data">
+<dt id="yokome.data.jpn.dictionary_to_rdbms.DIALECT">
+<code class="sig-prename descclassname">yokome.data.jpn.dictionary_to_rdbms.</code><code class="sig-name descname">DIALECT</code><em class="property"> = {'Hokkaido-ben': 'hob', 'Kansai-ben': 'ksb', 'Kantou-ben': 'ktb', 'Kyoto-ben': 'kyb', 'Kyuushuu-ben': 'kyu', 'Nagano-ben': 'nab', 'Osaka-ben': 'osb', 'Ryuukyuu-ben': 'rkb', 'Tosa-ben': 'tsb', 'Touhoku-ben': 'thb', 'Tsugaru-ben': 'tsug'}</em><a class="headerlink" href="#yokome.data.jpn.dictionary_to_rdbms.DIALECT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping from JMdict dialect entities to dialect codes.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="yokome.data.jpn.dictionary_to_rdbms.DOMAINS">
+<code class="sig-prename descclassname">yokome.data.jpn.dictionary_to_rdbms.</code><code class="sig-name descname">DOMAINS</code><em class="property"> = {'Buddhist term': 'Buddh.', 'Shinto term': 'Shinto', 'anatomical term': 'anat.', 'architecture term': 'archit.', 'astronomy, etc. term': 'astron.', 'baseball term': 'baseb.', 'biology term': 'biol.', 'botany term': 'bot.', 'business term': 'bus.', 'chemistry term': 'chem.', 'computer terminology': 'comp.', 'economics term': 'econ.', 'engineering term': 'engin.', 'finance term': 'fin.', 'food term': 'food', 'geology, etc. term': 'geol.', 'geometry term': 'geom.', 'law, etc. term': 'law', 'linguistics terminology': 'ling.', 'mahjong term': 'mahj.', 'martial arts term': 'MA', 'mathematics': 'math.', 'medicine, etc. term': 'med.', 'military': 'mil.', 'music term': 'music', 'physics terminology': 'phys.', 'shogi term': 'shogi', 'sports term': 'sports', 'sumo term': 'sumo', 'zoology term': 'zool.'}</em><a class="headerlink" href="#yokome.data.jpn.dictionary_to_rdbms.DOMAINS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping from JMdict domain entities to domain abbreviations.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="yokome.data.jpn.dictionary_to_rdbms.GLOSS_TYPES">
+<code class="sig-prename descclassname">yokome.data.jpn.dictionary_to_rdbms.</code><code class="sig-name descname">GLOSS_TYPES</code><em class="property"> = {'expl': 'i.e.', 'fig': 'fig.', 'lit': 'lit.'}</em><a class="headerlink" href="#yokome.data.jpn.dictionary_to_rdbms.GLOSS_TYPES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping from JMdict gloss types to more readable representations.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="yokome.data.jpn.dictionary_to_rdbms.POS">
+<code class="sig-prename descclassname">yokome.data.jpn.dictionary_to_rdbms.</code><code class="sig-name descname">POS</code><em class="property"> = {'Godan verb - -aru special class': 'verb:quintigrade::ra column:-aru special class:', 'Godan verb - Iku/Yuku special class': 'verb:quintigrade::ka column:iku/yuku special class:', 'Godan verb - Uru old class verb (old form of Eru)': 'verb:quintigrade::ra column:uru special class:', &quot;Godan verb with `bu' ending&quot;: 'verb:quintigrade::ba column:regular:', &quot;Godan verb with `gu' ending&quot;: 'verb:quintigrade::ga column:regular:', &quot;Godan verb with `ku' ending&quot;: 'verb:quintigrade::ka column:regular:', &quot;Godan verb with `mu' ending&quot;: 'verb:quintigrade::ma column:regular:', &quot;Godan verb with `nu' ending&quot;: 'verb:quintigrade::na column:regular:', &quot;Godan verb with `ru' ending&quot;: 'verb:quintigrade::ra column:regular:', &quot;Godan verb with `ru' ending (irregular verb)&quot;: 'verb:quintigrade::ra column:-ru irregular:', &quot;Godan verb with `su' ending&quot;: 'verb:quintigrade::sa column:regular:', &quot;Godan verb with `tsu' ending&quot;: 'verb:quintigrade::ta column:regular:', &quot;Godan verb with `u' ending&quot;: 'verb:quintigrade::a column:regular:', &quot;Godan verb with `u' ending (special class)&quot;: &quot;verb:quintigrade::a column:-'u special class:&quot;, 'Ichidan verb': 'verb:monograde::ra column:regular:', 'Ichidan verb - kureru special class': 'verb:monograde::ra column:kureru special class:', 'Ichidan verb - zuru verb (alternative form of -jiru verbs)': 'verb:monograde:::-zuru ending:', 'Kuru verb - special class': 'verb:k-irregular::::', &quot;Nidan verb (lower class) with `bu' ending (archaic)&quot;: 'verb:bigrade:lower class:ba column:regular:', &quot;Nidan verb (lower class) with `dzu' ending (archaic)&quot;: 'verb:bigrade:lower class:da column:regular:', &quot;Nidan verb (lower class) with `gu' ending (archaic)&quot;: 'verb:bigrade:lower class:ga column:regular:', &quot;Nidan verb (lower class) with `hu/fu' ending (archaic)&quot;: 'verb:bigrade:lower class:ha column:regular:', &quot;Nidan verb (lower class) with `ku' ending (archaic)&quot;: 'verb:bigrade:lower class:ka column:regular:', &quot;Nidan verb (lower class) with `mu' ending (archaic)&quot;: 'verb:bigrade:lower class:ma column:regular:', &quot;Nidan verb (lower class) with `nu' ending (archaic)&quot;: 'verb:bigrade:lower class:na column:regular:', &quot;Nidan verb (lower class) with `ru' ending (archaic)&quot;: 'verb:bigrade:lower class:ra column:regular:', &quot;Nidan verb (lower class) with `su' ending (archaic)&quot;: 'verb:bigrade:lower class:sa column:regular:', &quot;Nidan verb (lower class) with `tsu' ending (archaic)&quot;: 'verb:bigrade:lower class:ta column:regular:', &quot;Nidan verb (lower class) with `u' ending and `we' conjugation (archaic)&quot;: 'verb:bigrade:lower class:wa column:regular:', &quot;Nidan verb (lower class) with `yu' ending (archaic)&quot;: 'verb:bigrade:lower class:ya column:regular:', &quot;Nidan verb (lower class) with `zu' ending (archaic)&quot;: 'verb:bigrade:lower class:za column:regular:', &quot;Nidan verb (upper class) with `bu' ending (archaic)&quot;: 'verb:bigrade:upper class:ba column:regular:', &quot;Nidan verb (upper class) with `dzu' ending (archaic)&quot;: 'verb:bigrade:upper class:da column:regular:', &quot;Nidan verb (upper class) with `gu' ending (archaic)&quot;: 'verb:bigrade:upper class:ga column:regular:', &quot;Nidan verb (upper class) with `hu/fu' ending (archaic)&quot;: 'verb:bigrade:upper class:ha column:regular:', &quot;Nidan verb (upper class) with `ku' ending (archaic)&quot;: 'verb:bigrade:upper class:ka column:regular:', &quot;Nidan verb (upper class) with `mu' ending (archaic)&quot;: 'verb:bigrade:upper class:na column:regular:', &quot;Nidan verb (upper class) with `ru' ending (archaic)&quot;: 'verb:bigrade:upper class:ra column:regular:', &quot;Nidan verb (upper class) with `tsu' ending (archaic)&quot;: 'verb:bigrade:upper class:ta column:regular:', &quot;Nidan verb (upper class) with `yu' ending (archaic)&quot;: 'verb:bigrade:upper class:ya column:regular:', &quot;Nidan verb with 'u' ending (archaic)&quot;: 'verb:bigrade:lower class:a column:regular:', &quot;Yodan verb with `bu' ending (archaic)&quot;: 'verb:quadrigrade::ba column:regular:', &quot;Yodan verb with `gu' ending (archaic)&quot;: 'verb:quadrigrade::ga column:regular:', &quot;Yodan verb with `hu/fu' ending (archaic)&quot;: 'verb:quadrigrade::ha column:regular:', &quot;Yodan verb with `ku' ending (archaic)&quot;: 'verb:quadrigrade::ka column:regular:', &quot;Yodan verb with `mu' ending (archaic)&quot;: 'verb:quadrigrade::ma column:regular:', &quot;Yodan verb with `nu' ending (archaic)&quot;: 'verb:quadrigrade::na column:regular:', &quot;Yodan verb with `ru' ending (archaic)&quot;: 'verb:quadrigrade::ra column:regular:', &quot;Yodan verb with `su' ending (archaic)&quot;: 'verb:quadrigrade::sa column:regular:', &quot;Yodan verb with `tsu' ending (archaic)&quot;: 'verb:quadrigrade::ta column:regular:', &quot;`kari' adjective (archaic)&quot;: 'kari-adjective', &quot;`ku' adjective (archaic)&quot;: 'ku-adjective', &quot;`shiku' adjective (archaic)&quot;: 'shiku-adjective', &quot;`taru' adjective&quot;: 'taru-adjective', 'adjectival nouns or quasi-adjectives (keiyodoshi)': 'na-adjective', 'adjective (keiyoushi)': 'i-adjective', 'adjective (keiyoushi) - yoi/ii class': 'yoi/ii class', 'adverb (fukushi)': 'adverb', &quot;adverb taking the `to' particle&quot;: 'quotable', 'adverbial noun (fukushitekimeishi)': 'adverb:adverbial noun;noun:adverbial noun', 'archaic/formal form of na-adjective': 'nari-adjective', 'auxiliary': 'auxiliary', 'auxiliary adjective': 'auxiliary;adjective', 'auxiliary verb': 'auxiliary;verb', 'conjunction': 'conjunction', 'copula': 'copula', 'counter': 'suffix:counter', 'expressions (phrases, clauses, etc.)': 'multiword', 'interjection (kandoushi)': 'interjection', 'intransitive verb': 'intransitive', 'irregular nu verb': 'verb:n-irregular::::', 'irregular ru verb, plain form ends with -ri': 'verb:r-irregular::::', 'irregular verb': 'verb:irregular::::', 'noun (common) (futsuumeishi)': 'noun', 'noun (temporal) (jisoumeishi)': 'adverb:temporal noun;noun:temporal noun', 'noun or participle which takes the aux. verb suru': 'suru verb', 'noun or verb acting prenominally': 'prenominal', 'noun, used as a prefix': 'prefix;noun', 'noun, used as a suffix': 'suffix;noun', &quot;nouns which may take the genitive case particle `no'&quot;: 'no-adjective', 'numeric': 'numeral', 'particle': 'particle', 'pre-noun adjectival (rentaishi)': 'pre-noun adjectival', 'prefix': 'prefix', 'pronoun': 'pronoun', 'proper noun': 'proper noun', 'su verb - precursor to the modern suru': 'verb:s-irregular:::su class:', 'suffix': 'suffix', 'suru verb - included': 'verb:s-irregular:::suru class:suru ending', 'suru verb - special class': 'verb:s-irregular:::suru class:-suru ending', 'transitive verb': 'transitive', 'unclassified': '', 'verb unspecified': 'verb:::::'}</em><a class="headerlink" href="#yokome.data.jpn.dictionary_to_rdbms.POS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping from JMdict POS entities to POS tags.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="yokome.data.jpn.dictionary_to_rdbms.UK">
+<code class="sig-prename descclassname">yokome.data.jpn.dictionary_to_rdbms.</code><code class="sig-name descname">UK</code><em class="property"> = 'word usually written using kana alone'</em><a class="headerlink" href="#yokome.data.jpn.dictionary_to_rdbms.UK" title="Permalink to this definition">¶</a></dt>
+<dd><p>JMdict entity marking a word that is usually written using kana only.</p>
+<p>Triggers the insertion of a kana-only row into the lemma table of the resulting
+database.  For entries in JMdict that do not contain this entity in a &lt;misc/&gt;
+tag, a kana-only row is only inserted if there is no &lt;k_ele/&gt; tag in the entry.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="yokome.data.jpn.dictionary_to_rdbms.USAGE">
+<code class="sig-prename descclassname">yokome.data.jpn.dictionary_to_rdbms.</code><code class="sig-name descname">USAGE</code><em class="property"> = {'abbreviation': ('POS', 'abbr.'), 'archaism': ('frequency', 'archaic'), &quot;children's language&quot;: ('speaker', 'childish'), 'colloquialism': ('meaning', 'coll.'), 'derogatory': ('relationship', 'derog.'), 'exclusively kana': ('spelling', 'exclusively kana'), 'exclusively kanji': ('spelling', 'exclusively kanji'), 'familiar language': ('relationship', 'fam.'), 'female term or language': ('speaker', 'f. language'), 'honorific or respectful (sonkeigo) language': ('relationship', 'hon.'), 'humble (kenjougo) language': ('relationship', 'hum.'), 'idiomatic expression': ('meaning', 'idiom'), 'jocular, humorous term': ('meaning', 'joc.'), 'male slang': ('speaker', 'm. slang'), 'male term or language': ('speaker', 'm. language'), 'manga slang': ('speaker', 'manga slang'), 'obscure term': ('accuracy', 'obscure'), 'obsolete term': ('frequency', 'obsolete'), 'onomatopoeic or mimetic word': ('POS', 'on./mim.'), 'poetical term': ('meaning', 'poet.'), 'polite (teineigo) language': ('relationship', 'pol.'), 'proverb': ('POS', 'proverb'), 'quotation': ('POS', 'quote'), 'rare': ('frequency', 'rare'), 'rude or X-rated term (not displayed in educational software)': ('meaning', 'rude/X-rated'), 'sensitive': ('meaning', 'sensitive'), 'slang': ('speaker', 'slang'), 'vulgar expression or word': ('meaning', 'vulg.'), 'word usually written using kana alone': ('spelling', 'usu. wr. in kana'), 'word usually written using kanji alone': ('spelling', 'usu. wr. in kanji'), 'yojijukugo': ('spelling', 'yojijukugo')}</em><a class="headerlink" href="#yokome.data.jpn.dictionary_to_rdbms.USAGE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping from JMdict usage entities to usage types and short descriptions.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="yokome.data.jpn.dictionary_to_rdbms.WRITING">
+<code class="sig-prename descclassname">yokome.data.jpn.dictionary_to_rdbms.</code><code class="sig-name descname">WRITING</code><em class="property"> = {'ateji (phonetic) reading': 'ateji', 'gikun (meaning as reading) or jukujikun (special kanji reading)': 'gikun/jukujikun', 'irregular okurigana usage': 'irregular okurigana usage', 'old or irregular kana form': 'old/irregular kana form', 'out-dated or obsolete kana usage': 'outdated/obsolete kana usage', 'word containing irregular kana usage': 'irregular kana usage', 'word containing irregular kanji usage': 'irregular kanji usage', 'word containing out-dated kanji': 'outdated kanji'}</em><a class="headerlink" href="#yokome.data.jpn.dictionary_to_rdbms.WRITING" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping from JMdict writing style entities to short descriptions.</p>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, Julian Betz.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

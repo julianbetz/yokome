@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>yokome.models.cross_validation &#8212; Yokome 1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="yokome.models.hyperoptimization" href="hyperoptimization.html" />
+    <link rel="prev" title="yokome.models" href="../models.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          Yokome</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../py-modindex.html">Python Modules</a></li>
+                <li><a href="../../../webextension.html">WebExtension</a></li>
+                <li><a href="../../../genindex.html">Index</a></li>
+                <li><a href="../../../future_work.html">Future Work</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../yokome.html"><code class="docutils literal notranslate"><span class="pre">yokome</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../webextension.html">Yokome Firefox WebExtension (JavaScript)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../future_work.html">Where to go from here</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="../models.html" title="Previous Chapter: yokome.models"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; yokome.models</span>
+    </a>
+  </li>
+  <li>
+    <a href="hyperoptimization.html" title="Next Chapter: yokome.models.hyperoptimization"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">yokome.models... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">yokome.models.cross_validation</span></code></a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <div class="section" id="module-yokome.models.cross_validation">
+<span id="yokome-models-cross-validation"></span><h1><code class="docutils literal notranslate"><span class="pre">yokome.models.cross_validation</span></code><a class="headerlink" href="#module-yokome.models.cross_validation" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="yokome.models.cross_validation.cross_validate">
+<code class="sig-prename descclassname">yokome.models.cross_validation.</code><code class="sig-name descname">cross_validate</code><span class="sig-paren">(</span><em class="sig-param">seed_dir</em>, <em class="sig-param">language</em>, <em class="sig-param">n_samples</em>, <em class="sig-param">n_splits</em>, <em class="sig-param">evl_size</em>, <em class="sig-param">max_epochs</em>, <em class="sig-param">batch_size</em>, <em class="sig-param">max_generalization_loss</em>, <em class="sig-param">min_coverage</em>, <em class="sig-param">hyperparams</em>, <em class="sig-param">seed=None</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">dashboard_port=6006</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.models.cross_validation.cross_validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform cross-validation on the</p>
+<p>The process is designed to be able to continue with minimal additional
+effort after a crash.  It can therefore be stopped and taken up again later.</p>
+<p>Tensorboard is served during each training run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>seed_dir</strong> (<em>str</em>) – Where to store model data for this seed.  If
+cross-validation is performed for multiple seeds, multiple seed
+directories are needed.</p></li>
+<li><p><strong>language</strong> (<em>yokome.language.Language</em>) – The language to train on.</p></li>
+<li><p><strong>n_samples</strong> (<em>int</em>) – The number of sample sentences to load.</p></li>
+<li><p><strong>n_splits</strong> (<em>int</em>) – The number <code class="docutils literal notranslate"><span class="pre">k</span></code> of folds.</p></li>
+<li><p><strong>evl_size</strong> (<em>float</em>) – The portion of evaluation samples w.r.t. the
+non-validation part of all samples.</p></li>
+<li><p><strong>max_epochs</strong> (<em>int</em>) – The maximum number of epochs to train for.  The
+actual number of epochs may be less if the training process stops early.</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – The number of sentences to estimate the probability
+for in parallel.</p></li>
+<li><p><strong>max_generalization_loss</strong> (<em>float</em>) – The maximum generalization loss at
+which the training process is still continued.</p></li>
+<li><p><strong>min_coverage</strong> – The portion of the corpus that has to be covered by the
+minimal vocabulary of the most frequent words that is used to encode
+incoming data.</p></li>
+<li><p><strong>hyperparams</strong> – The model parameters used in this pass of
+cross-validation.</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – The seed used for the pseudo-random number generator that
+generates the seeds for the models to be trained.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Whether to print progress indiation.</p></li>
+<li><p><strong>dashboard_port</strong> (<em>int</em>) – On which port to serve Tensorboard.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The average loss over all folds.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="yokome.models.cross_validation.kfold">
+<code class="sig-prename descclassname">yokome.models.cross_validation.</code><code class="sig-name descname">kfold</code><span class="sig-paren">(</span><em class="sig-param">language</em>, <em class="sig-param">n_samples=None</em>, <em class="sig-param">n_splits=5</em>, <em class="sig-param">evl_size=0.25</em><span class="sig-paren">)</span><a class="headerlink" href="#yokome.models.cross_validation.kfold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create splits of corpus sentences to be used in cross-validation.</p>
+<p>The sentences are loaded using the languages <code class="docutils literal notranslate"><span class="pre">load</span></code> method.  The splits
+are performed randomly, and differently for different numbers of samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>language</strong> (<em>yokome.language.Language</em>) – The language to train on.</p></li>
+<li><p><strong>n_samples</strong> (<em>int</em>) – The number of sample sentences to load.</p></li>
+<li><p><strong>n_splits</strong> (<em>int</em>) – The number <code class="docutils literal notranslate"><span class="pre">k</span></code> of folds.</p></li>
+<li><p><strong>evl_size</strong> (<em>float</em>) – The portion of evaluation samples w.r.t. the
+non-validation part of all samples.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An iterable over triples of tuples over sentences.  Each triple
+consists of the training, evaluation and validation splits,
+respectively.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, Julian Betz.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
