@@ -14,13 +14,9 @@ hyperparameter_optimization/*
 !hyperparameter_optimization/xvld
 hyperparameter_optimization/xvld/*
 !hyperparameter_optimization/xvld/.gitkeep
-docs/*
-!docs/build
 docs/build/*
 !docs/build/html
 docs/build/html/*
 !docs/build/html/.gitkeep
-!docs/source/.static
-!docs/source/.templates
 
 !**/.gitkeep
