@@ -257,7 +257,7 @@ For the master project, I submit the following versions for grading:
   - `<https://github.com/julianbetz/yokome-jpn-corpus>`_: release v1.0.0 (branch master, commit 6cb1473be079780ba3df8f97302861c1112f0486) (2019-08-27)
   - `<https://github.com/julianbetz/yokome-jpn-dictionary>`_: release v1.0.0 (branch master, commit a05762b3d99d6633ac3b1e5f450342cb86bf8b0d) (2019-08-29)
 
-- Dockerhub:
+- Docker Hub:
 
   - ``julianbetz/yokome.app:1.0`` (2019-09-05)
   - ``julianbetz/yokome.search:1.0`` (2019-09-05)
