@@ -115,12 +115,6 @@ data/processed/.jpn.flag: data
 	@touch data/processed/.jpn.flag
 
 
-# Training
-# ------------------------------------------------------------------------------
-
-# hyperparameter_optimization/xvld/best_hyperparams.json:
-
-
 # Deployment
 # ------------------------------------------------------------------------------
 

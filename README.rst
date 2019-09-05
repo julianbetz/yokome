@@ -239,3 +239,25 @@ analyzer `JUMAN++ <http://nlp.ist.i.kyoto-u.ac.jp/EN/index.php?JUMAN%2B%2B>`_
 (Morita, Kawahara, Kurohashi 2015).  JUMAN++ is distributed under the `Apache
 License, Version 2.0 <http://www.apache.org/licenses/LICENSE-2.0>`_.  You can
 obtain it via download by issuing :bash:`make lib/jumanpp-1.02.tar.xz`.
+
+
+Submission for Grading
+======================
+
+For the master project, I submit the following versions for grading:
+
+- GitHub:
+  
+  - `<https://github.com/julianbetz/yokome>`_:
+
+    - Source: release v1.0.0 (branch master, commit ???) (2019-09-05)
+    - Documentation: release v1.0.0-doc (branch gh-pages, commit 809f9c3218faa3de5616002d00d9906d9420abf1) (2019-09-05)
+
+  - `<https://github.com/julianbetz/yokome-browser>`_: release v1.0.0 (branch master, commit 6a75f62737a04cdf4a6f3183c99a51e7ffed2721) (2019-08-29)
+  - `<https://github.com/julianbetz/yokome-jpn-corpus>`_: release v1.0.0 (branch master, commit 6cb1473be079780ba3df8f97302861c1112f0486) (2019-08-27)
+  - `<https://github.com/julianbetz/yokome-jpn-dictionary>`_: release v1.0.0 (branch master, commit a05762b3d99d6633ac3b1e5f450342cb86bf8b0d) (2019-08-29)
+
+- Dockerhub:
+
+  - ``julianbetz/yokome.app:1.0`` (2019-09-05)
+  - ``julianbetz/yokome.search:1.0`` (2019-09-05)
