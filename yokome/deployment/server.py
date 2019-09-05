@@ -105,7 +105,7 @@ class UnprocessableEntityError(Exception):
     pass
 
 
-# TODO Improve, discriminate CJK better
+# XXX Improve, discriminate CJK better
 def detect_language(text):
     """Detect the language in which the text was written.
 
@@ -165,7 +165,7 @@ def tokenize(text, language=None):
     if language is None:
         language = detect_language(text)
     if language == JAPANESE:
-        # TODO Handle case that there is no token (only omitted characters)
+        # XXX Handle case that there is no token (only omitted characters)
         sentences = list(
             list(stream_tokenizer(fullwidth_fold(ascii_fold(iteration_fold(
                 repetition_contraction(combining_voice_mark_fold(
@@ -212,7 +212,7 @@ def api_tokenize():
                                 status=200,
                                 mimetype='application/json')
         else:
-            # TODO Apply proper error handling
+            # XXX Apply proper error handling
             raise NotImplementedError('Language not supported')
     except Exception as error:
         response = handle_error(error)
@@ -285,7 +285,7 @@ def disambiguate(tokens, i, language):
     raise NotImplementedError('Language not supported')
 
 
-# TODO Apply proper error handling
+# XXX Apply proper error handling
 @app.route('/%s/%s' % (WSD_SERVANT, WSD_SERVICE), methods=['POST'])
 def api_disambiguate():
     """Respond to an HTTP POST request at the disambiguation endpoint.

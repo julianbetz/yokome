@@ -75,7 +75,6 @@ def n_lexemes_for_lemma(conn, language_code, lemma) -> int:
         lemma as one of its headwords.
 
     """
-    # TODO Use language code
     return next(conn.cursor().execute(
         'SELECT COUNT(DISTINCT entry_id) '
         '    FROM lemmas '
@@ -367,7 +366,8 @@ def score_lexeme(tokens, i, pos_trees, conn, lexeme, TOTAL_LEMMAS):
             total_pos_score += pos_score
             k -= 1
         lexeme_result['roles'].append(role_result)
-    lexeme_score *= n_senses / total_pos_score # TODO Correct?
+    # XXX Correct? Numerical stability?
+    lexeme_score *= n_senses / total_pos_score
     lexeme_result['score'] = lexeme_score
     return lexeme_result
 

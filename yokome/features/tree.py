@@ -78,7 +78,7 @@ class Tree(list):
             self._parent = None
 
 
-    # TODO Use property instead
+    # XXX Use property instead
     def __invert__(self):
         """Return the parent of this node."""
         return self._parent
@@ -364,7 +364,7 @@ class LabeledTree(Container, Iterable, Sized):
         return len(self._children)
 
 
-    # TODO Use property to set data instead of None value in __getitem__,
+    # XXX Use property to set data instead of None value in __getitem__,
     # __setitem__ and __delitem__; allow None values in labels
     def __getitem__(self, key):
         """Get satellite data, a specific child or an iterator over children.
@@ -414,7 +414,7 @@ class LabeledTree(Container, Iterable, Sized):
     def __setitem__(self, key, value):
         self._setitem(key, value)
 
-    # TODO Handle empty tuple as key on root node
+    # XXX Handle empty tuple as key on root node
     def _setitem(self, key, value):
         """
 
@@ -524,7 +524,7 @@ class LabeledTree(Container, Iterable, Sized):
             self._label = None
 
 
-    # TODO Use property instead
+    # XXX Use property instead
     def __invert__(self):
         return self._parent
 
@@ -749,14 +749,15 @@ class TemplateTree(LabeledTree):
             cls._prepare_restriction_depths(pos_dict, child, depth + 1)
 
 
-    # TODO Replace asserts with error raising
+    # XXX Replace asserts with error raising
+    # 
     # Idempotent
     @classmethod
     def _prepare_restrictions(cls, pos_dict):
         assert isinstance(pos_dict, dict)
         root_data = SENTINEL = object()
         for data, restrictions in pos_dict.items():
-            # TODO Verify whether adequate
+            # XXX Verify whether adequate
             assert data is not Ellipsis and not isinstance(data, slice)
             assert isinstance(restrictions, dict)
             restrictions[cls.CHILDREN] = []
@@ -819,7 +820,7 @@ class TemplateTree(LabeledTree):
         return super().__getitem__(key)
 
 
-    # TODO Check parent links in restrictions
+    # XXX Check parent links in restrictions
     def __setitem__(self, key, value):
         # Unify input representations
         if not isinstance(key, tuple):
@@ -1192,8 +1193,8 @@ class TemplateTree(LabeledTree):
             
             
 
-# TODO Extend to more general tree types
-# TODO Move to classes
+# XXX Extend to more general tree types
+# XXX Move to classes
 def dfs(tree, prefix='', next_sibling=False, shortened=False):
     """Printing function for :class:`DataOnlyTree` trees.
 

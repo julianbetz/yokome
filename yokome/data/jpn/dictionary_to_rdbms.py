@@ -25,7 +25,7 @@ import os
 import click
 from pathlib2 import Path
 from xml.etree import ElementTree
-# TODO Use a different SQLite wrapper to allow for atomic transactions
+# XXX Use a different SQLite wrapper to allow for atomic transactions
 import sqlite3 as sql
 
 _PROJECT_ROOT = os.path.abspath(os.path.dirname(os.path.abspath(__file__))
@@ -44,7 +44,7 @@ database.  For entries in JMdict that do not contain this entity in a <misc/>
 tag, a kana-only row is only inserted if there is no <k_ele/> tag in the entry.
 """
 
-# TODO Add unused, but missing tags (see http://www.edrdg.org/jmdictdb/cgi-bin/edhelp.py?svc=jmdict&sid=#kw_pos)
+# XXX Add unused, but missing tags (see http://www.edrdg.org/jmdictdb/cgi-bin/edhelp.py?svc=jmdict&sid=#kw_pos)
 POS = {
     # Nouns
     "noun (common) (futsuumeishi)": 'noun',
@@ -275,7 +275,7 @@ GLOSS_TYPES = {
 """Mapping from JMdict gloss types to more readable representations."""
 
 
-# TODO Check whether the katakana middle dot itself is referenced from another
+# XXX Check whether the katakana middle dot itself is referenced from another
 # entry; add corresponding asserts
 def _parse_reference(reference):
     parts = reference.split('・')
@@ -322,17 +322,17 @@ def main(jmdict_file):
     root = ElementTree.parse(jmdict_file).getroot()
 
     # XXX Add progress indicators
-    # TODO Check revision of JMdict file and warn when it changed
-    # TODO Check whether all types of data are imported for the current revision
+    # XXX Check revision of JMdict file and warn when it changed
+    # XXX Check whether all types of data are imported for the current revision
     # of the JMdict format
     with sql.connect(database_file) as conn:
         c = conn.cursor()
         c.execute('PRAGMA encoding="UTF-8"')
-        # TODO Use foreign keys
+        # Use foreign keys
         c.execute('PRAGMA foreign_keys=ON')
         print('    Creating tables...')
         # Surface forms for dictionary searches
-        # XXX Inconsistent use of the term 'lemmas': use 'base_forms' istead
+        # XXX Inconsistent use of the term 'lemmas': use 'base_forms' instead
         # XXX Use 'reading', or at least 'phonemic' instead of 'phonetic'
         c.execute('''CREATE TABLE lemmas (
             language TEXT NOT NULL,
@@ -404,7 +404,7 @@ def main(jmdict_file):
             sense_id_other INTEGER,
             FOREIGN KEY (language, entry_id, sense_id) REFERENCES roles,
             CHECK (nonkana IS NOT NULL OR reading IS NOT NULL))''')
-        # XXX Add check for ISO 639-3 / 639-2 language code on language
+        # XXX Add check for ISO 639-3 language code on language
         c.execute('''CREATE TABLE source_languages (
             language TEXT NOT NULL,
             entry_id INTEGER NOT NULL,

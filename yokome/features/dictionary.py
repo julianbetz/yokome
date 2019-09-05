@@ -105,7 +105,7 @@ class Lexeme():
         self.headwords = tuple(c.execute('SELECT nonkana, reading FROM lexemes WHERE language = ? AND entry_id = ? ORDER BY sequence_id', (self.language_code, self.entry_id)))
         if not self.headwords:
             raise ValueError('Unable to find entry with ID %d for language %r' % (self.entry_id, self.language_code))
-        # TODO Ensure that there is a suitable index for this query
+        # XXX Ensure that there is a suitable index for this query
         same_main_headword_entries = tuple(other_entry_id for (other_entry_id,) in c.execute('SELECT entry_id FROM lexemes WHERE language = ? AND nonkana IS ? AND reading = ? AND sequence_id = 1 ORDER BY entry_id' if self.headwords[0][0] is None else 'SELECT entry_id FROM lexemes WHERE language = ? AND nonkana = ? AND reading = ? AND sequence_id = 1 ORDER BY entry_id', (self.language_code, *self.headwords[0])))
         self.discriminator = next(j for j, other_entry_id in enumerate(same_main_headword_entries, start=1) if other_entry_id == self.entry_id) if len(same_main_headword_entries) > 1 else None
         self.roles = []
@@ -255,7 +255,7 @@ class Role():
         return '\n  '.join([str(self.pos_tree())] + [str(sense) for sense in self.senses])
 
 
-# TODO Rename to 'Connotation'
+# XXX Rename to 'Connotation'
 class Sense():
     """A connotation in the dictionary.
 

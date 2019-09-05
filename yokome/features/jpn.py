@@ -69,7 +69,6 @@ def _flatten_dict(d):
             yield value
 JUMAN_UNDETERMINABLE_POS = set(_flatten_dict(JUMAN_TRANSLATOR['未定義語']))
 
-# TODO Missing: Vertical forms
 BRACKET_DICT = {ord('「'): ord('」'),
                 ord('『'): ord('』'),
                 ord('（'): ord('）'),
@@ -102,7 +101,7 @@ CLOSING_QUOTATION = {ord('」'), ord('』'), ord('﹂'), ord('﹄')}
 assert OPENING_QUOTATION <= OPENING_BRACKETS
 assert CLOSING_QUOTATION <= CLOSING_BRACKETS
 
-# TODO Missing: Vertical forms
+# XXX Missing: Vertical forms
 SENTENCE_END_PUNCTUATION = {ord('。'), ord('？'), ord('！'),
                             ord('.'), ord('?'), ord('!')}
 assert SENTENCE_END_PUNCTUATION.isdisjoint(OPENING_BRACKETS | CLOSING_BRACKETS)
@@ -537,7 +536,7 @@ def is_reading(phrase: str) -> bool:
         ``False`` otherwise.
 
     """
-    # TODO Use above ranges instead of explicit hex codes
+    # XXX Use above ranges instead of explicit hex codes
     return (all((ord(c) >= 0x3041 and ord(c) <= 0x3096) # Hiragana
                 or (ord(c) >= 0x3099 and ord(c) <= 0x309f)
                 or (ord(c) >= 0x30a0 and ord(c) <= 0x30ff) # Katakana
@@ -559,7 +558,7 @@ def hiragana_to_katakana(phrase: str) -> str:
         katakana characters.
 
     """
-    # TODO Use above ranges instead of explicit hex codes
+    # XXX Use above ranges instead of explicit hex codes
     return ''.join(
         [chr(i + 0x60
              if (i >= 0x3041 and i <= 0x3096) or i == 0x309d or i == 0x309e
@@ -673,8 +672,6 @@ def iteration_fold(symbol_stream):
         yield out
 
 
-# TODO
-#
 # XXX Add support for voiced repetition mark misspelings using voiced sound mark
 # and combining voiced sound mark
 def repetition_contraction(symbol_stream):
@@ -1057,6 +1054,7 @@ def match_reading(splits):
             for j in range(3)]
 
 
+# XXX Catch the case that '#' starts a line
 def to_dict(token):
     """Turn an array of JUMAN++-style token annotations into a dictionary.
 
@@ -1105,7 +1103,7 @@ def to_dict(token):
         pos = JUMAN_TRANSLATOR[pos_broad][pos_fine][inflection_type]
     except KeyError:
         pos = ()
-        # TODO Use logger instead
+        # XXX Use logger instead
         print('\033[33mWARN\033[0m POS tags %r %r %r not found'
               % (pos_broad, pos_fine, inflection_type))
     inflection = pos if token[9] == '*' else pos + (token[9],)
@@ -1129,8 +1127,9 @@ def to_dict(token):
             pos += ('verb',)
             inflection += ('verb', '基本連用形')
     # Remove copula part of na-adjectives and no-adjectives
-    # TODO Monitor whether this may lead to unexpected results
-    if inflection_type in {'ナ形容詞', 'ナ形容詞特殊', 'ナノ形容詞'}: # TODO Check whether this exactly conforms to the inflections used by JUMAN++
+    # XXX Monitor whether this may lead to unexpected results
+    # XXX Check whether this exactly conforms to the inflections used by JUMAN++
+    if inflection_type in {'ナ形容詞', 'ナ形容詞特殊', 'ナノ形容詞'}:
         if uninflected_graphic[-1] == 'だ':
             uninflected_graphic = uninflected_graphic[:-1]
             uninflected_phonetic = uninflected_phonetic[:-1]
@@ -1188,8 +1187,8 @@ async def tokenize_async(text, partially_annotated=False):
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE)
         output, error = await process.communicate(input=text.encode())
-        # TODO Detect process failure
-        # TODO Handle error messages
+        # XXX Detect process failure
+        # XXX Handle error messages
     for candidates in parse_jumanpp_output(output.decode()):
         yield candidates
 
@@ -1213,8 +1212,8 @@ def tokenizer(text, partially_annotated=False):
         stdout=PIPE,
         stderr=PIPE)
     output, error = process.communicate(input=text.encode())
-    # TODO Detect process failure
-    # TODO Handle error messages
+    # XXX Detect process failure
+    # XXX Handle error messages
     yield from parse_jumanpp_output(output.decode())
 
 

@@ -121,9 +121,7 @@
         var arrowNode = document.createElement('div');
         arrowNode.appendChild(document.createTextNode(
                 top ? (left ? '◤' : '◥') : (left ? '◣' : '◢')));
-        // // XXX Check whether properties are overridden
-        // arrowNode.top = top;
-        // arrowNode.left = left;
+        // XXX Check whether properties are overridden
         arrowNode.style.position = 'absolute';
         if (top) {
             arrowNode.style.top = ARROW_DISTANCE + 'px';
@@ -191,7 +189,7 @@
 
 
     function post(url, data, node, callback, args) {
-        // TODO Do not retry on a HTTP 400 response
+        // XXX Do not retry on a HTTP 400 response
         var tries = TRIES,
             request = new XMLHttpRequest();
         data = JSON.stringify(data);
@@ -249,9 +247,9 @@
     function refreshTabs(node, lexemes, args) {
         var i, j, k, l, progressBar, score, intensity, // entries,
             subnode, subsubnode, subsubsubnode, ruby, reading, max_score;
-        node.wilps_lexemes = lexemes;
+        node.yokome_lexemes = lexemes;
         lexemes = lexemes.lexemes;
-        // TODO Rather use dojox.gfx.Surface to clear all objects
+        // XXX Rather use dojox.gfx.Surface to clear all objects
         while (tabSet.hasChildNodes()) {
             tabSet.removeChild(tabSet.lastChild);
         }
@@ -385,7 +383,8 @@
             + '</p>';
         
         tabPanels.appendChild(node);
-        if (tabSet.childNodes.length > 0) { // XXX Remove, should always be the case if statistics are used
+        // XXX Remove, should always be the case if statistics are used
+        if (tabSet.childNodes.length > 0) {
             switchToTab(tabSet.childNodes[0]);
             // fadeInAndOut(infoBox, 1.05, 50, 3000);
         }
@@ -394,15 +393,15 @@
 
     function maybeRefreshTabs(node) {
         if (Date.now() >= disambiguationTimeoutStart + TIMEOUT) {
-            if ('wilps_lemmas' in node) {
+            if ('yokome_lemmas' in node) {
                 console.log(node);
-                if ('wilps_lexemes' in node) { // Use cached data
-                    refreshTabs(node, node.wilps_lexemes, null, null);
+                if ('yokome_lexemes' in node) { // Use cached data
+                    refreshTabs(node, node.yokome_lexemes, null, null);
                 } else {
                     post('http://localhost:5003/wsd/disambiguate',
                          {'language': LANGUAGE,
-                          'i': node.wilps_i,
-                          'tokens': node.wilps_sentence},
+                          'i': node.yokome_i,
+                          'tokens': node.yokome_sentence},
                          node,
                          refreshTabs,
                          []);
@@ -473,9 +472,9 @@
                     // Insert token
                     replacement = document.createTextNode(sentence[j][0].surface_form.graphic);
                     node.parentNode.insertBefore(replacement, node);
-                    replacement.wilps_lemmas = [];
-                    replacement.wilps_sentence = sentence;
-                    replacement.wilps_i = j;
+                    replacement.yokome_lemmas = [];
+                    replacement.yokome_sentence = sentence;
+                    replacement.yokome_i = j;
                     max_k = sentence[j].length;
                     for (k = 0; k < max_k; k++) {
                         lemma = sentence[j][k].lemma;
@@ -487,7 +486,7 @@
                             rt.appendChild(document.createTextNode(lemma.phonetic));
                             ruby.appendChild(rt);
                             span.appendChild(ruby);
-                            replacement.wilps_lemmas.push(span);
+                            replacement.yokome_lemmas.push(span);
                         }
                     }
                 }

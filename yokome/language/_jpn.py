@@ -26,7 +26,7 @@ JPN = Language('jpn', 'Japanese',
                parallel_extractor=_lemma_extractor)
 """Japanese language with methods that load sentences from the corpus."""
 
-# TODO Merge with JPN
+# XXX Merge with JPN
 JPN_UNSEEN = Language('jpn_unseen', 'Japanese',
                       loader=None,
                       tokenizer=lambda x: x,

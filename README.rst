@@ -173,6 +173,18 @@ Yokome can be extended and improved in a multitude of ways.  Some ideas:
   - Trade disambiguation accuracy for faster processing: Use windowed inputs to
     the language model instead of a recurrent neural network
 
+- User interface:
+
+  - Add loading indicators
+  - Provide better data on entries
+
+    - All headwords
+    - More user-friendly presentation of POS tags
+    - Restrictions and notes for glosses
+
+  - Make the Yokome infobox's style independent from the webpage it is displayed
+    on
+
 
 About the name
 ==============

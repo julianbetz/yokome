@@ -268,7 +268,7 @@ def validate_brackets(symbol_stream, brackets) -> Iterator:
     return tuple(bracketing_structure)
 
 
-# # TODO Only Latin-1 supplement, Latin extended-A and Latin extended-b
+# # XXX Only Latin-1 supplement, Latin extended-A and Latin extended-b
 # def ascii_fold(symbol_stream):
 #     UPPERCASE = 2
 #     LOWERCASE = 1
